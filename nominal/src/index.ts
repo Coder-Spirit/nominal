@@ -131,7 +131,6 @@ export type GenericUntainted<
             BaseType0 & {
               __baseType: BaseType0
               __typeTags: TypeTags0
-              __debug: 'B'
             },
             TaintTag
           >
@@ -139,7 +138,6 @@ export type GenericUntainted<
             { [P in keyof BaseType0]: Untainted<BaseType0[P]> } & {
               __baseType: { [P in keyof BaseType0]: Untainted<BaseType0[P]> }
               __typeTags: TypeTags0
-              __debug: 'A'
             },
             TaintTag
           >
@@ -147,7 +145,6 @@ export type GenericUntainted<
           BaseType0 & {
             __baseType: BaseType0
             __typeTags: TypeTags0
-            __debug: 'B'
           },
           TaintTag
         >
