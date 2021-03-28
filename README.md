@@ -5,6 +5,16 @@ tainting with zero runtime overhead. This can be very useful to enforce complex
 pre-conditions and post-conditions, and to make your code more secure against
 malicious inputs.
 
+## Install instructions
+
+```
+npm install @coderspirit/nominal
+```
+or
+```
+yarn install @coderspirit/nominal
+```
+
 ## Basic nominal types
 
 To define a new nominal type based on a previous type, we can do:
