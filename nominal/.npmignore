@@ -1,0 +1,9 @@
+node_modules/
+src/
+.eslintignore
+.eslintrc.js
+.npmignore
+jest.config.js
+package-lock.json
+tsconfig.base.json
+tsconfig.json

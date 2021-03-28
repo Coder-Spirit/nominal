@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "workspaces": ["nominal"],
+  "scripts": {
+    "build": "yarn workspaces run build",
+    "lint": "yarn workspaces run lint",
+    "postinstall": "if [ -d .git ]; then git config core.hooksPath .hooks; fi"
+  }  
+}

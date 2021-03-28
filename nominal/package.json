@@ -1,0 +1,51 @@
+{
+  "name": "@coderspirit/nominal",
+  "version": "1.0.0",
+  "description": "Powerful nominal types for your project",
+  "main": "./dist/index.js",
+  "keywords": [
+    "typescript",
+    "types",
+    "nominal",
+    "taint"
+  ],
+  "author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p .",
+    "lint": "npm run lint:tsc && npm run lint:eslint",
+    "lint:eslint": "eslint . --ext .js,.ts --max-warnings 0",
+    "lint:tsc": "tsc --noEmit",
+    "test": "jest"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "@typescript-eslint/eslint-plugin": "^4.19.0",
+    "@typescript-eslint/parser": "^4.19.0",
+    "eslint": "^7.23.0",
+    "eslint-config-prettier": "^8.1.0",
+    "eslint-plugin-jest": "^24.3.2",
+    "eslint-plugin-node": "^11.1.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.4",
+    "ts-node": "^9.1.1"
+  },
+  "settings": {
+    "jest": {
+      "version": 26
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Coder-Spirit/nominal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Coder-Spirit/nominal/issues"
+  },
+  "homepage": "https://github.com/Coder-Spirit/nominal#readme"
+}
