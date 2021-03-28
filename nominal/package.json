@@ -10,6 +10,7 @@
     "taint"
   ],
   "author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
+  "private": false,
   "license": "MIT",
   "scripts": {
     "build": "tsc -p .",
