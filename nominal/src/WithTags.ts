@@ -1,17 +1,9 @@
 import { CompoundTypeTags } from './internal/UtilTypes'
+import { TagsMarker } from './internal/TagsMarker'
 
 export type WithTags<
   BaseType,
   TypeTags extends (string | symbol)[]
-> = BaseType extends {
-  __baseType: infer BaseType0
-  __typeTags: infer TypeTags0
-}
-  ? BaseType0 & {
-      __baseType: BaseType0
-      __typeTags: TypeTags0 & CompoundTypeTags<TypeTags>
-    }
-  : BaseType & {
-      __baseType: BaseType
-      __typeTags: CompoundTypeTags<TypeTags>
-    }
+> = BaseType extends TagsMarker<infer BaseType0, infer TypeTags0>
+  ? BaseType0 & TagsMarker<BaseType0, TypeTags0 & CompoundTypeTags<TypeTags>>
+  : BaseType & TagsMarker<BaseType, CompoundTypeTags<TypeTags>>
