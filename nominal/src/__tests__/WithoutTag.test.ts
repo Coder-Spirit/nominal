@@ -110,4 +110,22 @@ describe('WithoutTag', () => {
     const value: T1WithoutT1 = 42 as T1
     expect(value).toBe(42)
   })
+
+  it('allows to add the removed tag again', () => {
+    type T1WithoutT1WithT1 = WithTag<T1WithoutT1, 'T1'>
+    type T1WithoutT1WithT1_extends_T1 = T1WithoutT1WithT1 extends T1
+      ? true
+      : false
+    type T1_extends_T1WithoutT1WithT1 = T1 extends T1WithoutT1WithT1
+      ? true
+      : false
+
+    type AllowsToAddRemovedTagAgain = T1WithoutT1WithT1_extends_T1 extends true
+      ? T1_extends_T1WithoutT1WithT1 extends true
+        ? true
+        : false
+      : false
+    const allowsToAddRemovedTagAgain: AllowsToAddRemovedTagAgain = true
+    expect(allowsToAddRemovedTagAgain).toBe(true)
+  })
 })
