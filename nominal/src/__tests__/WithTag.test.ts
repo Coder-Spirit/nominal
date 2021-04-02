@@ -82,4 +82,39 @@ describe('WithTag', () => {
     const isIdempotentB: IsIdempotentB = true
     expect(isIdempotentB).toBe(true)
   })
+
+  it('preserves types across function boundaries', () => {
+    function throwIfNotEven<T extends number>(v: T): WithTag<T, 'Even'> {
+      if (v % 2 == 1) throw new Error('Not Even!')
+      return v as WithTag<T, 'Even'>
+    }
+
+    function throwIfNotPositive<T extends number>(
+      v: T,
+    ): WithTag<T, 'Positive'> {
+      if (v <= 0) throw new Error('Not positive!')
+      return v as WithTag<T, 'Positive'>
+    }
+
+    const v1 = 42
+    const v2 = throwIfNotEven(v1)
+    const v3 = throwIfNotPositive(v2)
+
+    type V3Type = typeof v3
+    type V3Type_extends_Even = V3Type extends WithTag<number, 'Even'>
+      ? true
+      : false
+    type V3Type_extends_Positive = V3Type extends WithTag<number, 'Positive'>
+      ? true
+      : false
+
+    type PreservesTypes = V3Type_extends_Even extends true
+      ? V3Type_extends_Positive extends true
+        ? true
+        : false
+      : false
+
+    const preservesTypes: PreservesTypes = true
+    expect(preservesTypes).toBe(true)
+  })
 })
