@@ -1,7 +1,7 @@
 import { SimpleTypeNegation, SimpleTypeTag } from './internal/UtilTypes'
 import { TagsMarker } from './internal/TagsMarker'
 
-export type WithoutTag<
+export type NegateTag<
   BaseType,
   TypeTag extends string | symbol
 > = BaseType extends TagsMarker<infer BaseType0, infer TypeTags0>

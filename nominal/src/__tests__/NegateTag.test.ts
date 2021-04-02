@@ -1,20 +1,20 @@
-import { WithTag, WithoutTag } from '..'
+import { NegateTag, WithTag } from '..'
 
 type T1 = WithTag<number, 'T1'>
 type T2 = WithTag<number, 'T2'>
 type T1T2 = WithTag<T1, 'T2'>
 type T2T1 = WithTag<T2, 'T1'>
 
-type T1WithoutT1 = WithoutTag<T1, 'T1'>
-type T2WithoutT2 = WithoutTag<T2, 'T2'>
-type T1T2WithoutT1 = WithoutTag<T1T2, 'T1'>
-type T1T2WithoutT2 = WithoutTag<T1T2, 'T2'>
-type T2T1WithoutT1 = WithoutTag<T2T1, 'T1'>
-type T2T1WithoutT2 = WithoutTag<T2T1, 'T2'>
+type T1WithoutT1 = NegateTag<T1, 'T1'>
+type T2WithoutT2 = NegateTag<T2, 'T2'>
+type T1T2WithoutT1 = NegateTag<T1T2, 'T1'>
+type T1T2WithoutT2 = NegateTag<T1T2, 'T2'>
+type T2T1WithoutT1 = NegateTag<T2T1, 'T1'>
+type T2T1WithoutT2 = NegateTag<T2T1, 'T2'>
 
-describe('WithoutTag', () => {
+describe('NegateTag', () => {
   it('leaves primitive types "unchanged"', () => {
-    type Unchanged = WithoutTag<number, 'T1'>
+    type Unchanged = NegateTag<number, 'T1'>
 
     type Unchanged_extends_Number = Unchanged extends number ? true : false
     type Number_extends_Unchanged = number extends Unchanged ? true : false
@@ -30,7 +30,7 @@ describe('WithoutTag', () => {
   })
 
   it('is idempotent', () => {
-    type T1T2WithoutT1WithoutT1 = WithoutTag<T1T2WithoutT1, 'T1'>
+    type T1T2WithoutT1WithoutT1 = NegateTag<T1T2WithoutT1, 'T1'>
     type T1T2WithoutT1WithoutT1_extends_T1T2WithoutT1 = T1T2WithoutT1WithoutT1 extends T1T2WithoutT1
       ? true
       : false
