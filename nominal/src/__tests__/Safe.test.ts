@@ -1,8 +1,9 @@
-import { Safe, TaintSymbol } from '..'
+import { Safe } from '..'
+import { TaintSymbolType } from '../internal/Symbols'
 
 describe('Safe', () => {
   it('does not allow "tainting tag"', () => {
-    type SafeWithTaint = Safe<number, typeof TaintSymbol>
+    type SafeWithTaint = Safe<number, TaintSymbolType>
     type SafeWithTaint_extends_never = SafeWithTaint extends never
       ? true
       : false
