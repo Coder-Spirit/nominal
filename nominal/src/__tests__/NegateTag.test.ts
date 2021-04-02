@@ -105,4 +105,11 @@ describe('NegateTag', () => {
     const _T2T1NegateT2_extends_T1: T2T1NegateT2_extends_T1 = true
     expect(_T2T1NegateT2_extends_T1).toBe(true)
   })
+
+  it('does not accept tagged values', () => {
+    type T1NegateT1_extends_T1 = T1NegateT1 extends T1 ? true : false
+
+    const does_T1NegateT1_extend_T1: T1NegateT1_extends_T1 = false
+    expect(does_T1NegateT1_extend_T1).toBe(false)
+  })
 })

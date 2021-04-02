@@ -1,6 +1,7 @@
 // Tag types
 export { WithTag } from './WithTag'
 export { WithTags } from './WithTags'
+export { WithoutTag } from './WithoutTag'
 export { NegateTag } from './NegateTag'
 
 // Taint types
