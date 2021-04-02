@@ -8,8 +8,8 @@
     "./src/**/__tests__/**/*"
   ],
   "compilerOptions": {
-    "module": "commonjs",   /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
-    "outDir": "./dist/cjs", /* Redirect output structure to the directory. */
+    "module": "es2015",     /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
+    "outDir": "./dist/esm", /* Redirect output structure to the directory. */
     "baseUrl": "./src",     /* Base directory to resolve non-absolute module names. */
   }
 }

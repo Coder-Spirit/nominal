@@ -2,7 +2,13 @@
   "name": "@coderspirit/nominal",
   "version": "2.0.0",
   "description": "Powerful nominal types for your project",
-  "main": "./dist/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
+  "exports": {
+    "import": "./dist/esm/index.js",
+    "require": "./dist/cjs/index.js"
+  },
   "keywords": [
     "typescript",
     "types",
@@ -13,12 +19,15 @@
   "private": false,
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p .",
+    "build": "yarn build:cjs && yarn build:esm",
+    "build:cjs": "tsc -p ./tsconfig.json",
+    "build:esm": "tsc -p ./tsconfig.esm.json",
     "lint": "yarn lint:tsc && yarn lint:eslint",
     "lint:eslint": "eslint . --ext .js,.ts --max-warnings 0",
     "lint:tsc": "yarn lint:tsc:main && yarn lint:tsc:tests",
     "lint:tsc:main": "tsc -p ./tsconfig.json --noEmit",
-    "lint:tsc:tests": "tsc -p ./src/__tests__/tsconfig.json",
+    "lint:tsc:tests": "tsc -p ./src/__tests__/tsconfig.json --noEmit",
+    "prepublishOnly": "yarn lint && yarn test && yarn build",
     "test": "jest"
   },
   "peerDependencies": {

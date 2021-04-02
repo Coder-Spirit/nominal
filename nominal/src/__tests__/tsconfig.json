@@ -4,6 +4,7 @@
     "./**/*.test.ts",
   ],
   "compilerOptions": {
+    "moduleResolution": "node",
     "baseUrl": "../src",   /* Base directory to resolve non-absolute module names. */
     "noEmit": true,        /* Do not emit outputs. */
   }
