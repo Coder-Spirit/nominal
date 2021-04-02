@@ -8,6 +8,7 @@ module.exports = {
     tsConfigRootDir: __dirname,
     project: [
       `${currentDir}/tsconfig.json`,
+      `${currentDir}/scripts/tsconfig.json`,
       `${currentDir}/src/__tests__/tsconfig.json`,
     ],
   },

@@ -21,7 +21,7 @@
   "scripts": {
     "build": "yarn build:cjs && yarn build:esm",
     "build:cjs": "tsc -p ./tsconfig.json",
-    "build:esm": "tsc -p ./tsconfig.esm.json",
+    "build:esm": "tsc -p ./tsconfig.esm.json && ts-node ./scripts/adaptESM.ts",
     "lint": "yarn lint:tsc && yarn lint:eslint",
     "lint:eslint": "eslint . --ext .js,.ts --max-warnings 0",
     "lint:tsc": "yarn lint:tsc:main && yarn lint:tsc:tests",
@@ -47,6 +47,9 @@
     "ts-jest": "^26.5.4",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   },
   "settings": {
     "jest": {
