@@ -1,17 +1,9 @@
-import { SimpleTypeTag } from 'internal/UtilTypes'
+import { SimpleTypeTag } from './internal/UtilTypes'
+import { TagsMarker } from './internal/TagsMarker'
 
 export type WithTag<
   BaseType,
   TypeTag extends string | symbol
-> = BaseType extends {
-  __baseType: infer BaseType0
-  __typeTags: infer TypeTags0
-}
-  ? BaseType0 & {
-      __baseType: BaseType0
-      __typeTags: TypeTags0 & SimpleTypeTag<TypeTag>
-    }
-  : BaseType & {
-      __baseType: BaseType
-      __typeTags: SimpleTypeTag<TypeTag>
-    }
+> = BaseType extends TagsMarker<infer BaseType0, infer TypeTags0>
+  ? BaseType0 & TagsMarker<BaseType0, TypeTags0 & SimpleTypeTag<TypeTag>>
+  : BaseType & TagsMarker<BaseType, SimpleTypeTag<TypeTag>>

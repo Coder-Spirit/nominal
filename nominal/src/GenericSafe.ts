@@ -1,5 +1,5 @@
-import { GenericUntainted } from 'GenericUntainted'
-import { WithTag } from 'WithTag'
+import { GenericUntainted } from './GenericUntainted'
+import { WithTag } from './WithTag'
 
 export type GenericSafe<
   BaseType,
