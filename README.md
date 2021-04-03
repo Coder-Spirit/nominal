@@ -40,7 +40,7 @@ npm install @coderspirit/nominal
 yarn add @coderspirit/nominal
 ```
 
-### Deno
+### [Deno](https://deno.land/)
 
 `Nominal` is served through different CDNs
 ```typescript
