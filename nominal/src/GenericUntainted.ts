@@ -1,6 +1,6 @@
 import { GenericTainted } from './GenericTainted'
+import { NegateTag } from './NegateTag'
 import { TagsMarker } from './internal/TagsMarker'
-import { WithoutTag } from './WithoutTag'
 
 export type GenericUntainted<
   BaseType,
@@ -19,8 +19,8 @@ export type GenericUntainted<
           | string
           | symbol
           | Date
-        ? WithoutTag<BaseType0 & TagsMarker<BaseType0, TypeTags0>, TaintTag>
-        : WithoutTag<
+        ? NegateTag<BaseType0 & TagsMarker<BaseType0, TypeTags0>, TaintTag>
+        : NegateTag<
             {
               [P in keyof BaseType0]: GenericUntainted<BaseType0[P], TaintTag>
             } &
@@ -35,7 +35,7 @@ export type GenericUntainted<
               >,
             TaintTag
           >
-      : WithoutTag<BaseType0 & TagsMarker<BaseType0, TypeTags0>, TaintTag>
+      : NegateTag<BaseType0 & TagsMarker<BaseType0, TypeTags0>, TaintTag>
     : // eslint-disable-next-line @typescript-eslint/no-unused-vars
     BaseType extends Partial<Record<infer _K, infer _V>>
     ? BaseType extends
@@ -47,10 +47,10 @@ export type GenericUntainted<
         | string
         | symbol
         | Date
-      ? WithoutTag<BaseType, TaintTag>
-      : WithoutTag<
+      ? NegateTag<BaseType, TaintTag>
+      : NegateTag<
           { [P in keyof BaseType]: GenericUntainted<BaseType[P], TaintTag> },
           TaintTag
         >
-    : WithoutTag<BaseType, TaintTag>
+    : NegateTag<BaseType, TaintTag>
   : BaseType

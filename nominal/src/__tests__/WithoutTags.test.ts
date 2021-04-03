@@ -1,20 +1,26 @@
-import { WithTag, WithoutTag } from '..'
+import { WithTag, WithTags, WithoutTags } from '..'
 
 type T1 = WithTag<number, 'T1'>
 type T2 = WithTag<number, 'T2'>
+type T3 = WithTag<number, 'T3'>
 type T1T2 = WithTag<T1, 'T2'>
 type T2T1 = WithTag<T2, 'T1'>
 
-type T1WithoutT1 = WithoutTag<T1, 'T1'>
-type T2WithoutT2 = WithoutTag<T2, 'T2'>
-type T1T2WithoutT1 = WithoutTag<T1T2, 'T1'>
-type T1T2WithoutT2 = WithoutTag<T1T2, 'T2'>
-type T2T1WithoutT1 = WithoutTag<T2T1, 'T1'>
-type T2T1WithoutT2 = WithoutTag<T2T1, 'T2'>
+type T1WithoutT1 = WithoutTags<T1, ['T1']>
+type T2WithoutT2 = WithoutTags<T2, ['T2']>
+type T1T2WithoutT1 = WithoutTags<T1T2, ['T1']>
+type T1T2WithoutT2 = WithoutTags<T1T2, ['T2']>
+type T2T1WithoutT1 = WithoutTags<T2T1, ['T1']>
+type T2T1WithoutT2 = WithoutTags<T2T1, ['T2']>
 
-describe('WithoutTag', () => {
+type T1T2T3 = WithTags<number, ['T1', 'T2', 'T3']>
+type T1T2T3_Without_T1T2 = WithoutTags<T1T2T3, ['T1', 'T2']>
+type T1T2T3_Without_T2T3 = WithoutTags<T1T2T3, ['T2', 'T3']>
+type T1T2T3_Without_T3T1 = WithoutTags<T1T2T3, ['T3', 'T1']>
+
+describe('WithoutTags (one tag)', () => {
   it('leaves primitive types "unchanged"', () => {
-    type Unchanged = WithoutTag<number, 'T1'>
+    type Unchanged = WithoutTags<number, ['T1']>
 
     type Unchanged_extends_Number = Unchanged extends number ? true : false
     type Number_extends_Unchanged = number extends Unchanged ? true : false
@@ -30,7 +36,7 @@ describe('WithoutTag', () => {
   })
 
   it('is idempotent', () => {
-    type T1T2WithoutT1WithoutT1 = WithoutTag<T1T2WithoutT1, 'T1'>
+    type T1T2WithoutT1WithoutT1 = WithoutTags<T1T2WithoutT1, ['T1']>
     type T1T2WithoutT1WithoutT1_extends_T1T2WithoutT1 = T1T2WithoutT1WithoutT1 extends T1T2WithoutT1
       ? true
       : false
@@ -127,5 +133,79 @@ describe('WithoutTag', () => {
       : false
     const allowsToAddRemovedTagAgain: AllowsToAddRemovedTagAgain = true
     expect(allowsToAddRemovedTagAgain).toBe(true)
+  })
+})
+
+describe('WithoutTags (many tags)', () => {
+  it('removes many tags at once', () => {
+    type T1T2T3_Without_T1T2_extends_T1 = T1T2T3_Without_T1T2 extends T1
+      ? true
+      : false
+    type T1T2T3_Without_T1T2_extends_T2 = T1T2T3_Without_T1T2 extends T2
+      ? true
+      : false
+    type T1T2T3_Without_T2T3_extends_T2 = T1T2T3_Without_T2T3 extends T2
+      ? true
+      : false
+    type T1T2T3_Without_T2T3_extends_T3 = T1T2T3_Without_T2T3 extends T3
+      ? true
+      : false
+    type T1T2T3_Without_T3T1_extends_T3 = T1T2T3_Without_T3T1 extends T3
+      ? true
+      : false
+    type T1T2T3_Without_T3T1_extends_T1 = T1T2T3_Without_T3T1 extends T1
+      ? true
+      : false
+
+    const withoutT1T2_has_T1: T1T2T3_Without_T1T2_extends_T1 = false
+    const withoutT1T2_has_T2: T1T2T3_Without_T1T2_extends_T2 = false
+    const withoutT2T3_has_T2: T1T2T3_Without_T2T3_extends_T2 = false
+    const withoutT2T3_has_T3: T1T2T3_Without_T2T3_extends_T3 = false
+    const withoutT3T1_has_T3: T1T2T3_Without_T3T1_extends_T3 = false
+    const withoutT3T1_has_T1: T1T2T3_Without_T3T1_extends_T1 = false
+
+    expect(withoutT1T2_has_T1).toBe(false)
+    expect(withoutT1T2_has_T2).toBe(false)
+    expect(withoutT2T3_has_T2).toBe(false)
+    expect(withoutT2T3_has_T3).toBe(false)
+    expect(withoutT3T1_has_T3).toBe(false)
+    expect(withoutT3T1_has_T1).toBe(false)
+  })
+
+  it('preserves other present tags', () => {
+    type T1T2T3_Without_T1T2_extends_T3 = T1T2T3_Without_T1T2 extends T3
+      ? true
+      : false
+    type T1T2T3_Without_T2T3_extends_T1 = T1T2T3_Without_T2T3 extends T1
+      ? true
+      : false
+    type T1T2T3_Without_T3T1_extends_T2 = T1T2T3_Without_T3T1 extends T2
+      ? true
+      : false
+
+    const preservesT3: T1T2T3_Without_T1T2_extends_T3 = true
+    const preservesT1: T1T2T3_Without_T2T3_extends_T1 = true
+    const preservesT2: T1T2T3_Without_T3T1_extends_T2 = true
+
+    expect(preservesT3).toBe(true)
+    expect(preservesT1).toBe(true)
+    expect(preservesT2).toBe(true)
+  })
+})
+
+describe('WithoutTags (all tags)', () => {
+  it('removes all tags when no tags are specified', () => {
+    type NoTags = WithoutTags<T1T2T3>
+    type NoTags_extends_Number = NoTags extends number ? true : false
+    type Number_extends_NoTags = number extends NoTags ? true : false
+
+    type RemovesAllTags = NoTags_extends_Number extends true
+      ? Number_extends_NoTags extends true
+        ? true
+        : false
+      : false
+
+    const removesAllTags: RemovesAllTags = true
+    expect(removesAllTags).toBe(true)
   })
 })
