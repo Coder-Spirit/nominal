@@ -12,6 +12,6 @@ run()
   })
 
 async function run(): Promise<void> {
-  const esmDir = join(__dirname, '..', 'dist', 'esm')
-  await processDirectory(esmDir, '.js')
+  const esmDir = join(__dirname, '..', 'deno')
+  await processDirectory(esmDir, '.ts')
 }

@@ -1,13 +1,13 @@
 // Tag types
-export { WithTag } from './WithTag'
-export { WithTags } from './WithTags'
-export { WithoutTag } from './WithoutTag'
-export { WithoutTags } from './WithoutTags'
-export { NegateTag } from './NegateTag'
+export type { WithTag } from './WithTag'
+export type { WithTags } from './WithTags'
+export type { WithoutTag } from './WithoutTag'
+export type { WithoutTags } from './WithoutTags'
+export type { NegateTag } from './NegateTag'
 
 // Taint types
-export { GenericTainted } from './GenericTainted'
-export { GenericUntainted } from './GenericUntainted'
+export type { GenericTainted } from './GenericTainted'
+export type { GenericUntainted } from './GenericUntainted'
 
-export { Tainted } from './Tainted'
-export { Untainted } from './Untainted'
+export type { Tainted } from './Tainted'
+export type { Untainted } from './Untainted'
