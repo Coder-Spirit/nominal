@@ -45,6 +45,7 @@ yarn add @coderspirit/nominal
 `Nominal` is served through different CDNs
 ```typescript
 import { ... } from 'https://denopkg.com/Coder-Spirit/nominal@[VERSION]/nominal/deno/index.ts'
+import { ... } from 'https://deno.land/x/nominal@[VERSION]/nominal/deno/index.ts'
 ```
 
 ## Brands
