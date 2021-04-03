@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ $default-branch ]
 
+defaults:
+  run:
+    working-directory: ./nominal
+
 jobs:
   build:
 
@@ -21,6 +25,6 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd nominal && yarn install
-    - run: cd nominal && yarn test
-    - run: cd nominal && yarn lint
+    - run: yarn install
+    - run: yarn test
+    - run: yarn lint
