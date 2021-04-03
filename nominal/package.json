@@ -1,13 +1,14 @@
 {
   "name": "@coderspirit/nominal",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Powerful nominal types for your project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
-  "types": "./dist/esm/index.d.ts",
+  "types": "./dist/cjs/index.d.ts",
   "exports": {
     "import": "./dist/esm/index.js",
-    "require": "./dist/cjs/index.js"
+    "require": "./dist/cjs/index.js",
+    "node": "./dist/cjs/index.js"
   },
   "keywords": [
     "typescript",
