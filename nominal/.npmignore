@@ -1,4 +1,5 @@
 node_modules/
+scripts/
 src/
 .eslintignore
 .eslintrc.js
@@ -7,4 +8,5 @@ jest.config.js
 package-lock.json
 README.md
 tsconfig.base.json
+tsconfig.esm.json
 tsconfig.json
