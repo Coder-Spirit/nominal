@@ -37,12 +37,15 @@ zero runtime overhead.
 npm install @coderspirit/nominal
 
 # Or with Yarn:
-yarn install @coderspirit/nominal
+yarn add @coderspirit/nominal
 ```
 
 ### Deno
 
-Pending explanation.
+`Nominal` is served through different CDNs
+```typescript
+import { ... } from 'https://denopkg.com/Coder-Spirit/nominal@[VERSION]/nominal/deno/index.ts'
+```
 
 ## Brands
 
