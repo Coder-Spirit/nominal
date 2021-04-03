@@ -36,20 +36,26 @@ async function processFile(filePath: string): Promise<void> {
   const thePattern = /^(\s*(import|export)\s+{.+}\s+from\s+'\.[A-Za-z0-9_./]+)';?\n?$/s
   const hasExtension = /\.(js|ts|d\.ts)$/s
 
-  const ext = filePath.endsWith('.ts') ? 'd.ts' : 'js'
+  if (!filePath.endsWith('.js')) {
+    return
+  }
 
   const fileBytes = await readFile(filePath, { encoding: 'utf8' })
   const fileLines = fileBytes.split('\n')
 
   const transformedLines: string[] = []
+  let transformed = false
   for (const line of fileLines) {
     const theMatch = thePattern.exec(line)
     if (theMatch && !hasExtension.exec(theMatch[1] as string)) {
-      transformedLines.push(`${theMatch[1] as string}.${ext}';`)
+      transformedLines.push(`${theMatch[1] as string}.js';`)
+      transformed = true
     } else {
       transformedLines.push(line)
     }
   }
 
-  await writeFile(filePath, transformedLines.join('\n'))
+  if (transformed) {
+    await writeFile(filePath, transformedLines.join('\n'))
+  }
 }
