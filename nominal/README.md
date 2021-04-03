@@ -249,10 +249,10 @@ const positiveOddPlus1 = plusOne(positiveOdd)
 
 ### Tainting values
 
-While using *brands*, *flavors* and *tags* way is often enough, sometimes it can
-be handy to mark all the values coming from the "external world" as *tainted*
-(and therefore "dangerous"), independently of whether we took the time to assign
-them a specific nominal type or not.
+While using *brands*, *flavors* and *tags* is often enough, sometimes it can be
+handy to mark all the values coming from the "external world" as *tainted* (and
+therefore "dangerous"), independently of whether we took the time to assign them
+a specific nominal type or not.
 
 `Nominal` provides the types `Tainted<T>` and `Untainted<T>`, both of them
 operate recursively on `T`.
