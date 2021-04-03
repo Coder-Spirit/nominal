@@ -37,7 +37,7 @@ module.exports = {
     quotes: ['error', 'single', { avoidEscape: true }],
     'sort-imports': 'error',
   },
-  ignorePatterns: ['*.js', 'tsconfig.json'],
+  ignorePatterns: ['*.js', 'tsconfig.json', 'dist/**/*'],
   overrides: [
     {
       files: ['**/__tests__/**/*.test.ts'],
