@@ -3,6 +3,8 @@
   "workspaces": ["nominal"],
   "scripts": {
     "build": "yarn workspaces run build",
+    "build:deno": "yarn workspaces run build:deno",
+    "clean:deno": "yarn workspaces run clean:deno",
     "lint": "yarn workspaces run lint",
     "postinstall": "if [ -d .git ]; then git config core.hooksPath .hooks; fi",
     "test": "yarn workspaces run test"
