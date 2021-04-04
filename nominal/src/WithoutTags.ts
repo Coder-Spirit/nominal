@@ -1,4 +1,4 @@
-import { TagsMarker } from './internal/TagsMarker'
+import { TagsMarker } from './internal/Markers'
 import { WithoutTag } from './WithoutTag'
 
 export type WithoutTags<
