@@ -1,4 +1,4 @@
-import { WithTag, WithTags } from '..'
+import { NegateTag, WithTag, WithTags } from '..'
 
 type T1 = WithTag<number, 'T1'>
 type T1T2 = WithTag<T1, 'T2'>
@@ -34,5 +34,22 @@ describe('WithTags', () => {
 
     const isComposition: IsComposition = true
     expect(isComposition).toBe(true)
+  })
+
+  it('reverses tag negation (simple case)', () => {
+    type NegatedT1 = NegateTag<number, 'T1'>
+    type NegatedT1WithT1 = WithTags<NegatedT1, ['T1']>
+
+    type NegatedT1WithT1_extends_T1 = NegatedT1WithT1 extends T1 ? true : false
+    type T1_extends_NegatedT1WithT1 = T1 extends NegatedT1WithT1 ? true : false
+
+    type ReversesTagNegation = NegatedT1WithT1_extends_T1 extends true
+      ? T1_extends_NegatedT1WithT1 extends true
+        ? true
+        : false
+      : false
+
+    const reversesTagNegation: ReversesTagNegation = true
+    expect(reversesTagNegation).toBe(true)
   })
 })

@@ -1,4 +1,5 @@
-import { WithTag, WithoutTag } from '..'
+import { NegateTag, WithTag, WithoutTag } from '..'
+import { WithTags } from '../WithTags'
 
 type T1 = WithTag<number, 'T1'>
 type T2 = WithTag<number, 'T2'>
@@ -58,6 +59,10 @@ describe('WithoutTag', () => {
 
     const singleTaggedBecomesPrimitive: SingleTaggedBecomesPrimitive = true
     expect(singleTaggedBecomesPrimitive).toBe(true)
+
+    // Here we test that we can assign "naked" primitive literals
+    const literalExample: T1WithoutT1 = 42
+    expect(literalExample).toBe(42)
   })
 
   it('removes tag', () => {
@@ -104,6 +109,16 @@ describe('WithoutTag', () => {
 
     const _T2T1WithoutT2_extends_T1: T2T1WithoutT2_extends_T1 = true
     expect(_T2T1WithoutT2_extends_T1).toBe(true)
+  })
+
+  it('preserves other present negated tags', () => {
+    type ABC_nD = NegateTag<WithTags<number, ['A', 'B', 'C']>, 'D'>
+    type ABC_nD_wB = WithoutTag<ABC_nD, 'B'>
+    type nD = NegateTag<number, 'D'>
+
+    type ABC_nD_wB_extends_nD = ABC_nD_wB extends nD ? true : false
+    const preservesNegatedTags: ABC_nD_wB_extends_nD = true
+    expect(preservesNegatedTags).toBe(true)
   })
 
   it('accepts tagged values', () => {

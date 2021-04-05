@@ -1,5 +1,5 @@
-import { SimpleTypeTag } from './internal/UtilTypes'
-import { TagsMarker } from './internal/TagsMarker'
+import { TagWrapper } from './internal/TagUtils'
+import { TagsMarker } from './internal/Markers'
 import { WithTag } from './WithTag'
 
 export type GenericTainted<
@@ -17,15 +17,15 @@ export type GenericTainted<
         | string
         | symbol
         | Date
-      ? BaseType0 & TagsMarker<BaseType0, TypeTags0 & SimpleTypeTag<TaintTag>>
+      ? BaseType0 & TagsMarker<BaseType0, TypeTags0 & TagWrapper<TaintTag>>
       : { [P in keyof BaseType0]: GenericTainted<BaseType0[P], TaintTag> } &
           TagsMarker<
             {
               [P in keyof BaseType0]: GenericTainted<BaseType0[P], TaintTag>
             },
-            TypeTags0 & SimpleTypeTag<TaintTag>
+            TypeTags0 & TagWrapper<TaintTag>
           >
-    : BaseType0 & TagsMarker<BaseType0, TypeTags0 & SimpleTypeTag<TaintTag>>
+    : BaseType0 & TagsMarker<BaseType0, TypeTags0 & TagWrapper<TaintTag>>
   : // eslint-disable-next-line @typescript-eslint/no-unused-vars
   BaseType extends Partial<Record<infer _K, infer _V>>
   ? BaseType extends

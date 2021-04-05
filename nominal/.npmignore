@@ -7,7 +7,7 @@ src/
 .npmignore
 jest.config.js
 package-lock.json
-README.md
 tsconfig.base.json
 tsconfig.esm.json
 tsconfig.json
+tsconfig.tsbuildinfo

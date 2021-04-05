@@ -1,4 +1,4 @@
-import { WithTag } from '..'
+import { NegateTag, WithTag } from '..'
 
 type T1 = WithTag<number, 'T1'>
 type T2 = WithTag<number, 'T2'>
@@ -116,5 +116,45 @@ describe('WithTag', () => {
 
     const preservesTypes: PreservesTypes = true
     expect(preservesTypes).toBe(true)
+  })
+
+  it('reverses tag negation (simple case)', () => {
+    type NegatedT1 = NegateTag<number, 'T1'>
+    type NegatedT1WithT1 = WithTag<NegatedT1, 'T1'>
+
+    type NegatedT1WithT1_extends_T1 = NegatedT1WithT1 extends T1 ? true : false
+    type T1_extends_NegatedT1WithT1 = T1 extends NegatedT1WithT1 ? true : false
+
+    type ReversesTagNegation = NegatedT1WithT1_extends_T1 extends true
+      ? T1_extends_NegatedT1WithT1 extends true
+        ? true
+        : false
+      : false
+
+    const reversesTagNegation: ReversesTagNegation = true
+    expect(reversesTagNegation).toBe(true)
+  })
+
+  it('reverses tag negation, and keeps the other negations', () => {
+    type NegatedT1 = NegateTag<number, 'T1'>
+    type NegatedT2 = NegateTag<number, 'T2'>
+    type NegatedT1T2 = NegateTag<NegatedT1, 'T2'>
+    type NegatedT1T2WithT1 = WithTag<NegatedT1T2, 'T1'>
+
+    type NegatedT1T2WithT1_extends_T1 = NegatedT1T2WithT1 extends T1 ? true : false
+    type T1_extends_NegatedT1T2WithT1 = T1 extends NegatedT1T2WithT1 ? true : false
+
+    type ReversesTagNegation = NegatedT1T2WithT1_extends_T1 extends true
+      ? T1_extends_NegatedT1T2WithT1 extends true
+        ? true
+        : false
+      : false
+
+    const reversesTagNegation: ReversesTagNegation = true
+    expect(reversesTagNegation).toBe(true)
+
+    type PreservesT2Negation = NegatedT1T2WithT1 extends NegatedT2 ? true : false
+    const preservesT2Negation: PreservesT2Negation = true
+    expect(preservesT2Negation).toBe(true)
   })
 })

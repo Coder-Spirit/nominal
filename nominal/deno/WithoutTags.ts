@@ -1,4 +1,4 @@
-import { TagsMarker } from './internal/TagsMarker.ts';
+import { TagsMarker } from './internal/Markers.ts';
 import { WithoutTag } from './WithoutTag.ts';
 
 export type WithoutTags<

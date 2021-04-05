@@ -1,11 +1,11 @@
-import { SimpleTypeTag } from './internal/UtilTypes'
-import { TagsMarker } from './internal/TagsMarker'
+import { TagWrapper } from './internal/TagUtils'
+import { TagsMarker } from './internal/Markers'
 
 export type WithoutTag<
   BaseType,
   TypeTag extends string | symbol
 > = BaseType extends TagsMarker<infer BaseType0, infer TypeTags0>
-  ? TagsMarker<BaseType0, SimpleTypeTag<TypeTag>> extends TagsMarker<
+  ? TagsMarker<BaseType0, TagWrapper<TypeTag>> extends TagsMarker<
       BaseType0,
       TypeTags0
     >
@@ -13,7 +13,7 @@ export type WithoutTag<
     : BaseType0 &
         TagsMarker<
           BaseType0,
-          TypeTags0 extends SimpleTypeTag<TypeTag> & infer RestTypeTags
+          TypeTags0 extends TagWrapper<TypeTag> & infer RestTypeTags
             ? RestTypeTags
             : Omit<TypeTags0, TypeTag>
         >

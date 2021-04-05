@@ -1,27 +1,37 @@
-import { SimpleTypeNegation, SimpleTypeTag } from './internal/UtilTypes'
-import { TagsMarker } from './internal/TagsMarker'
+import { NegatedTagWrapper, TagWrapper } from './internal/TagUtils'
+import { OptionalTagsMarker, TagsMarker } from './internal/Markers'
 
 export type NegateTag<
   BaseType,
   TypeTag extends string | symbol
 > = BaseType extends TagsMarker<infer BaseType0, infer TypeTags0>
   ? BaseType0 &
-      (TagsMarker<BaseType0, SimpleTypeTag<TypeTag>> extends TagsMarker<
+      (TagsMarker<BaseType0, TagWrapper<TypeTag>> extends TagsMarker<
         BaseType0,
         TypeTags0
       >
         ? Partial<
             TagsMarker<
               BaseType0,
-              TypeTags0 extends SimpleTypeTag<TypeTag> & infer RestTypeTags
-                ? RestTypeTags & SimpleTypeNegation<TypeTag>
-                : Omit<TypeTags0, TypeTag> & SimpleTypeNegation<TypeTag>
+              TypeTags0 extends TagWrapper<TypeTag> & infer RestTypeTags
+                ? RestTypeTags & NegatedTagWrapper<TypeTag>
+                : Omit<TypeTags0, TypeTag> & NegatedTagWrapper<TypeTag>
             >
           >
         : TagsMarker<
             BaseType0,
-            TypeTags0 extends SimpleTypeTag<TypeTag> & infer RestTypeTags
-              ? RestTypeTags & SimpleTypeNegation<TypeTag>
-              : Omit<TypeTags0, TypeTag> & SimpleTypeNegation<TypeTag>
+            TypeTags0 extends TagWrapper<TypeTag> & infer RestTypeTags
+              ? RestTypeTags & NegatedTagWrapper<TypeTag>
+              : Omit<TypeTags0, TypeTag> & NegatedTagWrapper<TypeTag>
           >)
-  : BaseType & Partial<TagsMarker<BaseType, SimpleTypeNegation<TypeTag>>>
+  : BaseType extends OptionalTagsMarker<infer BaseType0, infer TypeTags0>
+  ? BaseType0 &
+      Partial<
+        TagsMarker<
+          BaseType0,
+          TypeTags0 extends TagWrapper<TypeTag> & infer RestTypeTags
+            ? RestTypeTags & NegatedTagWrapper<TypeTag>
+            : Omit<TypeTags0, TypeTag> & NegatedTagWrapper<TypeTag>
+        >
+      >
+  : BaseType & Partial<TagsMarker<BaseType, NegatedTagWrapper<TypeTag>>>

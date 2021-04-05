@@ -1,4 +1,4 @@
-import { WithTag, WithTags, WithoutTags } from '..'
+import { NegateTag, WithTag, WithTags, WithoutTags } from '..'
 
 type T1 = WithTag<number, 'T1'>
 type T2 = WithTag<number, 'T2'>
@@ -112,6 +112,16 @@ describe('WithoutTags (one tag)', () => {
     expect(_T2T1WithoutT2_extends_T1).toBe(true)
   })
 
+  it('preserves other present negated tags', () => {
+    type ABC_nD = NegateTag<WithTags<number, ['A', 'B', 'C']>, 'D'>
+    type ABC_nD_wB = WithoutTags<ABC_nD, ['B']>
+    type nD = NegateTag<number, 'D'>
+
+    type ABC_nD_wB_extends_nD = ABC_nD_wB extends nD ? true : false
+    const preservesNegatedTags: ABC_nD_wB_extends_nD = true
+    expect(preservesNegatedTags).toBe(true)
+  })
+
   it('accepts tagged values', () => {
     const value: T1WithoutT1 = 42 as T1
     expect(value).toBe(42)
@@ -190,6 +200,16 @@ describe('WithoutTags (many tags)', () => {
     expect(preservesT3).toBe(true)
     expect(preservesT1).toBe(true)
     expect(preservesT2).toBe(true)
+  })
+
+  it('preserves other present negated tags', () => {
+    type ABC_nD = NegateTag<WithTags<number, ['A', 'B', 'C']>, 'D'>
+    type ABC_nD_wB = WithoutTags<ABC_nD, ['A', 'B']>
+    type nD = NegateTag<number, 'D'>
+
+    type ABC_nD_wB_extends_nD = ABC_nD_wB extends nD ? true : false
+    const preservesNegatedTags: ABC_nD_wB_extends_nD = true
+    expect(preservesNegatedTags).toBe(true)
   })
 })
 

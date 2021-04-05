@@ -1,6 +1,6 @@
 {
   "name": "@coderspirit/nominal",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "Powerful nominal types for your project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -20,10 +20,11 @@
   "private": false,
   "license": "MIT",
   "scripts": {
-    "build": "yarn clean && yarn build:cjs && yarn build:esm && yarn build:deno",
+    "build": "yarn build:npm && yarn build:deno",
     "build:cjs": "tsc -p ./tsconfig.json",
     "build:deno": "mkdir -p ./deno && cp -r ./src/* ./deno/ && rm -rf ./deno/__tests__ && ts-node ./scripts/adaptDeno.ts",
     "build:esm": "tsc -p ./tsconfig.esm.json && ts-node ./scripts/adaptESM.ts",
+    "build:npm": "yarn build:cjs && yarn build:esm",
     "clean": "yarn clean:dist && yarn clean:deno",
     "clean:deno": "rm -rf ./deno/*.ts && rm -rf ./deno/*/*.ts",
     "clean:dist": "rm -rf ./dist",
@@ -32,7 +33,7 @@
     "lint:tsc": "yarn lint:tsc:main && yarn lint:tsc:tests",
     "lint:tsc:main": "tsc -p ./tsconfig.json --noEmit",
     "lint:tsc:tests": "tsc -p ./src/__tests__/tsconfig.json --noEmit",
-    "prepublishOnly": "yarn lint && yarn test && yarn build",
+    "prepublishOnly": "yarn lint && yarn test && yarn clean:dist && yarn build:npm",
     "test": "jest"
   },
   "peerDependencies": {

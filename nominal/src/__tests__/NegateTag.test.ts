@@ -46,7 +46,7 @@ describe('NegateTag', () => {
     expect(isIdempotent).toBe(true)
   })
 
-  it('leaves simple-tagged types as primitive types', () => {
+  it('leaves simple-tagged types as primitive-compatible types', () => {
     type T1NegateT1_extends_Number = T1NegateT1 extends number ? true : false
     type Number_extends_T1NegateT1 = number extends T1NegateT1 ? true : false
 
@@ -58,6 +58,25 @@ describe('NegateTag', () => {
 
     const singleTaggedBecomesPrimitive: SingleTaggedBecomesPrimitive = true
     expect(singleTaggedBecomesPrimitive).toBe(true)
+
+    // Here we test that we can assign "naked" primitive literals
+    const literalExample: T1NegateT1 = 42
+    expect(literalExample).toBe(42)
+  })
+
+  it('accepts primitive types when multiple negations are combined', () => {
+    type NegateT1 = NegateTag<number, 'T1'>
+    type NegateT1T2 = NegateTag<NegateT1, 'T2'>
+
+    const doublyNegated: NegateT1T2 = 42
+    expect(doublyNegated).toBe(42)
+  })
+
+  it('accepts primitive types after negating "last" tag', () => {
+    type T1T2NegateT1T2 = NegateTag<T1T2NegateT1, 'T2'>
+
+    const negatedAfterTagged: T1T2NegateT1T2 = 42
+    expect(negatedAfterTagged).toBe(42)
   })
 
   it('removes tag', () => {

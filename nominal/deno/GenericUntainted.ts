@@ -1,6 +1,6 @@
 import { GenericTainted } from './GenericTainted.ts';
 import { NegateTag } from './NegateTag.ts';
-import { TagsMarker } from './internal/TagsMarker.ts';
+import { TagsMarker } from './internal/Markers.ts';
 
 export type GenericUntainted<
   BaseType,
