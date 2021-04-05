@@ -64,6 +64,14 @@ describe('NegateTag', () => {
     expect(literalExample).toBe(42)
   })
 
+  it('accepts primitive types when multiple negations are combined', () => {
+    type NegateT1 = NegateTag<number, 'T1'>
+    type NegateT1T2 = NegateTag<NegateT1, 'T2'>
+
+    const doublyNegated: NegateT1T2 = 42
+    expect(doublyNegated).toBe(42)
+  })
+
   it('removes tag', () => {
     type T1NegateT1_extends_T1 = T1NegateT1 extends T1 ? true : false
     type T2NegateT2_extends_T2 = T2NegateT2 extends T2 ? true : false
