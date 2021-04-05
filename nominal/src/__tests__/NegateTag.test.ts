@@ -72,6 +72,13 @@ describe('NegateTag', () => {
     expect(doublyNegated).toBe(42)
   })
 
+  it('accepts primitive types after negating "last" tag', () => {
+    type T1T2NegateT1T2 = NegateTag<T1T2NegateT1, 'T2'>
+
+    const negatedAfterTagged: T1T2NegateT1T2 = 42
+    expect(negatedAfterTagged).toBe(42)
+  })
+
   it('removes tag', () => {
     type T1NegateT1_extends_T1 = T1NegateT1 extends T1 ? true : false
     type T2NegateT2_extends_T2 = T2NegateT2 extends T2 ? true : false
