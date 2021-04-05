@@ -14,3 +14,8 @@ export type TagsMarker<BaseType, TypeTags> = {
   readonly [__BaseType]: BaseType
   readonly [__TypeTags]: TypeTags
 }
+
+export type OptionalTagsMarker<BaseType, TypeTags> = {
+  readonly [__BaseType]?: BaseType
+  readonly [__TypeTags]?: TypeTags
+}

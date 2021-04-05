@@ -6,6 +6,10 @@ export type NegatedTagWrapper<TypeTag extends string | symbol> = {
   readonly [key in TypeTag]?: null // It cannot be never, since it extends from everything
 }
 
+export type ExtendedTagWrapper<TypeTag extends string | symbol> =
+  | TagWrapper<TypeTag>
+  | NegatedTagWrapper<TypeTag>
+
 export type ManyTagsWrapper<
   TypeTags extends (string | symbol)[]
 > = TypeTags extends [infer TypeTag0, ...infer OtherTypeTags]
