@@ -59,6 +59,10 @@ describe('WithoutTag', () => {
 
     const singleTaggedBecomesPrimitive: SingleTaggedBecomesPrimitive = true
     expect(singleTaggedBecomesPrimitive).toBe(true)
+
+    // Here we test that we can assign "naked" primitive literals
+    const literalExample: T1WithoutT1 = 42
+    expect(literalExample).toBe(42)
   })
 
   it('removes tag', () => {

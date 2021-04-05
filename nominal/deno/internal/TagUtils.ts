@@ -1,5 +1,5 @@
 export type TagWrapper<TypeTag extends string | symbol> = {
-  readonly [key in TypeTag]: TypeTag
+  readonly [key in TypeTag]: true
 }
 
 export type NegatedTagWrapper<TypeTag extends string | symbol> = {
