@@ -152,12 +152,12 @@ is passed from one function to another.
 ```typescript
 function throwIfNotEven<T extends number>(v: T): WithProperty<T, 'Parity', 'Even'> {
   if (v % 2 == 1) throw new Error('Not Even!')
-  return v as WithTag<T, 'Even'>
+  return v as WithProperty<T, 'Even'>
 }
 
-function throwIfNotPositive<T extends number>(v: T): WithTag<T, 'Sign', 'Positive'> {
+function throwIfNotPositive<T extends number>(v: T): WithProperty<T, 'Sign', 'Positive'> {
   if (v <= 0) throw new Error('Not positive!')
-  return v as WithTag<T, 'Positive'>
+  return v as WithProperty<T, 'Positive'>
 }
 
 const v1 = 42
