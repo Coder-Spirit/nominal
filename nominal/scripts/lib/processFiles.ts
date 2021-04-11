@@ -24,7 +24,7 @@ export async function processFile(
   filePath: string,
   ext: string,
 ): Promise<void> {
-  const thePattern = /^(\s*(import|export)\s+(type\s+)?{.+}\s+from\s+'\.[A-Za-z0-9_./]+)';?\n?$/s
+  const thePattern = /^(.*}\s+from\s+'\.[A-Za-z0-9_./]+)';?\n?$/s
   const hasExtension = /\.(js|ts|d\.ts)$/s
 
   if (!filePath.endsWith(ext)) {
