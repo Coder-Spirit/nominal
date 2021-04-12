@@ -1,6 +1,6 @@
 # @coderspirit/nominal
 
-`Nominal` provides a powerful toolking to apply
+`Nominal` provides a powerful toolkit to apply
 [nominal typing](https://en.wikipedia.org/wiki/Nominal_type_system) on
 [Typescript](https://www.typescriptlang.org/) with zero runtime overhead.
 
