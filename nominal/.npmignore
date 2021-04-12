@@ -9,5 +9,6 @@ jest.config.js
 package-lock.json
 tsconfig.base.json
 tsconfig.esm.json
+tsconfig.esm.tsbuildinfo
 tsconfig.json
 tsconfig.tsbuildinfo
