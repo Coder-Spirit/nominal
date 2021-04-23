@@ -15,7 +15,8 @@ It offers three kinds of nominal types:
   where we would be forced to write tons of mappings just to content the type
   checker.
 - **Properties:** They are very useful to express things like logical and
-  mathematical properties.
+  mathematical properties, but also to implement a weak form of
+  [dependent types](https://en.wikipedia.org/wiki/Dependent_type).
 
 While each type can only have either a *brand* or a *flavor*, we can easily
 combine *brands* or *flavors* with *properties*.
@@ -141,7 +142,7 @@ type Even = WithStrictProperty<number, Parity, 'Even'>
 type Wrong = WithStrictProperty<number, Parity, 'Seven'>
 ```
 
-### Advanced use cases
+### Advanced use cases (pseudo dependent types)
 
 #### **Properties can be preserved across function boundaries**
 
