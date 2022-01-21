@@ -14,7 +14,7 @@ import { PreservePropertyMarkers } from './internal/Preservers.ts';
  */
 export type WithBrand<
   BaseType,
-  Brand extends BrandType
+  Brand extends BrandType,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 > = BaseType extends BaseTypeMarker<infer TrueBaseType>
   ? BrandMarker<TrueBaseType, Brand> & PreservePropertyMarkers<BaseType>
@@ -29,7 +29,7 @@ export type WithBrand<
  */
 export type WithFlavor<
   BaseType,
-  Brand extends BrandType
+  Brand extends BrandType,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 > = BaseType extends BaseTypeMarker<infer TrueBaseType>
   ? FlavorMarker<TrueBaseType, Brand> & PreservePropertyMarkers<BaseType>

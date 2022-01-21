@@ -1,6 +1,6 @@
 {
   "name": "@coderspirit/nominal",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Powerful nominal types for your project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -22,8 +22,8 @@
   "scripts": {
     "build": "yarn build:npm && yarn build:deno",
     "build:cjs": "tsc -p ./tsconfig.json",
-    "build:deno": "mkdir -p ./deno && cp -r ./src/* ./deno/ && rm -rf ./deno/__tests__ && ts-node ./scripts/adaptDeno.ts",
-    "build:esm": "tsc -p ./tsconfig.esm.json && ts-node ./scripts/adaptESM.ts",
+    "build:deno": "./scripts/build_deno.sh",
+    "build:esm": "./scripts/build_esm.sh",
     "build:npm": "yarn build:cjs && yarn build:esm",
     "clean": "yarn clean:dist && yarn clean:deno",
     "clean:deno": "rm -rf ./deno/*.ts && rm -rf ./deno/*/*.ts",
@@ -36,8 +36,8 @@
     "prepublishOnly": "yarn lint && yarn test && yarn clean:dist && yarn build:npm",
     "test": "jest"
   },
-  "peerDependencies": {
-    "typescript": ">=4.0"
+  "dependencies": {
+    "@coderspirit/nominal-symbols": "^1.0.1"
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",

@@ -21,7 +21,7 @@ import { PreserveBrandlikeMarkers } from './internal/Preservers'
 export type WithProperty<
   BaseType,
   PropertyKey extends PropertyKeyType,
-  PropertyValue extends PropertyValueType = true // By default we consider binary properties (the property holds or not)
+  PropertyValue extends PropertyValueType = true, // By default we consider binary properties (the property holds or not)
 > = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
   ? PropertiesMarker<
       TrueBaseType,
@@ -56,7 +56,7 @@ export type WithProperty<
  */
 export type PropertyTypeDefinition<
   PropertyName extends PropertyKeyType,
-  AcceptedValues extends PropertyValueType
+  AcceptedValues extends PropertyValueType,
 > = {
   readonly [__PropertyName]: PropertyName
   readonly [__PropertyValues]: AcceptedValues
@@ -76,7 +76,7 @@ export type PropertyTypeDefinition<
 export type WithStrictProperty<
   BaseType,
   PropertyType,
-  PropertyValue extends PropertyValueType
+  PropertyValue extends PropertyValueType,
 > = PropertyType extends PropertyTypeDefinition<
   infer PropertyName,
   infer AcceptedValues
@@ -95,7 +95,7 @@ export type WithStrictProperty<
  */
 export type KeepProperties<
   BaseType,
-  PropertyKeys extends PropertyKeyType
+  PropertyKeys extends PropertyKeyType,
 > = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
   ? PropertiesMarker<TrueBaseType, Pick<Properties, PropertyKeys>> &
       PreserveBrandlikeMarkers<BaseType>
@@ -109,7 +109,7 @@ export type KeepProperties<
 export type KeepPropertyIfValueMatches<
   BaseType,
   PropertyKey extends PropertyKeyType,
-  PropertyValues extends PropertyValueType
+  PropertyValues extends PropertyValueType,
 > = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
   ? Properties extends PropertyWrapper<PropertyKey, PropertyValueType>
     ? Properties[PropertyKey] extends PropertyValues

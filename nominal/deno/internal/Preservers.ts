@@ -18,8 +18,7 @@ export type PreserveBrandlikeMarkers<BaseType> = BaseType extends BrandMarker<
 /**
  * It helps us to preserve property markers
  */
-export type PreservePropertyMarkers<
-  BaseType
-> = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
-  ? PropertiesMarker<TrueBaseType, Properties>
-  : unknown
+export type PreservePropertyMarkers<BaseType> =
+  BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
+    ? PropertiesMarker<TrueBaseType, Properties>
+    : unknown
