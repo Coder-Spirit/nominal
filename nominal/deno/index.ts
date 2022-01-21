@@ -6,4 +6,8 @@ export type {
   WithProperty,
 } from './Properties.ts';
 
-export { WithBrand, WithFlavor, WithoutBrand } from './Brands.ts';
+export type { WithBrand, WithFlavor, WithoutBrand } from './Brands.ts';
+export type {
+  BrandMarker as FastBrand,
+  FlavorMarker as FastFlavor,
+} from './internal/Markers.ts';

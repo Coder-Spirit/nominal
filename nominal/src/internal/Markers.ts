@@ -13,7 +13,7 @@ export type PropertyValueType = string | number | boolean | symbol
  */
 export type PropertyWrapper<
   PropertyKey extends PropertyKeyType,
-  PropertyValue extends PropertyValueType
+  PropertyValue extends PropertyValueType,
 > = {
   readonly [key in PropertyKey]: PropertyValue
 }
@@ -23,7 +23,7 @@ export type PropertyWrapper<
  */
 export type PropertiesMarker<
   BaseType,
-  Properties extends PropertyWrapper<PropertyKeyType, PropertyValueType>
+  Properties extends PropertyWrapper<PropertyKeyType, PropertyValueType>,
 > = BaseType & {
   readonly [__BaseType]: BaseType
   readonly [__Properties]: Properties

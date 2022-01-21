@@ -1,6 +1,6 @@
 {
   "name": "@coderspirit/nominal",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Powerful nominal types for your project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
@@ -22,8 +22,8 @@
   "scripts": {
     "build": "yarn build:npm && yarn build:deno",
     "build:cjs": "tsc -p ./tsconfig.json",
-    "build:deno": "mkdir -p ./deno && cp -r ./src/* ./deno/ && rm -rf ./deno/__tests__ && ts-node ./scripts/adaptDeno.ts",
-    "build:esm": "tsc -p ./tsconfig.esm.json && ts-node ./scripts/adaptESM.ts",
+    "build:deno": "./scripts/build_deno.sh",
+    "build:esm": "./scripts/build_esm.sh",
     "build:npm": "yarn build:cjs && yarn build:esm",
     "clean": "yarn clean:dist && yarn clean:deno",
     "clean:deno": "rm -rf ./deno/*.ts && rm -rf ./deno/*/*.ts",
@@ -36,30 +36,30 @@
     "prepublishOnly": "yarn lint && yarn test && yarn clean:dist && yarn build:npm",
     "test": "jest"
   },
-  "peerDependencies": {
-    "typescript": ">=4.0"
+  "dependencies": {
+    "@coderspirit/nominal-symbols": "^1.0.1"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.22",
+    "@types/jest": "^27.4.0",
     "@types/node": "^14.14.37",
-    "@typescript-eslint/eslint-plugin": "^4.19.0",
-    "@typescript-eslint/parser": "^4.19.0",
-    "eslint": "^7.23.0",
-    "eslint-config-prettier": "^8.1.0",
-    "eslint-plugin-jest": "^24.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "eslint": "^8.7.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-node": "^11.1.0",
-    "jest": "^26.6.3",
-    "prettier": "^2.2.1",
-    "ts-jest": "^26.5.4",
-    "ts-node": "^9.1.1",
-    "typescript": "^4.2.3"
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.1.3",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.5"
   },
   "engines": {
     "node": ">=12.0.0"
   },
   "settings": {
     "jest": {
-      "version": 26
+      "version": 27
     }
   },
   "repository": {

@@ -6,4 +6,8 @@ export type {
   WithProperty,
 } from './Properties'
 
-export { WithBrand, WithFlavor, WithoutBrand } from './Brands'
+export type { WithBrand, WithFlavor, WithoutBrand } from './Brands'
+export type {
+  BrandMarker as FastBrand,
+  FlavorMarker as FastFlavor,
+} from './internal/Markers'
