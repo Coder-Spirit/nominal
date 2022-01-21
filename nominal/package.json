@@ -40,26 +40,26 @@
     "typescript": ">=4.0"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.1",
+    "@types/jest": "^27.4.0",
     "@types/node": "^14.14.37",
-    "@typescript-eslint/eslint-plugin": "^4.29.3",
-    "@typescript-eslint/parser": "^4.29.3",
-    "eslint": "^7.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.10.0",
+    "@typescript-eslint/parser": "^5.10.0",
+    "eslint": "^8.7.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jest": "^24.4.0",
+    "eslint-plugin-jest": "^25.7.0",
     "eslint-plugin-node": "^11.1.0",
-    "jest": "^27.0.6",
-    "prettier": "^2.3.2",
-    "ts-jest": "^27.0.5",
-    "ts-node": "^10.2.1",
-    "typescript": "^4.3.5"
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.1.3",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.5"
   },
   "engines": {
     "node": ">=12.0.0"
   },
   "settings": {
     "jest": {
-      "version": 26
+      "version": 27
     }
   },
   "repository": {
