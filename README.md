@@ -144,6 +144,35 @@ type Wrong = WithStrictProperty<number, Parity, 'Seven'>
 
 ### Advanced use cases (pseudo dependent types)
 
+#### Faster brands and flavors
+
+The types `WithBrand` and `WithFlavor`, although quite simple in their purpose,
+hide a quite complex machinery that exists for the sole purpose of maintaining
+full compatibility with other more complex types such as `WithProperty`.
+
+Most times we won't really need to rely on such complex mechanisms because we
+apply `WithBrandh` and `WithFlavor` to basic types. So, if we want to minimize
+our compilation types, we can chose a simpler and faster implementation:
+
+```typescript
+import {
+  FastBrand,
+  FastFlavor,
+  WithBrand,
+  WithFlavor
+} from '@coderspirit/nominal'
+
+// These two types are 100% equivalent, but the second one takes less time to be
+// compiled. Notice that they are 100% equivalent only because they were applied
+// to "basic" types (without other associated metadata, like `WithProperty`).
+type SlowEmailType = WithBrand<string, 'Email'>
+type FastEmailType = FastBrand<string, 'Email'>
+
+// Same for flavors.
+type SlowPhoneNumberType = WithFlavor<string, 'PhoneNumber'>
+type FastPhoneNumberType = FastFlavor<string, 'PhoneNumber'>
+```
+
 #### **Properties can be preserved across function boundaries**
 
 This feature can be very useful when we need to verify many properties for the
