@@ -1,5 +1,5 @@
 // We re-export, instead of directly importing from the package, for
-// compatibility with ES modules & Deno. Typescript and NodeJS are still in very
+// compatibility reasons. Typescript and NodeJS are still in very
 // early stages when it comes to ES modules support.
 export {
   __BaseType,
