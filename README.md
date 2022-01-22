@@ -1,5 +1,12 @@
 # @coderspirit/nominal
 
+[![NPM version](https://img.shields.io/npm/v/@coderspirit/nominal.svg?style=flat)](https://www.npmjs.com/package/@coderspirit/nominal)
+[![TypeScript](https://badgen.net/npm/types/@coderspirit/nominal)](http://www.typescriptlang.org/)
+[![License](https://badgen.net/npm/license/@coderspirit/nominal)](https://opensource.org/licenses/MIT)
+[![npm downloads](https://img.shields.io/npm/dm/@coderspirit/nominal.svg?style=flat)](https://www.npmjs.com/package/@coderspirit/nominal)
+[![Known Vulnerabilities](https://snyk.io//test/github/Coder-Spirit/nominal/badge.svg?targetFile=package.json)](https://snyk.io//test/github/Coder-Spirit/nominal?targetFile=package.json)
+[![Security Score](https://snyk-widget.herokuapp.com/badge/npm/@coderspirit%2Fnominal/badge.svg)](https://snyk.io/advisor/npm-package/@coderspirit/nominal)
+
 `Nominal` provides a powerful toolkit to apply
 [nominal typing](https://en.wikipedia.org/wiki/Nominal_type_system) on
 [Typescript](https://www.typescriptlang.org/) with zero runtime overhead.
