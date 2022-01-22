@@ -13,5 +13,9 @@ run()
 
 async function run(): Promise<void> {
   const esmDir = join(__dirname, '..', 'deno')
-  await processDirectory(esmDir, '.ts')
+  await processDirectory(
+    esmDir,
+    '.ts',
+    [['@coderspirit/nominal-symbols', 'https://deno.land/x/nominal_symbols@1.0.2/nominal-symbols/deno/index.ts']]
+  )
 }
