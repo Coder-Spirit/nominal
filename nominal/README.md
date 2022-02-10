@@ -1,5 +1,12 @@
 # @coderspirit/nominal
 
+[![NPM version](https://img.shields.io/npm/v/@coderspirit/nominal.svg?style=flat)](https://www.npmjs.com/package/@coderspirit/nominal)
+[![TypeScript](https://badgen.net/npm/types/@coderspirit/nominal)](http://www.typescriptlang.org/)
+[![License](https://badgen.net/npm/license/@coderspirit/nominal)](https://opensource.org/licenses/MIT)
+[![npm downloads](https://img.shields.io/npm/dm/@coderspirit/nominal.svg?style=flat)](https://www.npmjs.com/package/@coderspirit/nominal)
+[![Known Vulnerabilities](https://snyk.io//test/github/Coder-Spirit/nominal/badge.svg?targetFile=package.json)](https://snyk.io//test/github/Coder-Spirit/nominal?targetFile=package.json)
+[![Security Score](https://snyk-widget.herokuapp.com/badge/npm/@coderspirit%2Fnominal/badge.svg)](https://snyk.io/advisor/npm-package/@coderspirit/nominal)
+
 `Nominal` provides a powerful toolkit to apply
 [nominal typing](https://en.wikipedia.org/wiki/Nominal_type_system) on
 [Typescript](https://www.typescriptlang.org/) with zero runtime overhead.
@@ -15,7 +22,8 @@ It offers three kinds of nominal types:
   where we would be forced to write tons of mappings just to content the type
   checker.
 - **Properties:** They are very useful to express things like logical and
-  mathematical properties.
+  mathematical properties, but also to implement a weak form of
+  [dependent types](https://en.wikipedia.org/wiki/Dependent_type).
 
 While each type can only have either a *brand* or a *flavor*, we can easily
 combine *brands* or *flavors* with *properties*.
@@ -90,6 +98,34 @@ const mail: Email = user // Error, as the flavors don't match
   symbols instead of strings as property keys or property values when defining
   the new nominal type.
 
+### Faster brands and flavors
+
+The types `WithBrand` and `WithFlavor`, although quite simple in their purpose,
+hide a quite complex machinery that exists for the sole purpose of maintaining
+full compatibility with other more complex types such as `WithProperty`.
+
+Most times we won't really need to rely on such complex mechanisms because we
+apply `WithBrandh` and `WithFlavor` to basic types. So, if we want to minimize
+our compilation types, we can chose a simpler and faster implementation:
+
+```typescript
+import {
+  FastBrand,
+  FastFlavor,
+  WithBrand,
+  WithFlavor
+} from '@coderspirit/nominal'
+
+// These two types are 100% equivalent, but the second one takes less time to be
+// compiled. Notice that they are 100% equivalent only because they were applied
+// to "basic" types (without other associated metadata, like `WithProperty`).
+type SlowEmailType = WithBrand<string, 'Email'>
+type FastEmailType = FastBrand<string, 'Email'>
+
+// Same for flavors.
+type SlowPhoneNumberType = WithFlavor<string, 'PhoneNumber'>
+type FastPhoneNumberType = FastFlavor<string, 'PhoneNumber'>
+```
 
 ## Properties
 
@@ -112,6 +148,21 @@ type Positive = WithProperty<number, 'Positive'>
 const myPositive: Positive = 1 as Positive
 ```
 
+#### **Interesting _properties_**
+- `WithProperty` is additive, commutative and idempotent.
+- The previous point means that we don't have to worry about the order of
+  composition, we won't suffer typing inconsistencies because of that.
+
+`WithProperty` can be combined in two ways, which are completely compatible:
+- "Classic" `&` type operator:
+  ```typescript
+  type PositiveEven = WithProperty<number, 'Parity', 'Even'> & WithProperty<number, 'Positive'>
+  ```
+- Nesting types:
+  ```typescript
+  type PositiveEven = WithProperty<WithProperty<number, 'Positive'>, 'Parity', 'Even'>
+  ```
+
 #### **Advice**
 - Although we perform a "static cast" here, this should be done only when:
   - the value is a literal (as in the example)
@@ -119,11 +170,6 @@ const myPositive: Positive = 1 as Positive
 - One way to protect against other developers "forging" the type is to use
   symbols instead of strings as property keys or property values when defining
   the new nominal type.
-
-#### **Interesting properties**
-- `WithProperty` is additive, commutative and idempotent.
-- The previous point means that we don't have to worry about the order of
-  composition, we won't suffer typing inconsistencies because of that.
 
 ### Crazy-level strictness
 
@@ -141,7 +187,7 @@ type Even = WithStrictProperty<number, Parity, 'Even'>
 type Wrong = WithStrictProperty<number, Parity, 'Seven'>
 ```
 
-### Advanced use cases
+### Advanced use cases (pseudo dependent types)
 
 #### **Properties can be preserved across function boundaries**
 

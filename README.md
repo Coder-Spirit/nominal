@@ -148,6 +148,21 @@ type Positive = WithProperty<number, 'Positive'>
 const myPositive: Positive = 1 as Positive
 ```
 
+#### **Interesting _properties_**
+- `WithProperty` is additive, commutative and idempotent.
+- The previous point means that we don't have to worry about the order of
+  composition, we won't suffer typing inconsistencies because of that.
+
+`WithProperty` can be combined in two ways, which are completely compatible:
+- "Classic" `&` type operator:
+  ```typescript
+  type PositiveEven = WithProperty<number, 'Parity', 'Even'> & WithProperty<number, 'Positive'>
+  ```
+- Nesting types:
+  ```typescript
+  type PositiveEven = WithProperty<WithProperty<number, 'Positive'>, 'Parity', 'Even'>
+  ```
+
 #### **Advice**
 - Although we perform a "static cast" here, this should be done only when:
   - the value is a literal (as in the example)
@@ -155,11 +170,6 @@ const myPositive: Positive = 1 as Positive
 - One way to protect against other developers "forging" the type is to use
   symbols instead of strings as property keys or property values when defining
   the new nominal type.
-
-#### **Interesting properties**
-- `WithProperty` is additive, commutative and idempotent.
-- The previous point means that we don't have to worry about the order of
-  composition, we won't suffer typing inconsistencies because of that.
 
 ### Crazy-level strictness
 

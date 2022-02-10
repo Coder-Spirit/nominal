@@ -1,4 +1,5 @@
 # Dependencies, Caches & Artifacts
+.dccache
 dist/
 node_modules/
 tsconfig.tsbuildinfo
