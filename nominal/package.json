@@ -1,6 +1,6 @@
 {
   "name": "@coderspirit/nominal",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Powerful nominal types for your project",
   "main": "./dist/cjs/index.js",
   "module": "./dist/esm/index.js",
