@@ -1,7 +1,23 @@
 {
-  "name": "@coderspirit/nominal-symbols",
-  "version": "2.0.0",
-  "description": "Symbol objects for @coderspirit/nominal",
+  "name": "@coderspirit/nominal",
+  "version": "4.0.0",
+  "description": "Powerful nominal types for your project",
+  "main": "./dist/nominal.cjs",
+  "module": "./dist/nominal.mjs",
+  "types": "./dist/nominal.d.cts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    "import": {
+      "types": "./dist/nominal.d.mts",
+      "default": "./dist/nominal.mjs"
+    },
+    "require": {
+      "types": "./dist/nominal.d.cts",
+      "default": "./dist/nominal.cjs"
+    }
+  },
   "keywords": [
     "typescript",
     "types",
@@ -11,32 +27,17 @@
   "author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
   "private": false,
   "license": "MIT",
-  "main": "./dist/symbols.cjs",
-  "module": "./dist/symbols.mjs",
-  "types": "./dist/symbols.d.cts",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    "import": {
-      "types": "./dist/symbols.d.mts",
-      "default": "./dist/symbols.mjs"
-    },
-    "require": {
-      "types": "./dist/symbols.d.cts",
-      "default": "./dist/symbols.cjs"
-    }
-  },
   "scripts": {
     "build": "rm -rf dist && rollup --config rollup.config.prod.mjs",
     "lint:_all": "pnpm run lint:tsc && pnpm run lint:eslint && pnpm run lint:publint",
     "lint:eslint": "eslint . --ext ts,mts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:publint": "publint",
     "lint:tsc": "tsc",
+    "test": "vitest run",
     "prepublishOnly": "pnpm run build"
   },
-  "peerDependencies": {
-    "typescript": ">=5.2"
+  "dependencies": {
+    "@coderspirit/nominal-symbols": "workspace:*"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.12.2",
@@ -50,7 +51,8 @@
     "rollup": "^4.1.3",
     "rollup-plugin-dts": "^6.1.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "vitest": "^0.34.6"
   },
   "engines": {
     "node": ">=18.0.0"

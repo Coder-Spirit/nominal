@@ -1,13 +1,16 @@
-import {
-  BaseTypeMarker,
-  PropertiesMarker,
-  PropertyKeyType,
-  PropertyValueType,
-  PropertyWrapper,
-  WeakBaseTypeMarker,
+import type {
+	BaseTypeMarker,
+	PropertiesMarker,
+	PropertyKeyType,
+	PropertyValueType,
+	PropertyWrapper,
+	WeakBaseTypeMarker,
 } from './internal/Markers'
-import { __PropertyName, __PropertyValues } from './internal/Symbols'
-import { PreserveBrandlikeMarkers } from './internal/Preservers'
+import type {
+	__PropertyName,
+	__PropertyValues,
+} from '@coderspirit/nominal-symbols'
+import type { PreserveBrandlikeMarkers } from './internal/Preservers'
 
 /**
  * `WithProperty` adds a new property to the passed base type, and it overwrites
@@ -19,30 +22,30 @@ import { PreserveBrandlikeMarkers } from './internal/Preservers'
  * @see {WithStrictProperty}
  */
 export type WithProperty<
-  BaseType,
-  PropertyKey extends PropertyKeyType,
-  PropertyValue extends PropertyValueType = true, // By default we consider binary properties (the property holds or not)
+	BaseType,
+	PropertyKey extends PropertyKeyType,
+	PropertyValue extends PropertyValueType = true, // By default we consider binary properties (the property holds or not)
 > = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
-  ? PropertiesMarker<
-      TrueBaseType,
-      Omit<Properties, PropertyKey> &
-        PropertyWrapper<PropertyKey, PropertyValue>
-    > &
-      PreserveBrandlikeMarkers<BaseType>
-  : BaseType extends BaseTypeMarker<infer TrueBaseType>
-  ? PropertiesMarker<
-      TrueBaseType,
-      PropertyWrapper<PropertyKey, PropertyValue>
-    > &
-      PreserveBrandlikeMarkers<BaseType>
-  : BaseType extends WeakBaseTypeMarker<infer TrueBaseType>
-  ? PropertiesMarker<
-      TrueBaseType,
-      PropertyWrapper<PropertyKey, PropertyValue>
-    > &
-      PreserveBrandlikeMarkers<BaseType>
-  : PropertiesMarker<BaseType, PropertyWrapper<PropertyKey, PropertyValue>> &
-      PreserveBrandlikeMarkers<BaseType>
+	? PreserveBrandlikeMarkers<BaseType> &
+			PropertiesMarker<
+				TrueBaseType,
+				Omit<Properties, PropertyKey> &
+					PropertyWrapper<PropertyKey, PropertyValue>
+			>
+	: BaseType extends BaseTypeMarker<infer TrueBaseType>
+	? PreserveBrandlikeMarkers<BaseType> &
+			PropertiesMarker<
+				TrueBaseType,
+				PropertyWrapper<PropertyKey, PropertyValue>
+			>
+	: BaseType extends WeakBaseTypeMarker<infer TrueBaseType>
+	? PreserveBrandlikeMarkers<BaseType> &
+			PropertiesMarker<
+				TrueBaseType,
+				PropertyWrapper<PropertyKey, PropertyValue>
+			>
+	: PreserveBrandlikeMarkers<BaseType> &
+			PropertiesMarker<BaseType, PropertyWrapper<PropertyKey, PropertyValue>>
 
 /**
  * It helps to provide a strict definition of a property, delimiting which
@@ -55,11 +58,11 @@ export type WithProperty<
  * @see {WithStrictProperty}
  */
 export type PropertyTypeDefinition<
-  PropertyName extends PropertyKeyType,
-  AcceptedValues extends PropertyValueType,
+	PropertyName extends PropertyKeyType,
+	AcceptedValues extends PropertyValueType,
 > = {
-  readonly [__PropertyName]: PropertyName
-  readonly [__PropertyValues]: AcceptedValues
+	readonly [__PropertyName]: PropertyName
+	readonly [__PropertyValues]: AcceptedValues
 }
 
 /**
@@ -74,19 +77,19 @@ export type PropertyTypeDefinition<
  * @see {PropertyTypeDefinition}
  */
 export type WithStrictProperty<
-  BaseType,
-  PropertyType,
-  PropertyValue extends PropertyValueType,
+	BaseType,
+	PropertyType,
+	PropertyValue extends PropertyValueType,
 > = PropertyType extends PropertyTypeDefinition<
-  infer PropertyName,
-  infer AcceptedValues
+	infer PropertyName,
+	infer AcceptedValues
 >
-  ? PropertyValue extends AcceptedValues
-    ? PropertyValue extends never
-      ? never
-      : WithProperty<BaseType, PropertyName, PropertyValue>
-    : never
-  : never
+	? PropertyValue extends AcceptedValues
+		? PropertyValue extends never
+			? never
+			: WithProperty<BaseType, PropertyName, PropertyValue>
+		: never
+	: never
 
 /**
  * It strips away from `BaseType` all properties not specified in
@@ -94,12 +97,12 @@ export type WithStrictProperty<
  * @see {KeepPropertyIfValueMatches}
  */
 export type KeepProperties<
-  BaseType,
-  PropertyKeys extends PropertyKeyType,
+	BaseType,
+	PropertyKeys extends PropertyKeyType,
 > = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
-  ? PropertiesMarker<TrueBaseType, Pick<Properties, PropertyKeys>> &
-      PreserveBrandlikeMarkers<BaseType>
-  : BaseType
+	? PreserveBrandlikeMarkers<BaseType> &
+			PropertiesMarker<TrueBaseType, Pick<Properties, PropertyKeys>>
+	: BaseType
 
 /**
  * It preserves the property specified by `PropertyKey` only if its value
@@ -107,16 +110,16 @@ export type KeepProperties<
  * @see {KeepProperties}
  */
 export type KeepPropertyIfValueMatches<
-  BaseType,
-  PropertyKey extends PropertyKeyType,
-  PropertyValues extends PropertyValueType,
+	BaseType,
+	PropertyKey extends PropertyKeyType,
+	PropertyValues extends PropertyValueType,
 > = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
-  ? Properties extends PropertyWrapper<PropertyKey, PropertyValueType>
-    ? Properties[PropertyKey] extends PropertyValues
-      ? BaseType
-      : PropertyWrapper<PropertyKey, Properties[PropertyKey]> extends Properties
-      ? TrueBaseType & PreserveBrandlikeMarkers<BaseType>
-      : PropertiesMarker<TrueBaseType, Omit<Properties, PropertyKey>> &
-          PreserveBrandlikeMarkers<BaseType>
-    : BaseType
-  : BaseType
+	? Properties extends PropertyWrapper<PropertyKey, PropertyValueType>
+		? Properties[PropertyKey] extends PropertyValues
+			? BaseType
+			: PropertyWrapper<PropertyKey, Properties[PropertyKey]> extends Properties
+			? PreserveBrandlikeMarkers<BaseType> & TrueBaseType
+			: PreserveBrandlikeMarkers<BaseType> &
+					PropertiesMarker<TrueBaseType, Omit<Properties, PropertyKey>>
+		: BaseType
+	: BaseType

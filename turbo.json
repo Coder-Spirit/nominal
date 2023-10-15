@@ -2,7 +2,7 @@
 	"$schema": "https://turbo.build/schema.json",
 	"globalDependencies": ["tsconfig.json"],
 	"pipeline": {
-		"@coderspirit/nominal-symbols#build": {
+		"build": {
 			"inputs": [
 				"src/**",
 				"package.json",
@@ -13,10 +13,10 @@
 				"dist/**"
 			],
 			"dependsOn": [
-				"^build:clean"
+				"^build"
 			]
 		},
-		"@coderspirit/nominal-symbols#lint:eslint": {
+		"lint:eslint": {
 			"inputs": [
 				"src/**",
 				".eslintrc.cjs",
@@ -24,52 +24,48 @@
 				"tsconfig.json"
 			],
 			"dependsOn": [
-				"^lint:eslint"
+				"^build"
 			]
 		},
-		"@coderspirit/nominal-symbols#lint:publint": {
+		"lint:publint": {
 			"inputs": ["dist/**", "package.json"],
 			"dependsOn": [
-				"@coderspirit/nominal-symbols#build",
-				"^lint:publint"
+				"build"
 			]
 		},
-		"@coderspirit/nominal-symbols#lint:tsc": {
+		"lint:tsc": {
 			"inputs": [
 				"src/**",
 				"package.json",
 				"tsconfig.json"
 			],
 			"dependsOn": [
-				"^lint:tsc"
-			]
-		},
-		"@coderspirit/nominal-symbols#lint": {
-			"inputs": [
-				"src/**",
-				"package.json",
-				"tsconfig.json"
-			],
-			"dependsOn": [
-				"@coderspirit/nominal-symbols#lint:eslint",
-				"@coderspirit/nominal-symbols#lint:publint",
-				"@coderspirit/nominal-symbols#lint:tsc"
-			]
-		},
-		"build": {
-			"dependsOn": [
-				"@coderspirit/nominal-symbols#build"
+				"^build"
 			]
 		},
 		"lint": {
 			"dependsOn": [
-				"@coderspirit/nominal-symbols#lint"
+				"lint:eslint",
+				"lint:publint",
+				"lint:tsc"
+			]
+		},
+		"test": {
+			"inputs": [
+				"src/**",
+				"package.json",
+				"tsconfig.json",
+				"vitest.config.mts"
+			],
+			"dependsOn": [
+				"^build"
 			]
 		},
 		"all": {
 			"dependsOn": [
 				"build",
-				"lint"
+				"lint",
+				"test"
 			]
 		}
 	}
