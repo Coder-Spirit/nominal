@@ -1,5 +1,8 @@
-# Dependencies, Caches & Artifacts
-.dccache
+# Caches & Artifacts
+.turbo/
+coverage/
 dist/
 node_modules/
+.eslintcache
+.turbo-build.log
 tsconfig.tsbuildinfo
