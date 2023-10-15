@@ -1,32 +1,36 @@
-import { __BaseType, __Brand, __Properties } from './Symbols'
+import type {
+	__BaseType,
+	__Brand,
+	__Properties,
+} from '@coderspirit/nominal-symbols'
 
 // -----------------------------------------------------------------------------
 // Property related types
 // -----------------------------------------------------------------------------
 
 export type PropertyKeyType = string | symbol
-export type PropertyValueType = string | number | boolean | symbol
+export type PropertyValueType = boolean | number | string | symbol
 
 /**
  * It encapsulates specific property key-value metadata that will be attached
  * to other types.
  */
 export type PropertyWrapper<
-  PropertyKey extends PropertyKeyType,
-  PropertyValue extends PropertyValueType,
+	PropertyKey extends PropertyKeyType,
+	PropertyValue extends PropertyValueType,
 > = {
-  readonly [key in PropertyKey]: PropertyValue
+	readonly [key in PropertyKey]: PropertyValue
 }
 
 /**
  * It helps us to construct new types with added properties "metadata".
  */
 export type PropertiesMarker<
-  BaseType,
-  Properties extends PropertyWrapper<PropertyKeyType, PropertyValueType>,
+	BaseType,
+	Properties extends PropertyWrapper<PropertyKeyType, PropertyValueType>,
 > = BaseType & {
-  readonly [__BaseType]: BaseType
-  readonly [__Properties]: Properties
+	readonly [__BaseType]: BaseType
+	readonly [__Properties]: Properties
 }
 
 // -----------------------------------------------------------------------------
@@ -39,16 +43,16 @@ export type BrandType = string | symbol
  * It helps us to construct new branded types.
  */
 export type BrandMarker<BaseType, Brand extends BrandType> = BaseType & {
-  readonly [__BaseType]: BaseType
-  readonly [__Brand]: Brand
+	readonly [__BaseType]: BaseType
+	readonly [__Brand]: Brand
 }
 
 /**
  * It helps us to construct new flavored types.
  */
 export type FlavorMarker<BaseType, Brand extends BrandType> = BaseType & {
-  readonly [__BaseType]?: BaseType
-  readonly [__Brand]?: Brand
+	readonly [__BaseType]?: BaseType
+	readonly [__Brand]?: Brand
 }
 
 // -----------------------------------------------------------------------------
@@ -59,12 +63,12 @@ export type FlavorMarker<BaseType, Brand extends BrandType> = BaseType & {
  * Useful for type inference purposes
  */
 export type BaseTypeMarker<BaseType> = BaseType & {
-  readonly [__BaseType]: BaseType
+	readonly [__BaseType]: BaseType
 }
 
 /**
  * Useful for type inference purposes
  */
 export type WeakBaseTypeMarker<BaseType> = BaseType & {
-  readonly [__BaseType]?: BaseType
+	readonly [__BaseType]?: BaseType
 }
