@@ -1,14 +1,20 @@
 {
   "private": true,
+  "author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
+  "license": "MIT",
   "workspaces": [
-    "nominal"
+    "@coderspirit/*"
   ],
   "scripts": {
-    "build": "yarn workspaces run build",
-    "build:deno": "yarn workspaces run build:deno",
-    "clean:deno": "yarn workspaces run clean:deno",
-    "lint": "yarn workspaces run lint",
-    "postinstall": "if [ -d .git ]; then git config core.hooksPath .hooks; fi",
-    "test": "yarn workspaces run test"
+    "build": "pnpm -r run build",
+    "install-githooks": "if [ -d .git ]; then git config core.hooksPath .hooks; fi",
+    "test": "pnpm -r run test"
+  },
+  "devDependencies": {
+    "turbo": "^1.10.15"
+  },
+  "packageManager": "pnpm@8.9.0",
+  "engines": {
+    "node": ">=18.0"
   }
 }
