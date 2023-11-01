@@ -11,7 +11,7 @@
     "test": "pnpm -r run test"
   },
   "devDependencies": {
-    "turbo": "^1.10.15"
+    "turbo": "^1.10.16"
   },
   "packageManager": "pnpm@8.9.0",
   "engines": {
