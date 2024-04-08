@@ -1,6 +1,6 @@
 {
 	"name": "@coderspirit/safe-env",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Safe & strongly typed environment variables accessor",
 	"main": "./dist/main.cjs",
 	"module": "./dist/main.mjs",
@@ -31,8 +31,7 @@
 	},
 	"dependencies": {
 		"@coderspirit/nominal": "workspace:^",
-		"@coderspirit/nominal-inputs": "workspace:^",
-		"ajv": "^8.12.0"
+		"@coderspirit/nominal-inputs": "workspace:^"
 	},
 	"devDependencies": {
 		"@coderspirit/eslint-config": "^2.0.0",
