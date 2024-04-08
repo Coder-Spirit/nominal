@@ -1,64 +1,51 @@
 {
-  "name": "@coderspirit/nominal-symbols",
-  "version": "2.0.0",
-  "description": "Symbol objects for @coderspirit/nominal",
-  "keywords": [
-    "typescript",
-    "types",
-    "nominal",
-    "taint"
-  ],
-  "author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
-  "private": false,
-  "license": "MIT",
-  "main": "./dist/symbols.cjs",
-  "module": "./dist/symbols.mjs",
-  "types": "./dist/symbols.d.cts",
-  "files": [
-    "dist"
-  ],
-  "exports": {
-    "import": {
-      "types": "./dist/symbols.d.mts",
-      "default": "./dist/symbols.mjs"
-    },
-    "require": {
-      "types": "./dist/symbols.d.cts",
-      "default": "./dist/symbols.cjs"
-    }
-  },
-  "scripts": {
-    "build": "rm -rf dist && rollup --config rollup.config.prod.mjs",
-    "lint:_all": "pnpm run lint:tsc && pnpm run lint:eslint && pnpm run lint:publint",
-    "lint:biome": "biome lint .",
-    "lint:publint": "publint",
-    "lint:tsc": "tsc",
-    "prepublishOnly": "pnpm run build"
-  },
-  "peerDependencies": {
-    "typescript": ">=5.2"
-  },
-  "devDependencies": {
-    "@arethetypeswrong/cli": "^0.15.3",
-    "@biomejs/biome": "^1.6.4",
-    "@coderspirit/eslint-config": "^2.0.0",
-    "@rollup/plugin-typescript": "^11.1.6",
-    "@types/node": "^20.12.5",
-    "publint": "^0.2.7",
-    "rollup": "^4.14.1",
-    "rollup-plugin-dts": "^6.1.0",
-    "tslib": "^2.6.2",
-    "typescript": "^5.4.4"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Coder-Spirit/nominal.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Coder-Spirit/nominal/issues"
-  },
-  "homepage": "https://github.com/Coder-Spirit/nominal#readme"
+	"name": "@coderspirit/nominal-symbols",
+	"version": "2.0.0",
+	"description": "Symbol objects for @coderspirit/nominal",
+	"keywords": ["typescript", "types", "nominal", "taint"],
+	"author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
+	"private": false,
+	"license": "MIT",
+	"main": "./dist/symbols.cjs",
+	"module": "./dist/symbols.mjs",
+	"types": "./dist/symbols.d.cts",
+	"files": ["dist"],
+	"exports": {
+		"import": {
+			"types": "./dist/symbols.d.mts",
+			"default": "./dist/symbols.mjs"
+		},
+		"require": {
+			"types": "./dist/symbols.d.cts",
+			"default": "./dist/symbols.cjs"
+		}
+	},
+	"scripts": {
+		"build": "rm -rf dist && rollup --config rollup.config.prod.mjs",
+		"lint:_all": "pnpm run lint:tsc && pnpm run lint:eslint && pnpm run lint:publint",
+		"lint:biome": "biome lint .",
+		"lint:publint": "publint",
+		"lint:tsc": "tsc",
+		"prepublishOnly": "pnpm run build"
+	},
+	"peerDependencies": {
+		"typescript": ">=5.2"
+	},
+	"devDependencies": {
+		"@coderspirit/eslint-config": "^2.0.0",
+		"@types/node": "^20.12.5",
+		"tslib": "^2.6.2",
+		"typescript": "^5.4.4"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Coder-Spirit/nominal.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Coder-Spirit/nominal/issues"
+	},
+	"homepage": "https://github.com/Coder-Spirit/nominal#readme"
 }

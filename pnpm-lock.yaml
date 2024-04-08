@@ -8,6 +8,24 @@ importers:
 
   .:
     devDependencies:
+      '@arethetypeswrong/cli':
+        specifier: ^0.15.3
+        version: 0.15.3
+      '@biomejs/biome':
+        specifier: ^1.6.4
+        version: 1.6.4
+      '@rollup/plugin-typescript':
+        specifier: ^11.1.6
+        version: 11.1.6(rollup@4.14.1)(typescript@5.4.4)
+      publint:
+        specifier: ^0.2.7
+        version: 0.2.7
+      rollup:
+        specifier: ^4.14.1
+        version: 4.14.1
+      rollup-plugin-dts:
+        specifier: ^6.1.0
+        version: 6.1.0(rollup@4.14.1)(typescript@5.4.4)
       turbo:
         specifier: ^1.13.2
         version: 1.13.2
@@ -18,30 +36,34 @@ importers:
         specifier: workspace:*
         version: link:../nominal-symbols
     devDependencies:
-      '@arethetypeswrong/cli':
-        specifier: ^0.15.3
-        version: 0.15.3
-      '@biomejs/biome':
-        specifier: ^1.6.4
-        version: 1.6.4
       '@coderspirit/eslint-config':
         specifier: ^2.0.0
         version: 2.0.0(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.4)
-      '@rollup/plugin-typescript':
-        specifier: ^11.1.6
-        version: 11.1.6(rollup@4.14.1)(tslib@2.6.2)(typescript@5.4.4)
       '@types/node':
         specifier: ^20.12.5
         version: 20.12.5
-      publint:
-        specifier: ^0.2.7
-        version: 0.2.7
-      rollup:
-        specifier: ^4.14.1
-        version: 4.14.1
-      rollup-plugin-dts:
-        specifier: ^6.1.0
-        version: 6.1.0(rollup@4.14.1)(typescript@5.4.4)
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
+      typescript:
+        specifier: ^5.4.4
+        version: 5.4.4
+      vitest:
+        specifier: ^0.34.6
+        version: 0.34.6
+
+  '@coderspirit/nominal-inputs':
+    dependencies:
+      '@coderspirit/nominal':
+        specifier: workspace:*
+        version: link:../nominal
+    devDependencies:
+      '@coderspirit/eslint-config':
+        specifier: ^2.0.0
+        version: 2.0.0(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.4)
+      '@types/node':
+        specifier: ^20.12.5
+        version: 20.12.5
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -54,30 +76,12 @@ importers:
 
   '@coderspirit/nominal-symbols':
     devDependencies:
-      '@arethetypeswrong/cli':
-        specifier: ^0.15.3
-        version: 0.15.3
-      '@biomejs/biome':
-        specifier: ^1.6.4
-        version: 1.6.4
       '@coderspirit/eslint-config':
         specifier: ^2.0.0
         version: 2.0.0(eslint@8.57.0)(prettier@3.2.5)(typescript@5.4.4)
-      '@rollup/plugin-typescript':
-        specifier: ^11.1.6
-        version: 11.1.6(rollup@4.14.1)(tslib@2.6.2)(typescript@5.4.4)
       '@types/node':
         specifier: ^20.12.5
         version: 20.12.5
-      publint:
-        specifier: ^0.2.7
-        version: 0.2.7
-      rollup:
-        specifier: ^4.14.1
-        version: 4.14.1
-      rollup-plugin-dts:
-        specifier: ^6.1.0
-        version: 6.1.0(rollup@4.14.1)(typescript@5.4.4)
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -568,7 +572,7 @@ packages:
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
     dev: true
 
-  /@rollup/plugin-typescript@11.1.6(rollup@4.14.1)(tslib@2.6.2)(typescript@5.4.4):
+  /@rollup/plugin-typescript@11.1.6(rollup@4.14.1)(typescript@5.4.4):
     resolution: {integrity: sha512-R92yOmIACgYdJ7dJ97p4K69I8gg6IEHt8M7dUBxN3W6nrO8uUxX5ixl0yU/N3aZTi8WhPuICvOHXQvF6FaykAA==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
@@ -584,7 +588,6 @@ packages:
       '@rollup/pluginutils': 5.1.0(rollup@4.14.1)
       resolve: 1.22.8
       rollup: 4.14.1
-      tslib: 2.6.2
       typescript: 5.4.4
     dev: true
 

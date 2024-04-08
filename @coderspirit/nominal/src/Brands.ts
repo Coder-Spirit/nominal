@@ -18,8 +18,8 @@ export type WithBrand<
 > = BaseType extends BaseTypeMarker<infer TrueBaseType>
 	? BrandMarker<TrueBaseType, Brand> & PreservePropertyMarkers<BaseType>
 	: BaseType extends WeakBaseTypeMarker<infer TrueBaseType>
-	? BrandMarker<TrueBaseType, Brand> & PreservePropertyMarkers<BaseType>
-	: BrandMarker<BaseType, Brand> & PreservePropertyMarkers<BaseType>
+		? BrandMarker<TrueBaseType, Brand> & PreservePropertyMarkers<BaseType>
+		: BrandMarker<BaseType, Brand> & PreservePropertyMarkers<BaseType>
 
 /**
  * It adds a flavor to the passed base type, erasing previous brands or flavors,
@@ -32,8 +32,8 @@ export type WithFlavor<
 > = BaseType extends BaseTypeMarker<infer TrueBaseType>
 	? FlavorMarker<TrueBaseType, Brand> & PreservePropertyMarkers<BaseType>
 	: BaseType extends WeakBaseTypeMarker<infer TrueBaseType>
-	? FlavorMarker<TrueBaseType, Brand> & PreservePropertyMarkers<BaseType>
-	: FlavorMarker<BaseType, Brand> & PreservePropertyMarkers<BaseType>
+		? FlavorMarker<TrueBaseType, Brand> & PreservePropertyMarkers<BaseType>
+		: FlavorMarker<BaseType, Brand> & PreservePropertyMarkers<BaseType>
 
 /**
  * It strips away brands and flavors from the passed base type.
@@ -45,5 +45,5 @@ export type WithoutBrand<BaseType> = BaseType extends BaseTypeMarker<
 >
 	? PreservePropertyMarkers<BaseType> & TrueBaseType
 	: BaseType extends WeakBaseTypeMarker<infer TrueBaseType>
-	? PreservePropertyMarkers<BaseType> & TrueBaseType
-	: BaseType
+		? PreservePropertyMarkers<BaseType> & TrueBaseType
+		: BaseType

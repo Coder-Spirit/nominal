@@ -1,4 +1,8 @@
 import type {
+	__PropertyName,
+	__PropertyValues,
+} from '@coderspirit/nominal-symbols'
+import type {
 	BaseTypeMarker,
 	PropertiesMarker,
 	PropertyKeyType,
@@ -6,10 +10,6 @@ import type {
 	PropertyWrapper,
 	WeakBaseTypeMarker,
 } from './internal/Markers'
-import type {
-	__PropertyName,
-	__PropertyValues,
-} from '@coderspirit/nominal-symbols'
 import type { PreserveBrandlikeMarkers } from './internal/Preservers'
 
 /**
@@ -33,19 +33,22 @@ export type WithProperty<
 					PropertyWrapper<PropertyKey, PropertyValue>
 			>
 	: BaseType extends BaseTypeMarker<infer TrueBaseType>
-	? PreserveBrandlikeMarkers<BaseType> &
-			PropertiesMarker<
-				TrueBaseType,
-				PropertyWrapper<PropertyKey, PropertyValue>
-			>
-	: BaseType extends WeakBaseTypeMarker<infer TrueBaseType>
-	? PreserveBrandlikeMarkers<BaseType> &
-			PropertiesMarker<
-				TrueBaseType,
-				PropertyWrapper<PropertyKey, PropertyValue>
-			>
-	: PreserveBrandlikeMarkers<BaseType> &
-			PropertiesMarker<BaseType, PropertyWrapper<PropertyKey, PropertyValue>>
+		? PreserveBrandlikeMarkers<BaseType> &
+				PropertiesMarker<
+					TrueBaseType,
+					PropertyWrapper<PropertyKey, PropertyValue>
+				>
+		: BaseType extends WeakBaseTypeMarker<infer TrueBaseType>
+			? PreserveBrandlikeMarkers<BaseType> &
+					PropertiesMarker<
+						TrueBaseType,
+						PropertyWrapper<PropertyKey, PropertyValue>
+					>
+			: PreserveBrandlikeMarkers<BaseType> &
+					PropertiesMarker<
+						BaseType,
+						PropertyWrapper<PropertyKey, PropertyValue>
+					>
 
 /**
  * It helps to provide a strict definition of a property, delimiting which
@@ -118,8 +121,8 @@ export type KeepPropertyIfValueMatches<
 		? Properties[PropertyKey] extends PropertyValues
 			? BaseType
 			: PropertyWrapper<PropertyKey, Properties[PropertyKey]> extends Properties
-			? PreserveBrandlikeMarkers<BaseType> & TrueBaseType
-			: PreserveBrandlikeMarkers<BaseType> &
-					PropertiesMarker<TrueBaseType, Omit<Properties, PropertyKey>>
+				? PreserveBrandlikeMarkers<BaseType> & TrueBaseType
+				: PreserveBrandlikeMarkers<BaseType> &
+						PropertiesMarker<TrueBaseType, Omit<Properties, PropertyKey>>
 		: BaseType
 	: BaseType

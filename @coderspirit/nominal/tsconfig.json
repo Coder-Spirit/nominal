@@ -1,11 +1,7 @@
 {
 	"extends": "../../tsconfig.json",
 	"compilerOptions": {
-		"baseUrl": "./src",
+		"baseUrl": "./src"
 	},
-	"exclude": [
-		"coverage/**/*",
-		"dist/**/*",
-		"node_modules/**/*",
-	]
+	"exclude": ["coverage/**/*", "dist/**/*", "node_modules/**/*"]
 }

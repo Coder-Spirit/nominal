@@ -1,5 +1,5 @@
-import type { BrandMarker, FlavorMarker, PropertiesMarker } from './Markers'
 import type { __Impossible } from '@coderspirit/nominal-symbols'
+import type { BrandMarker, FlavorMarker, PropertiesMarker } from './Markers'
 
 /**
  * It helps us to preserve brand-like markers
@@ -10,10 +10,10 @@ export type PreserveBrandlikeMarkers<BaseType> = BaseType extends BrandMarker<
 >
 	? BrandMarker<TrueBaseType, Brand>
 	: BaseType extends FlavorMarker<infer TrueBaseType, infer Flavor>
-	? __Impossible extends Flavor
-		? unknown
-		: FlavorMarker<TrueBaseType, Flavor>
-	: never
+		? __Impossible extends Flavor
+			? unknown
+			: FlavorMarker<TrueBaseType, Flavor>
+		: never
 
 /**
  * It helps us to preserve property markers

@@ -61,5 +61,16 @@
 		"clientKind": "git",
 		"defaultBranch": "main",
 		"useIgnoreFile": true
-	}
+	},
+	"overrides": [
+		{
+			"include": ["tsconfig.json"],
+			"json": {
+				"parser": {
+					"allowComments": true,
+					"allowTrailingCommas": true
+				}
+			}
+		}
+	]
 }

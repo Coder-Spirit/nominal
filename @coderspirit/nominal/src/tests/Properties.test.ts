@@ -1,11 +1,11 @@
+import { describe, expect, it } from 'vitest'
+import type { PropertyTypeDefinition, WithProperty } from '..'
+import type { WithBrand, WithFlavor } from '../Brands'
 import type {
 	KeepProperties,
 	KeepPropertyIfValueMatches,
 	WithStrictProperty,
 } from '../Properties'
-import type { PropertyTypeDefinition, WithProperty } from '..'
-import type { WithBrand, WithFlavor } from '../Brands'
-import { describe, expect, it } from 'vitest'
 
 describe('WithProperty', () => {
 	type Even = WithProperty<number, 'Parity', 'Even'>
