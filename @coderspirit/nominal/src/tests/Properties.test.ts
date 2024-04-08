@@ -1,11 +1,11 @@
+import { describe, expect, it } from 'vitest'
+import type { PropertyTypeDefinition, WithProperty } from '..'
+import type { WithBrand, WithFlavor } from '../Brands'
 import type {
 	KeepProperties,
 	KeepPropertyIfValueMatches,
 	WithStrictProperty,
 } from '../Properties'
-import type { PropertyTypeDefinition, WithProperty } from '..'
-import type { WithBrand, WithFlavor } from '../Brands'
-import { describe, expect, it } from 'vitest'
 
 describe('WithProperty', () => {
 	type Even = WithProperty<number, 'Parity', 'Even'>
@@ -108,7 +108,7 @@ describe('WithProperty', () => {
 	it('preserves types across function boundaries', () => {
 		// eslint-disable-next-line unicorn/consistent-function-scoping
 		function throwIfNotEven<T extends number>(v: T): WithProperty<T, 'Even'> {
-			if (v % 2 == 1) {
+			if (v % 2 === 1) {
 				throw new Error('Not Even!')
 			}
 			return v as WithProperty<T, 'Even'>
