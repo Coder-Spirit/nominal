@@ -1,6 +1,6 @@
 {
 	"name": "@coderspirit/nominal",
-	"version": "4.0.1",
+	"version": "4.0.3",
 	"description": "Powerful nominal types for your project",
 	"main": "./dist/nominal.cjs",
 	"module": "./dist/nominal.mjs",
@@ -30,7 +30,7 @@
 		"prepublishOnly": "pnpm run build"
 	},
 	"dependencies": {
-		"@coderspirit/nominal-symbols": "workspace:*"
+		"@coderspirit/nominal-symbols": "workspace:^"
 	},
 	"devDependencies": {
 		"@coderspirit/eslint-config": "^2.0.0",
