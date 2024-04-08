@@ -16,10 +16,10 @@
 				"^build"
 			]
 		},
-		"lint:eslint": {
+		"lint:biome": {
 			"inputs": [
 				"src/**",
-				".eslintrc.cjs",
+				"biome.jsonc",
 				"package.json",
 				"tsconfig.json"
 			],
@@ -45,7 +45,7 @@
 		},
 		"lint": {
 			"dependsOn": [
-				"lint:eslint",
+				"lint:biome",
 				"lint:publint",
 				"lint:tsc"
 			]

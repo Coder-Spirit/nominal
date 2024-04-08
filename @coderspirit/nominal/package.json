@@ -1,6 +1,6 @@
 {
   "name": "@coderspirit/nominal",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "Powerful nominal types for your project",
   "main": "./dist/nominal.cjs",
   "module": "./dist/nominal.mjs",
@@ -29,8 +29,8 @@
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && rollup --config rollup.config.prod.mjs",
-    "lint:_all": "pnpm run lint:tsc && pnpm run lint:eslint && pnpm run lint:publint",
-    "lint:eslint": "eslint . --ext ts,mts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:_all": "pnpm run lint:tsc && pnpm run lint:biome && pnpm run lint:publint",
+    "lint:biome": "biome lint .",
     "lint:publint": "publint",
     "lint:tsc": "tsc",
     "test": "vitest run",
@@ -40,18 +40,16 @@
     "@coderspirit/nominal-symbols": "workspace:*"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.12.2",
-    "@coderspirit/eslint-config": "^1.3.0",
-    "@rollup/plugin-typescript": "^11.1.5",
-    "@types/node": "^20.8.6",
-    "@typescript-eslint/parser": "^6.7.5",
-    "eslint": "^8.51.0",
-    "prettier": "^3.0.3",
-    "publint": "^0.2.4",
-    "rollup": "^4.1.3",
+    "@arethetypeswrong/cli": "^0.15.3",
+    "@biomejs/biome": "^1.6.4",
+    "@coderspirit/eslint-config": "^2.0.0",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/node": "^20.12.5",
+    "publint": "^0.2.7",
+    "rollup": "^4.14.1",
     "rollup-plugin-dts": "^6.1.0",
     "tslib": "^2.6.2",
-    "typescript": "^5.2.2",
+    "typescript": "^5.4.4",
     "vitest": "^0.34.6"
   },
   "engines": {

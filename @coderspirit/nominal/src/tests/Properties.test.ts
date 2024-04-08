@@ -108,7 +108,7 @@ describe('WithProperty', () => {
 	it('preserves types across function boundaries', () => {
 		// eslint-disable-next-line unicorn/consistent-function-scoping
 		function throwIfNotEven<T extends number>(v: T): WithProperty<T, 'Even'> {
-			if (v % 2 == 1) {
+			if (v % 2 === 1) {
 				throw new Error('Not Even!')
 			}
 			return v as WithProperty<T, 'Even'>
