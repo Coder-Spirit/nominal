@@ -3,7 +3,6 @@ import type {
 	TaggedInteger,
 	TaggedPositiveInteger,
 } from '@coderspirit/nominal-inputs'
-import { _ } from 'ajv'
 
 interface SimpleEnv {
 	[key: string]: string | undefined
