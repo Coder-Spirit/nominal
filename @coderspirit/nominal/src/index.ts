@@ -13,19 +13,3 @@ export type {
 	FlavorMarker as FastFlavor,
 	PropertiesMarker as FastProperty,
 } from './internal/Markers'
-
-export type {
-	IntegerInput,
-	NegativeInput,
-	NegativeIntegerInput,
-	PositiveInput,
-	PositiveIntegerInput,
-	TaggedFloat,
-	TaggedInteger,
-	TaggedNegative,
-	TaggedNegativeFloat,
-	TaggedNegativeInteger,
-	TaggedPositive,
-	TaggedPositiveFloat,
-	TaggedPositiveInteger,
-} from './Inputs'
