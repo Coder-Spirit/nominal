@@ -6,9 +6,9 @@ type ACME = WithBrand<string, 'ACME'>
 type Ubik = WithBrand<string, 'Ubik'>
 type UbikFlavor = WithFlavor<string, 'Ubik'>
 
-export type Sweet = WithFlavor<string, 'Sweet'>
-export type Salty = WithFlavor<string, 'Salty'>
-export type SaltyBrand = WithBrand<string, 'Salty'>
+type Sweet = WithFlavor<string, 'Sweet'>
+type Salty = WithFlavor<string, 'Salty'>
+type SaltyBrand = WithBrand<string, 'Salty'>
 
 describe('WithBrand', () => {
 	it('strictly extends base types', () => {
