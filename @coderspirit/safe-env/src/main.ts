@@ -86,7 +86,9 @@ type EnvKeyType<S extends Schema, K extends keyof S> = S[K] extends {
 			: S[K] extends { default: infer D }
 				? D extends undefined
 					? TOutMapper<T>
-					: D
+					: D extends bigint
+						? bigint
+						: number
 				: TOutMapper<T>
 		: never
 	: S[K] extends { enum: infer E }
