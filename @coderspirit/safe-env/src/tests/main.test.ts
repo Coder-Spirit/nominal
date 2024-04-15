@@ -107,4 +107,43 @@ describe('getSafeEnv', () => {
 			).toThrowError(errorMsg)
 		},
 	)
+
+	it('shoud set correct type for .get with enum variables', () => {
+		const env = { ENUM_A: 'bar', ENUM_B: 'foo' }
+
+		const envWrapper = getSafeEnv(env, {
+			ENUM_A: { enum: ['foo', 'bar'], default: 'foo' },
+			ENUM_B: { enum: ['foo', 'bar'] },
+		})
+
+		// Type checks for enum with default value
+		const valueA = envWrapper.get('ENUM_A')
+
+		type Does_AValue_extend_FooBar = typeof valueA extends 'foo' | 'bar'
+			? true
+			: false
+		const a_extends_FooBar: Does_AValue_extend_FooBar = true
+		expect(a_extends_FooBar).toBe(true)
+
+		type Does_FooBar_extend_AValue = 'foo' | 'bar' extends typeof valueA
+			? true
+			: false
+		const fooBar_extends_a: Does_FooBar_extend_AValue = true
+		expect(fooBar_extends_a).toBe(true)
+
+		// Type checks for enum without default value
+		const valueB = envWrapper.get('ENUM_B')
+
+		type Does_BValue_extend_FooBar = typeof valueB extends 'foo' | 'bar'
+			? true
+			: false
+		const b_extends_FooBar: Does_BValue_extend_FooBar = true
+		expect(b_extends_FooBar).toBe(true)
+
+		type Does_FooBar_extend_BValue = 'foo' | 'bar' extends typeof valueB
+			? true
+			: false
+		const fooBar_extends_b: Does_FooBar_extend_BValue = true
+		expect(fooBar_extends_b).toBe(true)
+	})
 })

@@ -93,11 +93,7 @@ type EnvKeyType<S extends Schema, K extends keyof S> = S[K] extends {
 		? E extends string[]
 			? S[K] extends { optional: true }
 				? E[number] | undefined
-				: S[K] extends { default: infer D }
-					? D extends undefined
-						? E[number]
-						: D
-					: E[number]
+				: E[number]
 			: never
 		: never
 
@@ -363,7 +359,7 @@ const buildEnvWrapper = <
 
 export const getSafeEnv = <
 	S extends Schema,
-	SS extends S | undefined = S | undefined,
+	const SS extends S | undefined = S | undefined,
 >(
 	env: SimpleEnv,
 	schema?: SS,
