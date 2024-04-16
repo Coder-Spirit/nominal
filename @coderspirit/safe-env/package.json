@@ -1,6 +1,6 @@
 {
 	"name": "@coderspirit/safe-env",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"description": "Safe & strongly typed environment variables accessor",
 	"main": "./dist/main.cjs",
 	"module": "./dist/main.mjs",

@@ -59,4 +59,23 @@ describe('getSafeEnv (regressions)', () => {
 		const bigint_extends_bar: Does_BigInt_extend_Bar = true
 		expect(bigint_extends_bar).toBe(true)
 	})
+
+	it('should assign "string" type to "string" values', () => {
+		const env = { FOO: 'hello' }
+
+		const envWrapper = getSafeEnv(env, {
+			FOO: { type: 'string' },
+			BAR: { type: 'string', default: 'hello' },
+		})
+
+		const foo = envWrapper.get('FOO')
+		type Does_String_extend_Foo = string extends typeof foo ? true : false
+		const string_extends_foo: Does_String_extend_Foo = true
+		expect(string_extends_foo).toBe(true)
+
+		const bar = envWrapper.get('BAR')
+		type Does_String_extend_Bar = string extends typeof bar ? true : false
+		const string_extends_bar: Does_String_extend_Bar = true
+		expect(string_extends_bar).toBe(true)
+	})
 })
