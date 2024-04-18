@@ -101,10 +101,8 @@ type EnvKeyType<S extends Schema, K extends keyof S> = S[K] extends {
 			: never
 		: never
 
-interface EnvWrapper<S extends Schema | undefined> {
-	get<K extends S extends Schema ? keyof S & string : string>(
-		key: K,
-	): S extends Schema ? EnvKeyType<S, K> : string | undefined
+export type EnvWrapper<Values extends Record<string, unknown>> = {
+	get<K extends keyof Values & string>(key: K): Values[K]
 }
 
 class SafeEnvError extends Error {}
@@ -326,17 +324,14 @@ const processEnv = <S extends Schema>(
 	return _env
 }
 
-const buildEnvWrapper = <
-	S extends Schema,
-	SS extends S | undefined = S | undefined,
->(
+const buildEnvWrapper = <S extends Schema>(
 	env: SimpleEnv,
-	schema?: SS,
-): EnvWrapper<S | undefined> => {
+	schema: S,
+): EnvWrapper<{
+	[K in keyof S]: EnvKeyType<S, K>
+}> => {
 	return {
-		get: <K extends keyof S & string>(
-			key: K,
-		): S extends Schema ? EnvKeyType<S, K> : string | undefined => {
+		get: <K extends keyof S & string>(key: K): EnvKeyType<S, K> => {
 			const value = env[key]
 
 			if (value === undefined) {
@@ -361,13 +356,12 @@ const buildEnvWrapper = <
 	}
 }
 
-export const getSafeEnv = <
-	S extends Schema,
-	const SS extends S | undefined = S | undefined,
->(
+export const getSafeEnv = <const S extends Schema>(
 	env: SimpleEnv,
-	schema?: SS,
-): EnvWrapper<SS> => {
+	schema: S,
+): EnvWrapper<{
+	[K in keyof S]: EnvKeyType<S, K>
+}> => {
 	const _env = schema ? processEnv(env, schema) : { ...env }
 	return buildEnvWrapper(_env as EnvData<S>, schema)
 }

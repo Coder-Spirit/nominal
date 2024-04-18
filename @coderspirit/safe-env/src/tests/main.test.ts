@@ -2,16 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { getSafeEnv } from '../main'
 
 describe('getSafeEnv', () => {
-	it('should return a passthrough env wrapper when no schema is specified', () => {
-		const env = { FOO: 'bar' }
-		const envWrapper = getSafeEnv(env)
-
-		expect(envWrapper.get('FOO')).toBe('bar')
-		expect(() => envWrapper.get('BAR')).toThrowError(
-			'Missing environment variable: "BAR"',
-		)
-	})
-
 	it('should return a safe env wrapper when a schema is specified', () => {
 		const env = { FOO: 'foo', HAH: 'hah' }
 
