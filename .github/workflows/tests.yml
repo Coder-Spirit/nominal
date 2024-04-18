@@ -26,14 +26,14 @@ jobs:
       TURBO_TEAM: ${{ vars.TURBO_TEAM }}
 
     steps:
-    - name: Checkout repository # v4.0.0
-      uses: actions/checkout@3df4ab11eba7bda6032a0b82a6bb43b11571feac
+    - name: Checkout repository # v4.1.1
+      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
     - name: Install PNPM # v2.4.0
       uses: pnpm/action-setup@d882d12c64e032187b2edb46d3a0d003b7a43598
       with:
         version: '8.9.0'
-    - name: Use Node.js ${{ matrix.node-version }} # v3.8.1
-      uses: actions/setup-node@5e21ff4d9bc1a8cf6de233a3057d20ec6b3fb69d
+    - name: Use Node.js ${{ matrix.node-version }} # v4.0.2
+      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
