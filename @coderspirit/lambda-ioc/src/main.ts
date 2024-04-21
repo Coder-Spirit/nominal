@@ -133,24 +133,12 @@ type ConstrainedKey<
 	| `${string}:*`
 >
 
-type RegisterFactoryFunc<
+type SyncRegisterResult<
 	TSyncDependencies extends Dict,
 	TAsyncDependencies extends Dict,
-> = <
-	K extends ConstrainedKey<string, TSyncDependencies, TAsyncDependencies>,
-	// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
-	TArgs extends any[],
-	V extends NNO,
-	TParams extends TArgs & TSyncDependencies[keyof TSyncDependencies][],
-	TDependencies extends ContextualParamsToSyncResolverKeys<
-		TSyncDependencies,
-		TParams
-	>,
->(
-	k: ConstrainedKey<K, TSyncDependencies, TAsyncDependencies>,
-	f: (...args: TArgs) => Awaited<V>,
-	...args: TDependencies
-) => ContainerBuilder<
+	K extends string,
+	V,
+> = ContainerBuilder<
 	{
 		[TK in keyof TSyncDependencies | K]: TK extends keyof TSyncDependencies
 			? TSyncDependencies[TK]
@@ -170,6 +158,25 @@ type RegisterFactoryFunc<
 			}
 		: TAsyncDependencies
 >
+
+type RegisterFactoryFunc<
+	TSyncDependencies extends Dict,
+	TAsyncDependencies extends Dict,
+> = <
+	K extends ConstrainedKey<string, TSyncDependencies, TAsyncDependencies>,
+	// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
+	TArgs extends any[],
+	V extends NNO,
+	TParams extends TArgs & TSyncDependencies[keyof TSyncDependencies][],
+	TDependencies extends ContextualParamsToSyncResolverKeys<
+		TSyncDependencies,
+		TParams
+	>,
+>(
+	k: ConstrainedKey<K, TSyncDependencies, TAsyncDependencies>,
+	f: (...args: TArgs) => Awaited<V>,
+	...args: TDependencies
+) => SyncRegisterResult<TSyncDependencies, TAsyncDependencies, K, V>
 
 type RegisterAsyncFactory<
 	TSyncDependencies extends Dict,
@@ -244,26 +251,7 @@ export interface WritableContainer<
 			| `${string}:*`
 		>,
 		v: Awaited<NonNullable<V>>,
-	): ContainerBuilder<
-		{
-			[TK in keyof TSyncDependencies | K]: TK extends keyof TSyncDependencies
-				? TSyncDependencies[TK]
-				: V
-		},
-		K extends `${infer Prefix}:${string}`
-			? {
-					[TK in
-						| keyof TAsyncDependencies
-						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
-						? TK extends `${Prefix}:*`
-							? TAsyncDependencies[TK] extends unknown[]
-								? [...TAsyncDependencies[TK], V]
-								: never
-							: TAsyncDependencies[TK]
-						: [V]
-				}
-			: TAsyncDependencies
-	>
+	): SyncRegisterResult<TSyncDependencies, TAsyncDependencies, K, V>
 
 	/** Registers a factory in the container. */
 	registerFactory: RegisterFactoryFunc<TSyncDependencies, TAsyncDependencies>
