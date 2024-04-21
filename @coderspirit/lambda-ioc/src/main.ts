@@ -272,6 +272,10 @@ export interface WritableContainer<
 	>
 }
 
+type DeepPartial<T> = {
+	[K in keyof T]?: T[K] extends Dict ? DeepPartial<T[K]> : T[K]
+}
+
 export interface ContainerBuilder<
 	TSyncDependencies extends Dict,
 	TAsyncDependencies extends Dict,
@@ -282,8 +286,8 @@ export interface ContainerBuilder<
 	 * less dependencies than the ones we have registered.
 	 */
 	close<
-		SD extends Partial<TSyncDependencies> = TSyncDependencies,
-		AD extends Partial<TAsyncDependencies> = TAsyncDependencies,
+		SD extends DeepPartial<TSyncDependencies> = TSyncDependencies,
+		AD extends DeepPartial<TAsyncDependencies> = TAsyncDependencies,
 	>(): Container<SD, AD>
 }
 
