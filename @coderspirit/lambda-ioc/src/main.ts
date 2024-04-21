@@ -1,6 +1,5 @@
 type NNO = NonNullable<unknown>
 type Dict = Record<string, unknown>
-type BasicValue<T = unknown> = Awaited<NonNullable<T>>
 
 /**
  * Example:
@@ -122,17 +121,23 @@ type ContextualParamsToAsyncResolverKeys<
 	>
 }
 
+type ConstrainedKey<
+	K extends string,
+	TSyncDependencies extends Dict,
+	TAsyncDependencies extends Dict,
+> = Exclude<
+	K,
+	| keyof TSyncDependencies
+	| keyof TAsyncDependencies
+	| `${string}:`
+	| `${string}:*`
+>
+
 type RegisterFactoryFunc<
 	TSyncDependencies extends Dict,
 	TAsyncDependencies extends Dict,
 > = <
-	K extends Exclude<
-		string,
-		| keyof TSyncDependencies
-		| keyof TAsyncDependencies
-		| `${string}:`
-		| `${string}:*`
-	>,
+	K extends ConstrainedKey<string, TSyncDependencies, TAsyncDependencies>,
 	// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
 	TArgs extends any[],
 	V extends NNO,
@@ -142,13 +147,7 @@ type RegisterFactoryFunc<
 		TParams
 	>,
 >(
-	k: Exclude<
-		K,
-		| keyof TSyncDependencies
-		| keyof TAsyncDependencies
-		| `${string}:`
-		| `${string}:*`
-	>,
+	k: ConstrainedKey<K, TSyncDependencies, TAsyncDependencies>,
 	f: (...args: TArgs) => Awaited<V>,
 	...args: TDependencies
 ) => ContainerBuilder<
@@ -176,13 +175,7 @@ type RegisterAsyncFactory<
 	TSyncDependencies extends Dict,
 	TAsyncDependencies extends Dict,
 > = <
-	K extends Exclude<
-		string,
-		| keyof TSyncDependencies
-		| keyof TAsyncDependencies
-		| `${string}:`
-		| `${string}:*`
-	>,
+	K extends ConstrainedKey<string, TSyncDependencies, TAsyncDependencies>,
 	// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
 	TArgs extends any[],
 	V extends NNO,
@@ -197,13 +190,7 @@ type RegisterAsyncFactory<
 		TParams
 	>,
 >(
-	k: Exclude<
-		K,
-		| keyof TSyncDependencies
-		| keyof TAsyncDependencies
-		| `${string}:`
-		| `${string}:*`
-	>,
+	k: ConstrainedKey<K, TSyncDependencies, TAsyncDependencies>,
 	f: (...args: TArgs) => V,
 	...args: TDependencies
 ) => ContainerBuilder<
@@ -256,7 +243,7 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		v: BasicValue<V>,
+		v: Awaited<NonNullable<V>>,
 	): ContainerBuilder<
 		{
 			[TK in keyof TSyncDependencies | K]: TK extends keyof TSyncDependencies
