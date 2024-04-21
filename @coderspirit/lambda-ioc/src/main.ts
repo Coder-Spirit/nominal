@@ -227,14 +227,14 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		NakedFactory extends (
-			...args: (
+		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
+		TArgs extends any[],
+		V extends NNO,
+		TParams extends TArgs &
+			(
 				| TSyncDependencies[keyof TSyncDependencies]
 				| TAsyncDependencies[keyof TAsyncDependencies]
-			)[]
-		) => Promise<unknown>,
-		TParams extends Parameters<NakedFactory>,
-		V extends Awaited<ReturnType<NakedFactory>> & Awaited<NNO>,
+			)[],
 		TDependencies extends ContextualParamsToAsyncResolverKeys<
 			TSyncDependencies,
 			TAsyncDependencies,
@@ -248,7 +248,7 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		f: NakedFactory,
+		f: (...args: TArgs) => Promise<V>,
 		...args: TDependencies
 	): ContainerBuilder<
 		TSyncDependencies,
@@ -333,14 +333,14 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		NakedFactory extends (
-			...args: (
+		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
+		TArgs extends any[],
+		V extends NNO,
+		TParams extends TArgs &
+			(
 				| TSyncDependencies[keyof TSyncDependencies]
 				| TAsyncDependencies[keyof TAsyncDependencies]
-			)[]
-		) => Promise<unknown>,
-		TParams extends Parameters<NakedFactory>,
-		V extends Awaited<ReturnType<NakedFactory>> & Awaited<NNO>,
+			)[],
 		TDependencies extends ContextualParamsToAsyncResolverKeys<
 			TSyncDependencies,
 			TAsyncDependencies,
@@ -354,7 +354,7 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		f: NakedFactory,
+		f: (...args: TArgs) => Promise<V>,
 		...args: TDependencies
 	): ContainerBuilder<
 		TSyncDependencies,
@@ -507,6 +507,9 @@ export function __createContainer<
 				[k]: async () => {
 					const resolvedParams = await Promise.all(
 						args.map(arg => {
+							if (arg.endsWith(':*')) {
+								return c.resolveGroup(arg.slice(0, -2))
+							}
 							if (syncFactories[arg] !== undefined) {
 								// biome-ignore lint/style/noNonNullAssertion: asserted above!
 								return syncFactories[arg]!(c)
@@ -581,6 +584,9 @@ export function __createContainer<
 					if (singleton === undefined) {
 						const resolvedParams = await Promise.all(
 							args.map(arg => {
+								if (arg.endsWith(':*')) {
+									return c.resolveGroup(arg.slice(0, -2))
+								}
 								if (syncFactories[arg] !== undefined) {
 									// biome-ignore lint/style/noNonNullAssertion: asserted above!
 									return syncFactories[arg]!(c)

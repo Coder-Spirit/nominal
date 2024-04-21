@@ -207,6 +207,50 @@ describe('container', () => {
 		// @ts-expect-error
 		expect(() => c.registerAsyncSingleton('g:*', async () => 1)).toThrow()
 	})
+
+	it('can pass groups to registered factories', async () => {
+		const c = createContainer()
+			.registerValue('g:a', 2)
+			.registerValue('g:b', 3)
+			.registerAsyncFactory(
+				'sum',
+				async (n: [number, number]) => n[0] + n[1],
+				'g:*',
+			)
+			.registerAsyncFactory(
+				'anotherSum',
+				async (n: number[]) => n.reduce((acc, curr) => acc + curr, 0),
+				'g:*',
+			)
+
+		const sum: number = await c.resolveAsync('sum')
+		const anotherSum: number = await c.resolveAsync('anotherSum')
+
+		expect(sum).toBe(5)
+		expect(anotherSum).toBe(5)
+	})
+
+	it('can pass groups to registered singletons', async () => {
+		const c = createContainer()
+			.registerValue('g:a', 2)
+			.registerValue('g:b', 3)
+			.registerAsyncSingleton(
+				'sum',
+				async (n: [number, number]) => ({ v: n[0] + n[1] }),
+				'g:*',
+			)
+			.registerAsyncSingleton(
+				'anotherSum',
+				async (n: number[]) => ({ v: n.reduce((acc, curr) => acc + curr, 0) }),
+				'g:*',
+			)
+
+		const sum: { v: number } = await c.resolveAsync('sum')
+		const anotherSum: { v: number } = await c.resolveAsync('anotherSum')
+
+		expect(sum.v).toBe(5)
+		expect(anotherSum.v).toBe(5)
+	})
 })
 
 describe('@types/container', () => {
