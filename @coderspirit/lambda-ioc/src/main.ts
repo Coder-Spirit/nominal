@@ -20,7 +20,7 @@ type ExtractPrefixedValues<
 		: Struct[`${Prefix}:${U}`]
 	: never
 
-export interface SyncContainer<TSyncDependencies extends Dict> {
+export interface SyncContainer<out TSyncDependencies extends Dict> {
 	resolve<TKey extends keyof TSyncDependencies>(
 		k: TKey,
 	): TSyncDependencies[TKey]
@@ -122,6 +122,116 @@ type ContextualParamsToAsyncResolverKeys<
 	>
 }
 
+type RegisterFactoryFunc<
+	TSyncDependencies extends Dict,
+	TAsyncDependencies extends Dict,
+> = <
+	K extends Exclude<
+		string,
+		| keyof TSyncDependencies
+		| keyof TAsyncDependencies
+		| `${string}:`
+		| `${string}:*`
+	>,
+	// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
+	TArgs extends any[],
+	V extends NNO,
+	TParams extends TArgs & TSyncDependencies[keyof TSyncDependencies][],
+	TDependencies extends ContextualParamsToSyncResolverKeys<
+		TSyncDependencies,
+		TParams
+	>,
+>(
+	k: Exclude<
+		K,
+		| keyof TSyncDependencies
+		| keyof TAsyncDependencies
+		| `${string}:`
+		| `${string}:*`
+	>,
+	f: (...args: TArgs) => Awaited<V>,
+	...args: TDependencies
+) => ContainerBuilder<
+	{
+		[TK in keyof TSyncDependencies | K]: TK extends keyof TSyncDependencies
+			? TSyncDependencies[TK]
+			: V
+	},
+	K extends `${infer Prefix}:${string}`
+		? {
+				[TK in
+					| keyof TAsyncDependencies
+					| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+					? TK extends `${Prefix}:*`
+						? TAsyncDependencies[TK] extends unknown[]
+							? [...TAsyncDependencies[TK], V]
+							: never
+						: TAsyncDependencies[TK]
+					: [V]
+			}
+		: TAsyncDependencies
+>
+
+type RegisterAsyncFactory<
+	TSyncDependencies extends Dict,
+	TAsyncDependencies extends Dict,
+> = <
+	K extends Exclude<
+		string,
+		| keyof TSyncDependencies
+		| keyof TAsyncDependencies
+		| `${string}:`
+		| `${string}:*`
+	>,
+	// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
+	TArgs extends any[],
+	V extends NNO,
+	TParams extends TArgs &
+		(
+			| TSyncDependencies[keyof TSyncDependencies]
+			| TAsyncDependencies[keyof TAsyncDependencies]
+		)[],
+	TDependencies extends ContextualParamsToAsyncResolverKeys<
+		TSyncDependencies,
+		TAsyncDependencies,
+		TParams
+	>,
+>(
+	k: Exclude<
+		K,
+		| keyof TSyncDependencies
+		| keyof TAsyncDependencies
+		| `${string}:`
+		| `${string}:*`
+	>,
+	f: (...args: TArgs) => V,
+	...args: TDependencies
+) => ContainerBuilder<
+	TSyncDependencies,
+	K extends `${infer Prefix}:${string}`
+		? {
+				[TK in
+					| keyof TAsyncDependencies
+					| K
+					| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+					? TK extends `${Prefix}:*`
+						? TAsyncDependencies[TK] extends unknown[]
+							? [...TAsyncDependencies[TK], Awaited<V>]
+							: never
+						: TAsyncDependencies[TK]
+					: TK extends `${Prefix}:*`
+						? [Awaited<V>]
+						: Awaited<V>
+			}
+		: {
+				[TK in
+					| keyof TAsyncDependencies
+					| K]: TK extends keyof TAsyncDependencies
+					? TAsyncDependencies[TK]
+					: Awaited<V>
+			}
+>
+
 export interface WritableContainer<
 	TSyncDependencies extends Dict,
 	TAsyncDependencies extends Dict,
@@ -169,215 +279,21 @@ export interface WritableContainer<
 	>
 
 	/** Registers a factory in the container. */
-	registerFactory<
-		K extends Exclude<
-			string,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
-		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
-		TArgs extends any[],
-		V extends NNO,
-		TParams extends TArgs & TSyncDependencies[keyof TSyncDependencies][],
-		TDependencies extends ContextualParamsToSyncResolverKeys<
-			TSyncDependencies,
-			TParams
-		>,
-	>(
-		k: Exclude<
-			K,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
-		f: (...args: TArgs) => Awaited<V>,
-		...args: TDependencies
-	): ContainerBuilder<
-		{
-			[TK in keyof TSyncDependencies | K]: TK extends keyof TSyncDependencies
-				? TSyncDependencies[TK]
-				: V
-		},
-		K extends `${infer Prefix}:${string}`
-			? {
-					[TK in
-						| keyof TAsyncDependencies
-						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
-						? TK extends `${Prefix}:*`
-							? TAsyncDependencies[TK] extends unknown[]
-								? [...TAsyncDependencies[TK], V]
-								: never
-							: TAsyncDependencies[TK]
-						: [V]
-				}
-			: TAsyncDependencies
-	>
+	registerFactory: RegisterFactoryFunc<TSyncDependencies, TAsyncDependencies>
 
 	/** Registers an async factory in the container. */
-	registerAsyncFactory<
-		K extends Exclude<
-			string,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
-		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
-		TArgs extends any[],
-		V extends NNO,
-		TParams extends TArgs &
-			(
-				| TSyncDependencies[keyof TSyncDependencies]
-				| TAsyncDependencies[keyof TAsyncDependencies]
-			)[],
-		TDependencies extends ContextualParamsToAsyncResolverKeys<
-			TSyncDependencies,
-			TAsyncDependencies,
-			TParams
-		>,
-	>(
-		k: Exclude<
-			K,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
-		f: (...args: TArgs) => V,
-		...args: TDependencies
-	): ContainerBuilder<
+	registerAsyncFactory: RegisterAsyncFactory<
 		TSyncDependencies,
-		K extends `${infer Prefix}:${string}`
-			? {
-					[TK in
-						| keyof TAsyncDependencies
-						| K
-						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
-						? TK extends `${Prefix}:*`
-							? TAsyncDependencies[TK] extends unknown[]
-								? [...TAsyncDependencies[TK], Awaited<V>]
-								: never
-							: TAsyncDependencies[TK]
-						: TK extends `${Prefix}:*`
-							? [Awaited<V>]
-							: Awaited<V>
-				}
-			: {
-					[TK in
-						| keyof TAsyncDependencies
-						| K]: TK extends keyof TAsyncDependencies
-						? TAsyncDependencies[TK]
-						: Awaited<V>
-				}
+		TAsyncDependencies
 	>
 
 	/** Registers a factory in the container and treats it as a singleton. */
-	registerSingleton<
-		K extends Exclude<
-			string,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
-		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
-		TArgs extends any[],
-		V extends NNO,
-		TParams extends TArgs & TSyncDependencies[keyof TSyncDependencies][],
-		TDependencies extends ContextualParamsToSyncResolverKeys<
-			TSyncDependencies,
-			TParams
-		>,
-	>(
-		k: Exclude<
-			K,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
-		f: (...args: TArgs) => Awaited<V>,
-		...args: TDependencies
-	): ContainerBuilder<
-		{
-			[TK in keyof TSyncDependencies | K]: TK extends keyof TSyncDependencies
-				? TSyncDependencies[TK]
-				: V
-		},
-		K extends `${infer Prefix}:${string}`
-			? {
-					[TK in
-						| keyof TAsyncDependencies
-						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
-						? TK extends `${Prefix}:*`
-							? TAsyncDependencies[TK] extends unknown[]
-								? [...TAsyncDependencies[TK], V]
-								: never
-							: TAsyncDependencies[TK]
-						: [V]
-				}
-			: TAsyncDependencies
-	>
+	registerSingleton: RegisterFactoryFunc<TSyncDependencies, TAsyncDependencies>
 
 	/** Registers an async factory in the container and treats it as a singleton. */
-	registerAsyncSingleton<
-		K extends Exclude<
-			string,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
-		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
-		TArgs extends any[],
-		V extends NNO,
-		TParams extends TArgs &
-			(
-				| TSyncDependencies[keyof TSyncDependencies]
-				| TAsyncDependencies[keyof TAsyncDependencies]
-			)[],
-		TDependencies extends ContextualParamsToAsyncResolverKeys<
-			TSyncDependencies,
-			TAsyncDependencies,
-			TParams
-		>,
-	>(
-		k: Exclude<
-			K,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
-		f: (...args: TArgs) => V,
-		...args: TDependencies
-	): ContainerBuilder<
+	registerAsyncSingleton: RegisterAsyncFactory<
 		TSyncDependencies,
-		K extends `${infer Prefix}:${string}`
-			? {
-					[TK in
-						| keyof TAsyncDependencies
-						| K
-						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
-						? TK extends `${Prefix}:*`
-							? TAsyncDependencies[TK] extends unknown[]
-								? [...TAsyncDependencies[TK], Awaited<V>]
-								: never
-							: TAsyncDependencies[TK]
-						: TK extends `${Prefix}:*`
-							? [Awaited<V>]
-							: Awaited<V>
-				}
-			: {
-					[TK in
-						| keyof TAsyncDependencies
-						| K]: TK extends keyof TAsyncDependencies
-						? TAsyncDependencies[TK]
-						: Awaited<V>
-				}
+		TAsyncDependencies
 	>
 }
 
