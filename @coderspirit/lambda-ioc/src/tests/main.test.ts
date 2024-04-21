@@ -25,16 +25,40 @@ describe('container', () => {
 	})
 
 	it('resolves from registered factories', () => {
+		class TestClass1 {
+			constructor(public a: number) {}
+		}
+
+		class TestClass2 {
+			constructor(public o: TestClass1) {}
+		}
+
+		const opaqueFactory1 = (a: number): TestClass1 => {
+			return new TestClass1(a)
+		}
+
+		const opaqueFactory2 = (o: TestClass1) => {
+			return new TestClass2(o)
+		}
+
 		const container = createContainer()
 			.registerValue('a', 1)
 			.registerValue('b', 2)
 			.registerFactory('sum', (a, b) => a + b, 'a', 'b')
+			.registerFactory('factory1', opaqueFactory1, 'a')
+			.registerFactory('factory2', opaqueFactory2, 'factory1')
 			.close()
 
 		// Types are inferred correctly
 		const sum: number = container.resolve('sum')
+		const obj1: TestClass1 = container.resolve('factory1')
+		const obj2: TestClass2 = container.resolve('factory2')
 
 		expect(sum).toBe(3)
+		expect(obj1).toBeInstanceOf(TestClass1)
+		expect(obj1.a).toBe(1)
+		expect(obj2).toBeInstanceOf(TestClass2)
+		expect(obj2.o).toBeInstanceOf(TestClass1)
 	})
 
 	it('does not return the same instance for registered factories', () => {

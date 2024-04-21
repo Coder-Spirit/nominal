@@ -177,12 +177,10 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		NakedFactory extends (
-			...args: TSyncDependencies[keyof TSyncDependencies][]
-		) => Awaited<NNO>,
-		TParams extends Parameters<NakedFactory> &
-			TSyncDependencies[keyof TSyncDependencies][],
-		V extends ReturnType<NakedFactory>,
+		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
+		TArgs extends any[],
+		V extends NNO,
+		TParams extends TArgs & (TSyncDependencies[keyof TSyncDependencies])[],
 		TDependencies extends ContextualParamsToSyncResolverKeys<
 			TSyncDependencies,
 			TParams
@@ -195,7 +193,7 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		f: NakedFactory,
+		f: (...args: TArgs) => Awaited<V>,
 		...args: TDependencies
 	): ContainerBuilder<
 		{
@@ -285,12 +283,10 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		NakedFactory extends (
-			...args: TSyncDependencies[keyof TSyncDependencies][]
-		) => Awaited<NNO>,
-		TParams extends Parameters<NakedFactory> &
-			TSyncDependencies[keyof TSyncDependencies][],
-		V extends ReturnType<NakedFactory>,
+		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
+		TArgs extends any[],
+		V extends NNO,
+		TParams extends TArgs & (TSyncDependencies[keyof TSyncDependencies])[],
 		TDependencies extends ContextualParamsToSyncResolverKeys<
 			TSyncDependencies,
 			TParams
@@ -303,7 +299,7 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		f: NakedFactory,
+		f: (...args: TArgs) => Awaited<V>,
 		...args: TDependencies
 	): ContainerBuilder<
 		{
