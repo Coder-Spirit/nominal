@@ -296,6 +296,63 @@ describe('container', () => {
 		const aSum: number = await c.resolveAsync('aSum')
 		expect(aSum).toBe(5)
 	})
+
+	it('can register synchronous factories when using asynchronous dependencies', async () => {
+		const buildDbClient = (dbUser: string, dbPassword: string) => {
+			return { dbUser, dbPassword }
+		}
+		const buildWebhookClient = (webhookUrl: string) => {
+			return { webhookUrl }
+		}
+		const buildApp1 = async (
+			dbClient: ReturnType<typeof buildDbClient>,
+			webhookClient: ReturnType<typeof buildWebhookClient>,
+		) => {
+			return { dbClient, webhookClient }
+		}
+		const buildApp2 = (app1: Awaited<ReturnType<typeof buildApp1>>) => {
+			return { app1 }
+		}
+		const buildApp2_ = async (app1: Awaited<ReturnType<typeof buildApp1>>) => {
+			return { app1 }
+		}
+		const buildApp3 = (
+			app1: Awaited<ReturnType<typeof buildApp1>>,
+			webhookClient: ReturnType<typeof buildWebhookClient>,
+		) => {
+			return { app1, webhookClient }
+		}
+
+		const c = createContainer()
+			.registerValue('dbUser', 'root')
+			.registerValue('dbPassword', 'password')
+			.registerValue('webhookUrl', 'https://example.com/webhook')
+			.registerFactory('dbClient', buildDbClient, 'dbUser', 'dbPassword')
+			.registerSingleton('webhookClient', buildWebhookClient, 'webhookUrl')
+			.registerAsyncFactory('app1', buildApp1, 'dbClient', 'webhookClient')
+			.registerAsyncSingleton('app2', buildApp1, 'dbClient', 'webhookClient')
+			// Here is where things start to complicate, that's why we have a test
+			.registerAsyncFactory('app3', buildApp2, 'app2')
+			.registerAsyncSingleton('app4', buildApp3, 'app2', 'webhookClient')
+			.registerAsyncFactory('app5', buildApp2_, 'app2')
+
+		const app1: Awaited<ReturnType<typeof buildApp1>> =
+			await c.resolveAsync('app1')
+		const app2: Awaited<ReturnType<typeof buildApp1>> =
+			await c.resolveAsync('app2')
+		const app3: Awaited<ReturnType<typeof buildApp2>> =
+			await c.resolveAsync('app3')
+		const app4: Awaited<ReturnType<typeof buildApp3>> =
+			await c.resolveAsync('app4')
+		const app5: Awaited<ReturnType<typeof buildApp2_>> =
+			await c.resolveAsync('app5')
+
+		expect(app1.dbClient.dbUser).toBe('root')
+		expect(app2.dbClient.dbUser).toBe('root')
+		expect(app3.app1.dbClient.dbUser).toBe('root')
+		expect(app4.app1.dbClient.dbUser).toBe('root')
+		expect(app5.app1.dbClient.dbUser).toBe('root')
+	})
 })
 
 describe('@types/container', () => {

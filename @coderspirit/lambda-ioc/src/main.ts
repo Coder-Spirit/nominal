@@ -246,7 +246,7 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		f: (...args: TArgs) => Promise<V>,
+		f: (...args: TArgs) => V,
 		...args: TDependencies
 	): ContainerBuilder<
 		TSyncDependencies,
@@ -258,19 +258,19 @@ export interface WritableContainer<
 						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
 						? TK extends `${Prefix}:*`
 							? TAsyncDependencies[TK] extends unknown[]
-								? [...TAsyncDependencies[TK], V]
+								? [...TAsyncDependencies[TK], Awaited<V>]
 								: never
 							: TAsyncDependencies[TK]
 						: TK extends `${Prefix}:*`
-							? [V]
-							: V
+							? [Awaited<V>]
+							: Awaited<V>
 				}
 			: {
 					[TK in
 						| keyof TAsyncDependencies
 						| K]: TK extends keyof TAsyncDependencies
 						? TAsyncDependencies[TK]
-						: V
+						: Awaited<V>
 				}
 	>
 
@@ -352,7 +352,7 @@ export interface WritableContainer<
 			| `${string}:`
 			| `${string}:*`
 		>,
-		f: (...args: TArgs) => Promise<V>,
+		f: (...args: TArgs) => V,
 		...args: TDependencies
 	): ContainerBuilder<
 		TSyncDependencies,
@@ -364,19 +364,19 @@ export interface WritableContainer<
 						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
 						? TK extends `${Prefix}:*`
 							? TAsyncDependencies[TK] extends unknown[]
-								? [...TAsyncDependencies[TK], V]
+								? [...TAsyncDependencies[TK], Awaited<V>]
 								: never
 							: TAsyncDependencies[TK]
 						: TK extends `${Prefix}:*`
-							? [V]
-							: V
+							? [Awaited<V>]
+							: Awaited<V>
 				}
 			: {
 					[TK in
 						| keyof TAsyncDependencies
 						| K]: TK extends keyof TAsyncDependencies
 						? TAsyncDependencies[TK]
-						: V
+						: Awaited<V>
 				}
 	>
 }
