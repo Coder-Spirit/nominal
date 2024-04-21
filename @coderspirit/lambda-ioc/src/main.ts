@@ -14,7 +14,11 @@ type ExtractPrefixedValues<
 	Prefix extends string,
 	Struct extends Dict,
 	BaseKeys extends keyof Struct = keyof Struct,
-> = BaseKeys extends `${Prefix}:${infer U}` ? Struct[`${Prefix}:${U}`] : never
+> = BaseKeys extends `${Prefix}:${infer U}`
+	? U extends '*'
+		? never
+		: Struct[`${Prefix}:${U}`]
+	: never
 
 export interface SyncContainer<TSyncDependencies extends Dict> {
 	resolve<TKey extends keyof TSyncDependencies>(
@@ -149,7 +153,19 @@ export interface WritableContainer<
 				? TSyncDependencies[TK]
 				: V
 		},
-		TAsyncDependencies
+		K extends `${infer Prefix}:${string}`
+			? {
+					[TK in
+						| keyof TAsyncDependencies
+						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+						? TK extends `${Prefix}:*`
+							? TAsyncDependencies[TK] extends unknown[]
+								? [...TAsyncDependencies[TK], V]
+								: never
+							: TAsyncDependencies[TK]
+						: [V]
+				}
+			: TAsyncDependencies
 	>
 
 	/** Registers a factory in the container. */
@@ -187,7 +203,19 @@ export interface WritableContainer<
 				? TSyncDependencies[TK]
 				: V
 		},
-		TAsyncDependencies
+		K extends `${infer Prefix}:${string}`
+			? {
+					[TK in
+						| keyof TAsyncDependencies
+						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+						? TK extends `${Prefix}:*`
+							? TAsyncDependencies[TK] extends unknown[]
+								? [...TAsyncDependencies[TK], V]
+								: never
+							: TAsyncDependencies[TK]
+						: [V]
+				}
+			: TAsyncDependencies
 	>
 
 	/** Registers an async factory in the container. */
@@ -205,11 +233,7 @@ export interface WritableContainer<
 				| TAsyncDependencies[keyof TAsyncDependencies]
 			)[]
 		) => Promise<unknown>,
-		TParams extends Parameters<NakedFactory> &
-			(
-				| TSyncDependencies[keyof TSyncDependencies]
-				| TAsyncDependencies[keyof TAsyncDependencies]
-			)[],
+		TParams extends Parameters<NakedFactory>,
 		V extends Awaited<ReturnType<NakedFactory>> & Awaited<NNO>,
 		TDependencies extends ContextualParamsToAsyncResolverKeys<
 			TSyncDependencies,
@@ -228,11 +252,26 @@ export interface WritableContainer<
 		...args: TDependencies
 	): ContainerBuilder<
 		TSyncDependencies,
-		{
-			[TK in keyof TAsyncDependencies | K]: TK extends keyof TAsyncDependencies
-				? TAsyncDependencies[TK]
-				: V
-		}
+		K extends `${infer Prefix}:${string}`
+			? {
+					[TK in
+						| keyof TAsyncDependencies
+						| K
+						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+						? TK extends `${Prefix}:*`
+							? TAsyncDependencies[TK] extends unknown[]
+								? [...TAsyncDependencies[TK], V]
+								: never
+							: TAsyncDependencies[TK]
+						: [V]
+				}
+			: {
+					[TK in
+						| keyof TAsyncDependencies
+						| K]: TK extends keyof TAsyncDependencies
+						? TAsyncDependencies[TK]
+						: V
+				}
 	>
 
 	/** Registers a factory in the container and treats it as a singleton. */
@@ -270,7 +309,19 @@ export interface WritableContainer<
 				? TSyncDependencies[TK]
 				: V
 		},
-		TAsyncDependencies
+		K extends `${infer Prefix}:${string}`
+			? {
+					[TK in
+						| keyof TAsyncDependencies
+						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+						? TK extends `${Prefix}:*`
+							? TAsyncDependencies[TK] extends unknown[]
+								? [...TAsyncDependencies[TK], V]
+								: never
+							: TAsyncDependencies[TK]
+						: [V]
+				}
+			: TAsyncDependencies
 	>
 
 	/** Registers an async factory in the container and treats it as a singleton. */
@@ -288,11 +339,7 @@ export interface WritableContainer<
 				| TAsyncDependencies[keyof TAsyncDependencies]
 			)[]
 		) => Promise<unknown>,
-		TParams extends Parameters<NakedFactory> &
-			(
-				| TSyncDependencies[keyof TSyncDependencies]
-				| TAsyncDependencies[keyof TAsyncDependencies]
-			)[],
+		TParams extends Parameters<NakedFactory>,
 		V extends Awaited<ReturnType<NakedFactory>> & Awaited<NNO>,
 		TDependencies extends ContextualParamsToAsyncResolverKeys<
 			TSyncDependencies,
@@ -311,11 +358,26 @@ export interface WritableContainer<
 		...args: TDependencies
 	): ContainerBuilder<
 		TSyncDependencies,
-		{
-			[TK in keyof TAsyncDependencies | K]: TK extends keyof TAsyncDependencies
-				? TAsyncDependencies[TK]
-				: V
-		}
+		K extends `${infer Prefix}:${string}`
+			? {
+					[TK in
+						| keyof TAsyncDependencies
+						| K
+						| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+						? TK extends `${Prefix}:*`
+							? TAsyncDependencies[TK] extends unknown[]
+								? [...TAsyncDependencies[TK], V]
+								: never
+							: TAsyncDependencies[TK]
+						: [V]
+				}
+			: {
+					[TK in
+						| keyof TAsyncDependencies
+						| K]: TK extends keyof TAsyncDependencies
+						? TAsyncDependencies[TK]
+						: V
+				}
 	>
 }
 
@@ -349,6 +411,10 @@ export function __createContainer<
 		},
 
 		async resolveAsync(k: string): Promise<unknown> {
+			if (k.endsWith(':*')) {
+				return c.resolveGroup(k.slice(0, -2))
+			}
+
 			const syncFactory = syncFactories[k as keyof TSyncFactories]
 
 			if (syncFactory === undefined) {
@@ -356,7 +422,7 @@ export function __createContainer<
 				if (asyncFactory === undefined) {
 					throw new LambdaIoCError(`Dependency "${k as string}" not found`)
 				}
-				return await asyncFactory(c as unknown as Container<Dict, Dict>)
+				return asyncFactory(c as unknown as Container<Dict, Dict>)
 			}
 
 			return syncFactory(c)
@@ -383,6 +449,9 @@ export function __createContainer<
 					`Dependency "${k as string}" already registered`,
 				)
 			}
+			if (k.endsWith(':*')) {
+				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
+			}
 
 			return __createContainer(
 				{
@@ -402,6 +471,9 @@ export function __createContainer<
 				throw new LambdaIoCError(
 					`Dependency "${k as string}" already registered`,
 				)
+			}
+			if (k.endsWith(':*')) {
+				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
 			}
 
 			return __createContainer(
@@ -425,6 +497,9 @@ export function __createContainer<
 				throw new LambdaIoCError(
 					`Dependency "${k as string}" already registered`,
 				)
+			}
+			if (k.endsWith(':*')) {
+				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
 			}
 
 			return __createContainer(syncFactories, {
@@ -463,6 +538,9 @@ export function __createContainer<
 					`Dependency "${k as string}" already registered`,
 				)
 			}
+			if (k.endsWith(':*')) {
+				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
+			}
 
 			let singleton: unknown = undefined
 
@@ -491,6 +569,9 @@ export function __createContainer<
 					`Dependency "${k as string}" already registered`,
 				)
 			}
+			if (k.endsWith(':*')) {
+				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
+			}
 
 			let singleton: unknown = undefined
 
@@ -516,7 +597,7 @@ export function __createContainer<
 							}),
 						)
 
-						singleton = await factory(...resolvedParams)
+						singleton = factory(...resolvedParams)
 					}
 					return singleton
 				},

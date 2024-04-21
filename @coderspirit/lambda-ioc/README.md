@@ -36,6 +36,7 @@ import {
   buildServiceA,
   buildServiceB
 } from './services.ts'
+import { buildServer } from './server.ts'
 
 const container = createContainer()
   // We can register already instantiated values
@@ -64,6 +65,9 @@ const container = createContainer()
     'aSingleton',
     async () => Promise.resolve({ v: 42 })
   )
+  // We can inject groups into other registered dependencies by using
+  // the `:*` suffix
+  .registerAsync('server', buildServer, 'svc:*')
   // The next call is not strictly necessary, but it helps to "clean up"
   // the container's type for faster type checking.
   .close()
@@ -92,6 +96,12 @@ const asyncAsSync = container.resolve('asyncStuff')
 // `svcGroup` will be an array (with arbitrary order) containing the
 // dependencies registered under the 'svc:` prefix.
 const svcGroup = await container.resolveGroup('svc')
+
+// Having a specific method to resolve groups is fine, but it does not
+// fit well in dependency resolution pipelines. For this reason, we also
+// provide a way to asynchronously resolve groups by relying on the `:*`
+// suffix, so we can pass whole groups as dependencies.
+const svcGroup = await container.resolveAsync('svc:*')
 ```
 
 ## Other considerations

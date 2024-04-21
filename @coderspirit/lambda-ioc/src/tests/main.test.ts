@@ -8,8 +8,12 @@ describe('container', () => {
 			.registerValue('b', 2)
 			.close()
 
-		expect(container.resolve('a')).toBe(1)
-		expect(container.resolve('b')).toBe(2)
+		// Types are inferred correctly
+		const a: 1 = container.resolve('a')
+		const b: 2 = container.resolve('b')
+
+		expect(a).toBe(1)
+		expect(b).toBe(2)
 	})
 
 	it('returns the same instance for registered values', () => {
@@ -27,7 +31,10 @@ describe('container', () => {
 			.registerFactory('sum', (a, b) => a + b, 'a', 'b')
 			.close()
 
-		expect(container.resolve('sum')).toBe(3)
+		// Types are inferred correctly
+		const sum: number = container.resolve('sum')
+
+		expect(sum).toBe(3)
 	})
 
 	it('does not return the same instance for registered factories', () => {
@@ -53,7 +60,10 @@ describe('container', () => {
 			.registerAsyncFactory('sum', async (a, b) => a + b, 'a', 'b')
 			.close()
 
-		expect(await container.resolveAsync('sum')).toBe(3)
+		// Types are inferred correctly
+		const sum: number = await container.resolveAsync('sum')
+
+		expect(sum).toBe(3)
 	})
 
 	it('does not return the same instance for registered async factories', async () => {
@@ -101,13 +111,13 @@ describe('container', () => {
 			.registerFactory('g2:sum', (a, b) => a + b, 'g2:a', 'g2:b')
 			.close()
 
-		const g1 = await container.resolveGroup('g1')
+		const g1: number[] = await container.resolveGroup('g1')
 		expect(g1.length).toBe(3)
 		expect(g1).toContain(1)
 		expect(g1).toContain(2)
 		expect(g1).toContain(3)
 
-		const g2 = await container.resolveGroup('g2')
+		const g2: number[] = await container.resolveGroup('g2')
 		expect(g2.length).toBe(3)
 		expect(g2).toContain(3)
 		expect(g2).toContain(4)
@@ -116,6 +126,46 @@ describe('container', () => {
 		// @ts-expect-error
 		const g3 = await container.resolveGroup('g3') // g3 is not registered
 		expect(g3.length).toBe(0)
+	})
+
+	it('resolve groups with ":*" suffix', async () => {
+		const c = createContainer().registerValue('g:a', 1).registerValue('g:b', 2)
+
+		const g1: number[] = await c.resolveAsync('g:*')
+		expect(g1.length).toBe(2)
+
+		const g2: number[] = await c.resolveGroup('g')
+		expect(g2.length).toBe(2)
+
+		for (const v of g1) {
+			expect(g2).toContain(v)
+		}
+	})
+
+	it('detects too many parameters when registering factories', () => {
+		const c = createContainer()
+			.registerValue('a', 2)
+			.registerValue('b', 3)
+			// @ts-expect-error This is an error because we pass 3 args instead of 2
+			.registerFactory('wrongSum', (a, b) => a + b, 'a', 'b', 'a')
+
+		// @ts-expect-error We resolve an incorrectly registered dependency
+		const wrongSum: number = c.resolve('wrongSum')
+
+		expect(wrongSum).toBe(5)
+	})
+
+	it('detects too few parameters when registering factories', () => {
+		const c = createContainer()
+			.registerValue('a', 2)
+			.registerValue('b', 3)
+			// @ts-expect-error This is an error because we pass 1 arg instead of 2
+			.registerFactory('wrongSum', (a, b) => a + b, 'a')
+
+		// @ts-expect-error We resolve an incorrectly registered dependency
+		const wrongSum: number = c.resolve('wrongSum')
+
+		expect(wrongSum).toBeNaN()
 	})
 
 	it('throws when trying to register a dependency twice', () => {
@@ -141,6 +191,21 @@ describe('container', () => {
 		expect(() => container.resolve('c')).toThrow()
 		// @ts-expect-error
 		expect(() => container.resolveAsync('c')).rejects.toThrow()
+	})
+
+	it('throws when registering dependencies with ":*" suffix', async () => {
+		const c = createContainer()
+
+		// @ts-expect-error
+		expect(() => c.registerValue('g:*', 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerFactory('g:*', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncFactory('g:*', async () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerSingleton('g:*', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncSingleton('g:*', async () => 1)).toThrow()
 	})
 })
 

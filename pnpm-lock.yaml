@@ -31,6 +31,10 @@ importers:
         version: 1.13.2
 
   '@coderspirit/lambda-ioc':
+    dependencies:
+      '@coderspirit/nominal':
+        specifier: workspace:^
+        version: link:../nominal
     devDependencies:
       '@coderspirit/eslint-config':
         specifier: ^2.0.0
