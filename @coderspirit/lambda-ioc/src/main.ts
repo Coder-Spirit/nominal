@@ -126,13 +126,22 @@ export interface WritableContainer<
 	registerValue<
 		K extends Exclude<
 			string,
-			keyof TSyncDependencies | keyof TAsyncDependencies
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
 		>,
 		V extends K extends keyof TSyncDependencies | keyof TAsyncDependencies
 			? never
 			: unknown,
 	>(
-		k: K,
+		k: Exclude<
+			K,
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
+		>,
 		v: BasicValue<V>,
 	): ContainerBuilder<
 		{
@@ -147,7 +156,10 @@ export interface WritableContainer<
 	registerFactory<
 		K extends Exclude<
 			string,
-			keyof TSyncDependencies | keyof TAsyncDependencies
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
 		>,
 		NakedFactory extends (
 			...args: TSyncDependencies[keyof TSyncDependencies][]
@@ -160,7 +172,13 @@ export interface WritableContainer<
 			TParams
 		>,
 	>(
-		k: K,
+		k: Exclude<
+			K,
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
+		>,
 		f: NakedFactory,
 		...args: TDependencies
 	): ContainerBuilder<
@@ -176,7 +194,10 @@ export interface WritableContainer<
 	registerAsyncFactory<
 		K extends Exclude<
 			string,
-			keyof TSyncDependencies | keyof TAsyncDependencies
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
 		>,
 		NakedFactory extends (
 			...args: (
@@ -196,7 +217,13 @@ export interface WritableContainer<
 			TParams
 		>,
 	>(
-		k: K,
+		k: Exclude<
+			K,
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
+		>,
 		f: NakedFactory,
 		...args: TDependencies
 	): ContainerBuilder<
@@ -212,7 +239,10 @@ export interface WritableContainer<
 	registerSingleton<
 		K extends Exclude<
 			string,
-			keyof TSyncDependencies | keyof TAsyncDependencies
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
 		>,
 		NakedFactory extends (
 			...args: TSyncDependencies[keyof TSyncDependencies][]
@@ -225,7 +255,13 @@ export interface WritableContainer<
 			TParams
 		>,
 	>(
-		k: K,
+		k: Exclude<
+			K,
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
+		>,
 		f: NakedFactory,
 		...args: TDependencies
 	): ContainerBuilder<
@@ -241,7 +277,10 @@ export interface WritableContainer<
 	registerAsyncSingleton<
 		K extends Exclude<
 			string,
-			keyof TSyncDependencies | keyof TAsyncDependencies
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
 		>,
 		NakedFactory extends (
 			...args: (
@@ -261,7 +300,13 @@ export interface WritableContainer<
 			TParams
 		>,
 	>(
-		k: K,
+		k: Exclude<
+			K,
+			| keyof TSyncDependencies
+			| keyof TAsyncDependencies
+			| `${string}:`
+			| `${string}:*`
+		>,
 		f: NakedFactory,
 		...args: TDependencies
 	): ContainerBuilder<
@@ -325,7 +370,9 @@ export function __createContainer<
 					await Promise.all(
 						Object.entries(asyncFactories)
 							.filter(([key]) => key.startsWith(k))
-							.map(([_, factory]) => factory(c as unknown as Container<Dict, Dict>)),
+							.map(([_, factory]) =>
+								factory(c as unknown as Container<Dict, Dict>),
+							),
 					),
 				)
 		},
@@ -391,7 +438,9 @@ export function __createContainer<
 							}
 							if (asyncFactories[arg] !== undefined) {
 								// biome-ignore lint/style/noNonNullAssertion: asserted above!
-								return asyncFactories[arg]!(c as unknown as Container<Dict, Dict>)
+								return asyncFactories[arg]!(
+									c as unknown as Container<Dict, Dict>,
+								)
 							}
 							throw new LambdaIoCError(
 								`Dependency "${arg as string}" not found`,
@@ -457,7 +506,9 @@ export function __createContainer<
 								}
 								if (asyncFactories[arg] !== undefined) {
 									// biome-ignore lint/style/noNonNullAssertion: asserted above!
-									return asyncFactories[arg]!(c as unknown as Container<Dict, Dict>)
+									return asyncFactories[arg]!(
+										c as unknown as Container<Dict, Dict>,
+									)
 								}
 								throw new LambdaIoCError(
 									`Dependency "${arg as string}" not found`,

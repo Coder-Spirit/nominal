@@ -112,6 +112,10 @@ describe('container', () => {
 		expect(g2).toContain(3)
 		expect(g2).toContain(4)
 		expect(g2).toContain(7)
+
+		// @ts-expect-error
+		const g3 = await container.resolveGroup('g3') // g3 is not registered
+		expect(g3.length).toBe(0)
 	})
 
 	it('throws when trying to register a dependency twice', () => {
@@ -119,8 +123,11 @@ describe('container', () => {
 			.registerValue('a', 1)
 			.registerValue('b', 2)
 
-		expect(() => container.registerValue('a', 1 as never)).toThrow()
+		// @ts-expect-error
+		expect(() => container.registerValue('a', 1)).toThrow()
+		// @ts-expect-error
 		expect(() => container.registerFactory('a', () => 1)).toThrow()
+		// @ts-expect-error
 		expect(() => container.registerAsyncFactory('a', async () => 1)).toThrow()
 	})
 
@@ -130,8 +137,10 @@ describe('container', () => {
 			.registerValue('b', 2)
 			.close()
 
-		expect(() => container.resolve('c' as 'a' | 'b')).toThrow()
-		expect(() => container.resolveAsync('c' as 'a' | 'b')).rejects.toThrow()
+		// @ts-expect-error
+		expect(() => container.resolve('c')).toThrow()
+		// @ts-expect-error
+		expect(() => container.resolveAsync('c')).rejects.toThrow()
 	})
 })
 
