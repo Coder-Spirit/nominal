@@ -251,6 +251,27 @@ describe('container', () => {
 		expect(sum.v).toBe(5)
 		expect(anotherSum.v).toBe(5)
 	})
+
+	it('can resolve registed arrays during registration', async () => {
+		const c = createContainer()
+			.registerValue('l_1', [2, 3])
+			.registerFactory(
+				'sum',
+				(l: number[]) => l.reduce((acc, curr) => acc + curr, 0),
+				'l_1',
+			)
+			.registerAsyncFactory(
+				'aSum',
+				async (l: number[]) => l.reduce((acc, curr) => acc + curr, 0),
+				'l_1',
+			)
+
+		const sum: number = c.resolve('sum')
+		expect(sum).toBe(5)
+
+		const aSum: number = await c.resolveAsync('aSum')
+		expect(aSum).toBe(5)
+	})
 })
 
 describe('@types/container', () => {

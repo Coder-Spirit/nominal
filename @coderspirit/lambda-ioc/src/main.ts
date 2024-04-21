@@ -263,7 +263,9 @@ export interface WritableContainer<
 								? [...TAsyncDependencies[TK], V]
 								: never
 							: TAsyncDependencies[TK]
-						: [V]
+						: TK extends `${Prefix}:*`
+							? [V]
+							: V
 				}
 			: {
 					[TK in
@@ -369,7 +371,9 @@ export interface WritableContainer<
 								? [...TAsyncDependencies[TK], V]
 								: never
 							: TAsyncDependencies[TK]
-						: [V]
+						: TK extends `${Prefix}:*`
+							? [V]
+							: V
 				}
 			: {
 					[TK in
