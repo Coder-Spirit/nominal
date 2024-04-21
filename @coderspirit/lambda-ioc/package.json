@@ -33,5 +33,13 @@
 		"@coderspirit/eslint-config": "^2.0.0",
 		"typescript": "^5.4.5",
 		"vitest": "^1.5.0"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Coder-Spirit/nominal.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Coder-Spirit/nominal/issues"
+	},
+	"homepage": "https://github.com/Coder-Spirit/nominal#readme"
 }
