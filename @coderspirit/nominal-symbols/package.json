@@ -33,9 +33,9 @@
 	},
 	"devDependencies": {
 		"@coderspirit/eslint-config": "^2.0.0",
-		"@types/node": "^20.12.5",
+		"@types/node": "^20.12.7",
 		"tslib": "^2.6.2",
-		"typescript": "^5.4.4"
+		"typescript": "^5.4.5"
 	},
 	"engines": {
 		"node": ">=18.0.0"

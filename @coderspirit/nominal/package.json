@@ -34,10 +34,10 @@
 	},
 	"devDependencies": {
 		"@coderspirit/eslint-config": "^2.0.0",
-		"@types/node": "^20.12.5",
+		"@types/node": "^20.12.7",
 		"tslib": "^2.6.2",
-		"typescript": "^5.4.4",
-		"vitest": "^0.34.6"
+		"typescript": "^5.4.5",
+		"vitest": "^1.5.0"
 	},
 	"engines": {
 		"node": ">=18.0.0"

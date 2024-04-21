@@ -4,6 +4,7 @@
 - [@coderspirit/nominal-inputs](@coderspirit/nominal-inputs/README.md)
 - [@coderspirit/nominal-symbols](@coderspirit/nominal-symbols/README.md)
 - [@coderspirit/safe-env](@coderspirit/safe-env/README.md)
+- [@coderspirit/lambda-ioc](@coderspirit/lambda-ioc/README.md)
 
 ## Community
 
