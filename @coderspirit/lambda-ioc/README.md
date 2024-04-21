@@ -70,6 +70,9 @@ const container = createContainer()
   .registerAsync('server', buildServer, 'svc:*')
   // The next call is not strictly necessary, but it helps to "clean up"
   // the container's type for faster type checking.
+  // Although we don't do it in this example, we can parametrize the
+  // type parameters of `close` if we want to expose less dependencies
+  // than the ones we registered.
   .close()
 
 // Once we have the container, we can start resolving its registered

@@ -180,7 +180,7 @@ export interface WritableContainer<
 		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
 		TArgs extends any[],
 		V extends NNO,
-		TParams extends TArgs & (TSyncDependencies[keyof TSyncDependencies])[],
+		TParams extends TArgs & TSyncDependencies[keyof TSyncDependencies][],
 		TDependencies extends ContextualParamsToSyncResolverKeys<
 			TSyncDependencies,
 			TParams
@@ -286,7 +286,7 @@ export interface WritableContainer<
 		// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
 		TArgs extends any[],
 		V extends NNO,
-		TParams extends TArgs & (TSyncDependencies[keyof TSyncDependencies])[],
+		TParams extends TArgs & TSyncDependencies[keyof TSyncDependencies][],
 		TDependencies extends ContextualParamsToSyncResolverKeys<
 			TSyncDependencies,
 			TParams
@@ -386,8 +386,14 @@ export interface ContainerBuilder<
 	TAsyncDependencies extends Dict,
 > extends Container<TSyncDependencies, TAsyncDependencies>,
 		WritableContainer<TSyncDependencies, TAsyncDependencies> {
-	/** "Closes" the container, making it read-only. */
-	close(): Container<TSyncDependencies, TAsyncDependencies>
+	/**
+	 * "Closes" the container, making it read-only. It also allows us to expose
+	 * less dependencies than the ones we have registered.
+	 */
+	close<
+		SD extends Partial<TSyncDependencies> = TSyncDependencies,
+		AD extends Partial<TAsyncDependencies> = TAsyncDependencies,
+	>(): Container<SD, AD>
 }
 
 export class LambdaIoCError extends Error {}
