@@ -28,8 +28,8 @@ jobs:
     steps:
     - name: Checkout repository # v4.1.1
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-    - name: Install PNPM # v2.4.0
-      uses: pnpm/action-setup@d882d12c64e032187b2edb46d3a0d003b7a43598
+    - name: Install PNPM # v3.0.0
+      uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d
       with:
         version: '8.9.0'
     - name: Use Node.js ${{ matrix.node-version }} # v4.0.2
