@@ -122,9 +122,9 @@ type ContextualParamsToAsyncResolverKeys<
 }
 
 type ConstrainedKey<
-	K extends string,
 	TSyncDependencies extends Dict,
 	TAsyncDependencies extends Dict,
+	K extends string = string,
 > = Exclude<
 	K,
 	| keyof TSyncDependencies
@@ -163,7 +163,7 @@ type RegisterFactoryFunc<
 	TSyncDependencies extends Dict,
 	TAsyncDependencies extends Dict,
 > = <
-	K extends ConstrainedKey<string, TSyncDependencies, TAsyncDependencies>,
+	K extends ConstrainedKey<TSyncDependencies, TAsyncDependencies>,
 	// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
 	TArgs extends any[],
 	V extends NNO,
@@ -173,7 +173,7 @@ type RegisterFactoryFunc<
 		TParams
 	>,
 >(
-	k: ConstrainedKey<K, TSyncDependencies, TAsyncDependencies>,
+	k: ConstrainedKey<TSyncDependencies, TAsyncDependencies, K>,
 	f: (...args: TArgs) => Awaited<V>,
 	...args: TDependencies
 ) => SyncRegisterResult<TSyncDependencies, TAsyncDependencies, K, V>
@@ -182,7 +182,7 @@ type RegisterAsyncFactory<
 	TSyncDependencies extends Dict,
 	TAsyncDependencies extends Dict,
 > = <
-	K extends ConstrainedKey<string, TSyncDependencies, TAsyncDependencies>,
+	K extends ConstrainedKey<TSyncDependencies, TAsyncDependencies>,
 	// biome-ignore lint/suspicious/noExplicitAny: WE NEED IT
 	TArgs extends any[],
 	V extends NNO,
@@ -197,7 +197,7 @@ type RegisterAsyncFactory<
 		TParams
 	>,
 >(
-	k: ConstrainedKey<K, TSyncDependencies, TAsyncDependencies>,
+	k: ConstrainedKey<TSyncDependencies, TAsyncDependencies, K>,
 	f: (...args: TArgs) => V,
 	...args: TDependencies
 ) => ContainerBuilder<
@@ -232,24 +232,12 @@ export interface WritableContainer<
 > {
 	/** Registers a value in the container. */
 	registerValue<
-		K extends Exclude<
-			string,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
+		K extends ConstrainedKey<TSyncDependencies, TAsyncDependencies>,
 		V extends K extends keyof TSyncDependencies | keyof TAsyncDependencies
 			? never
 			: unknown,
 	>(
-		k: Exclude<
-			K,
-			| keyof TSyncDependencies
-			| keyof TAsyncDependencies
-			| `${string}:`
-			| `${string}:*`
-		>,
+		k: ConstrainedKey<TSyncDependencies, TAsyncDependencies, K>,
 		v: Awaited<NonNullable<V>>,
 	): SyncRegisterResult<TSyncDependencies, TAsyncDependencies, K, V>
 
