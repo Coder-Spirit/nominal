@@ -152,7 +152,7 @@ describe('container', () => {
 		expect(g3.length).toBe(0)
 	})
 
-	it('resolve groups with ":*" suffix', async () => {
+	it('resolves groups with ":*" suffix', async () => {
 		const c = createContainer().registerValue('g:a', 1).registerValue('g:b', 2)
 
 		const g1: number[] = await c.resolveAsync('g:*')
@@ -164,6 +164,33 @@ describe('container', () => {
 		for (const v of g1) {
 			expect(g2).toContain(v)
 		}
+	})
+
+	it('resolves labelled groups with the ":#" suffix', async () => {
+		const c = createContainer().registerValue('g:a', 1).registerValue('g:b', 2)
+
+		const g1: (['a', 1] | ['b', 2])[] = await c.resolveAsync('g:#')
+		expect(g1.length).toBe(2)
+
+		const g2: (['a', 1] | ['b', 2])[] = await c.resolveLabelledGroup('g')
+		expect(g2.length).toBe(2)
+
+		for (const v of g1) {
+			expect(g2.filter(w => w[0] === v[0]).map(w => w[1])).toContain(v[1])
+		}
+	})
+
+	it('does not add deps into resolved group when they share same "prefix"', async () => {
+		const c = createContainer()
+			.registerValue('group:a', 1)
+			.registerValue('group:b', 2)
+			.registerValue('groupedStuff', [4, 5, 6])
+
+		const group: number[] = await c.resolveAsync('group:*')
+		expect(group.length).toBe(2)
+
+		const labelledGroup = await c.resolveLabelledGroup('group')
+		expect(labelledGroup.length).toBe(2)
 	})
 
 	it('detects too many parameters when registering factories', () => {
@@ -217,6 +244,21 @@ describe('container', () => {
 		expect(() => container.resolveAsync('c')).rejects.toThrow()
 	})
 
+	it('throws when registering dependencies with ":" suffix', async () => {
+		const c = createContainer()
+
+		// @ts-expect-error
+		expect(() => c.registerValue('g:', 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerFactory('g:', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncFactory('g:', async () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerSingleton('g:', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncSingleton('g:', async () => 1)).toThrow()
+	})
+
 	it('throws when registering dependencies with ":*" suffix', async () => {
 		const c = createContainer()
 
@@ -230,6 +272,36 @@ describe('container', () => {
 		expect(() => c.registerSingleton('g:*', () => 1)).toThrow()
 		// @ts-expect-error
 		expect(() => c.registerAsyncSingleton('g:*', async () => 1)).toThrow()
+	})
+
+	it('throws when registering dependencies with ":#" suffix', async () => {
+		const c = createContainer()
+
+		// @ts-expect-error
+		expect(() => c.registerValue('g:#', 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerFactory('g:#', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncFactory('g:#', async () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerSingleton('g:#', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncSingleton('g:#', async () => 1)).toThrow()
+	})
+
+	it('throws when registering dependencies with ":" prefix', async () => {
+		const c = createContainer()
+
+		// @ts-expect-error
+		expect(() => c.registerValue(':x', 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerFactory(':x', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncFactory(':x', async () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerSingleton(':x', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncSingleton(':x', async () => 1)).toThrow()
 	})
 
 	it('can pass groups to registered factories', async () => {

@@ -1,6 +1,6 @@
 {
 	"name": "@coderspirit/lambda-ioc",
-	"version": "2.0.4",
+	"version": "2.1.0",
 	"description": "Super type safe dependency injection 💉 for TypeScript",
 	"keywords": ["typescript", "functional", "ioc", "di", "dependency injection"],
 	"author": "Andres Correa Casablanca <andreu@kindspells.dev>",

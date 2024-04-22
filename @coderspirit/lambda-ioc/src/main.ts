@@ -13,10 +13,20 @@ type ExtractPrefixedValues<
 	Prefix extends string,
 	Struct extends Dict,
 	BaseKeys extends keyof Struct = keyof Struct,
-> = BaseKeys extends `${Prefix}:${infer U}`
-	? U extends '*'
+> = BaseKeys extends `${Prefix}:${infer Suffix}`
+	? Suffix extends '*' | '#'
 		? never
-		: Struct[`${Prefix}:${U}`]
+		: Struct[`${Prefix}:${Suffix}`]
+	: never
+
+type ExtractLabelledPrefixedValues<
+	Prefix extends string,
+	Struct extends Dict,
+	BaseKeys extends keyof Struct = keyof Struct,
+> = BaseKeys extends `${Prefix}:${infer Suffix}`
+	? Suffix extends '*' | '#'
+		? never
+		: [Suffix, Struct[`${Prefix}:${Suffix}`]]
 	: never
 
 export interface SyncContainer<out TSyncDependencies extends Dict> {
@@ -47,6 +57,19 @@ export interface AsyncContainer<
 		k: TKey,
 	): Promise<
 		ExtractPrefixedValues<TKey, TSyncDependencies & TAsyncDependencies>[]
+	>
+
+	resolveLabelledGroup<
+		TKey extends ExtractPrefix<
+			string & (keyof TSyncDependencies | keyof TAsyncDependencies)
+		>,
+	>(
+		k: TKey,
+	): Promise<
+		ExtractLabelledPrefixedValues<
+			TKey,
+			TSyncDependencies & TAsyncDependencies
+		>[]
 	>
 }
 
@@ -129,9 +152,13 @@ type ConstrainedKey<
 	K,
 	| keyof TSyncDependencies
 	| keyof TAsyncDependencies
+	| `:${string}`
 	| `${string}:`
 	| `${string}:*`
+	| `${string}:#`
 >
+
+const forbiddenKeysMatcher = /(^:|:(#|\*)?$)/
 
 type SyncRegisterResult<
 	TSyncDependencies extends Dict,
@@ -144,17 +171,24 @@ type SyncRegisterResult<
 			? TSyncDependencies[TK]
 			: V
 	},
-	K extends `${infer Prefix}:${string}`
+	K extends `${infer Prefix}:${infer Suffix}`
 		? {
 				[TK in
 					| keyof TAsyncDependencies
-					| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+					| `${Prefix}:*`
+					| `${Prefix}:#`]: TK extends keyof TAsyncDependencies
 					? TK extends `${Prefix}:*`
-						? TAsyncDependencies[TK] extends unknown[]
+						? [TAsyncDependencies[TK]] extends [unknown[]]
 							? [...TAsyncDependencies[TK], V]
 							: never
-						: TAsyncDependencies[TK]
-					: [V]
+						: TK extends `${Prefix}:#`
+							? [TAsyncDependencies[TK]] extends [unknown[]]
+								? [...TAsyncDependencies[TK], [Suffix, V]]
+								: never
+							: TAsyncDependencies[TK]
+					: TK extends `${Prefix}:*`
+						? [V]
+						: [[Suffix, V]] // TK extends `${Prefix}:#`
 			}
 		: TAsyncDependencies
 >
@@ -202,20 +236,27 @@ type RegisterAsyncFactory<
 	...args: TDependencies
 ) => ContainerBuilder<
 	TSyncDependencies,
-	K extends `${infer Prefix}:${string}`
+	K extends `${infer Prefix}:${infer Suffix}`
 		? {
 				[TK in
 					| keyof TAsyncDependencies
 					| K
-					| `${Prefix}:*`]: TK extends keyof TAsyncDependencies
+					| `${Prefix}:*`
+					| `${Prefix}:#`]: TK extends keyof TAsyncDependencies
 					? TK extends `${Prefix}:*`
-						? TAsyncDependencies[TK] extends unknown[]
+						? [TAsyncDependencies[TK]] extends [unknown[]]
 							? [...TAsyncDependencies[TK], Awaited<V>]
 							: never
-						: TAsyncDependencies[TK]
+						: TK extends `${Prefix}:#`
+							? [TAsyncDependencies[TK]] extends [unknown[]]
+								? [...TAsyncDependencies[TK], [Suffix, Awaited<V>]]
+								: never
+							: TAsyncDependencies[TK]
 					: TK extends `${Prefix}:*`
 						? [Awaited<V>]
-						: Awaited<V>
+						: TK extends `${Prefix}:#`
+							? [[Suffix, Awaited<V>]]
+							: Awaited<V>
 			}
 		: {
 				[TK in
@@ -300,8 +341,11 @@ export function __createContainer<
 		},
 
 		async resolveAsync(k: string): Promise<unknown> {
-			if (k.endsWith(':*')) {
-				return c.resolveGroup(k.slice(0, -2))
+			switch (k.slice(-2)) {
+				case ':*':
+					return c.resolveGroup(k.slice(0, -2))
+				case ':#':
+					return c.resolveLabelledGroup(k.slice(0, -2))
 			}
 
 			const syncFactory = syncFactories[k as keyof TSyncFactories]
@@ -318,16 +362,36 @@ export function __createContainer<
 		},
 
 		async resolveGroup(k: string): Promise<unknown[]> {
+			const prefix = `${k}:`
+
 			return Object.entries(syncFactories)
-				.filter(([key]) => key.startsWith(k))
+				.filter(([key]) => key.startsWith(prefix))
 				.map(([_, factory]) => factory(c))
 				.concat(
 					await Promise.all(
 						Object.entries(asyncFactories)
-							.filter(([key]) => key.startsWith(k))
+							.filter(([key]) => key.startsWith(prefix))
 							.map(([_, factory]) =>
 								factory(c as unknown as Container<Dict, Dict>),
 							),
+					),
+				)
+		},
+
+		async resolveLabelledGroup(k: string): Promise<unknown[]> {
+			const prefix = `${k}:`
+
+			return Object.entries(syncFactories)
+				.filter(([key]) => key.startsWith(prefix))
+				.map(([key, factory]) => [key.split(':')[1], factory(c)])
+				.concat(
+					await Promise.all(
+						Object.entries(asyncFactories)
+							.filter(([key]) => key.startsWith(prefix))
+							.map(([key, factory]) => async () => [
+								key.split(':')[1],
+								await factory(c as unknown as Container<Dict, Dict>),
+							]),
 					),
 				)
 		},
@@ -338,7 +402,7 @@ export function __createContainer<
 					`Dependency "${k as string}" already registered`,
 				)
 			}
-			if (k.endsWith(':*')) {
+			if (k.match(forbiddenKeysMatcher) !== null) {
 				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
 			}
 
@@ -361,7 +425,7 @@ export function __createContainer<
 					`Dependency "${k as string}" already registered`,
 				)
 			}
-			if (k.endsWith(':*')) {
+			if (k.match(forbiddenKeysMatcher) !== null) {
 				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
 			}
 
@@ -387,7 +451,7 @@ export function __createContainer<
 					`Dependency "${k as string}" already registered`,
 				)
 			}
-			if (k.endsWith(':*')) {
+			if (k.match(forbiddenKeysMatcher) !== null) {
 				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
 			}
 
@@ -396,8 +460,11 @@ export function __createContainer<
 				[k]: async () => {
 					const resolvedParams = await Promise.all(
 						args.map(arg => {
-							if (arg.endsWith(':*')) {
-								return c.resolveGroup(arg.slice(0, -2))
+							switch (arg.slice(-2)) {
+								case ':*':
+									return c.resolveGroup(arg.slice(0, -2))
+								case ':#':
+									return c.resolveLabelledGroup(arg.slice(0, -2))
 							}
 							if (syncFactories[arg] !== undefined) {
 								// biome-ignore lint/style/noNonNullAssertion: asserted above!
@@ -430,7 +497,7 @@ export function __createContainer<
 					`Dependency "${k as string}" already registered`,
 				)
 			}
-			if (k.endsWith(':*')) {
+			if (k.match(forbiddenKeysMatcher) !== null) {
 				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
 			}
 
@@ -461,7 +528,7 @@ export function __createContainer<
 					`Dependency "${k as string}" already registered`,
 				)
 			}
-			if (k.endsWith(':*')) {
+			if (k.match(forbiddenKeysMatcher) !== null) {
 				throw new LambdaIoCError(`Invalid dependency name: "${k as string}"`)
 			}
 
@@ -473,8 +540,11 @@ export function __createContainer<
 					if (singleton === undefined) {
 						const resolvedParams = await Promise.all(
 							args.map(arg => {
-								if (arg.endsWith(':*')) {
-									return c.resolveGroup(arg.slice(0, -2))
+								switch (arg.slice(-2)) {
+									case ':*':
+										return c.resolveGroup(arg.slice(0, -2))
+									case ':#':
+										return c.resolveLabelledGroup(arg.slice(0, -2))
 								}
 								if (syncFactories[arg] !== undefined) {
 									// biome-ignore lint/style/noNonNullAssertion: asserted above!

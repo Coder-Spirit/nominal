@@ -105,6 +105,11 @@ const svcGroup = await container.resolveGroup('svc')
 // provide a way to asynchronously resolve groups by relying on the `:*`
 // suffix, so we can pass whole groups as dependencies.
 const svcGroup = await container.resolveAsync('svc:*')
+
+// In case we wanted to keep the labels of our resolved group
+// dependencies, we can rely on the `:#` suffix. This will return us a
+// list where its values are [label, dependency] pairs.
+const svcLabelledGroup = await container.resolveAsync('svc:#')
 ```
 
 ## Other considerations
