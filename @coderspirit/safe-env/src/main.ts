@@ -192,12 +192,12 @@ const verifyEnumDefault = (
 	if (!enumValues.includes(value)) {
 		throw new SafeEnvError(
 			forDefault
-				? `Default value for "${fieldName}" must be one of: [${enumValues.join(
+				? `Default value for "${fieldName}" must be one of [${enumValues.join(
 						', ',
-					)}]`
+					)}], but it is "${value}"`
 				: `Environment variable "${fieldName}" must be one of: [${enumValues.join(
 						', ',
-					)}]`,
+					)}], but it is "${value}"`,
 		)
 	}
 }
@@ -238,9 +238,9 @@ const processEnv = <S extends Schema>(
 		if ('enum' in rule) {
 			if (!rule.enum.includes(envValue)) {
 				throw new SafeEnvError(
-					`Environment variable "${key}" must be one of: [${rule.enum.join(
+					`Environment variable "${key}" must be one of [${rule.enum.join(
 						', ',
-					)}]`,
+					)}], but it is "${envValue}"`,
 				)
 			}
 
