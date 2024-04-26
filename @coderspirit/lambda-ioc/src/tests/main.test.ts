@@ -180,6 +180,19 @@ describe('container', () => {
 		}
 	})
 
+	it('resolves group labels', () => {
+		const c = createContainer()
+			.registerValue('g1:a', 1)
+			.registerValue('g1:b', 2)
+			.registerValue('g2:x', 3)
+			.registerValue('g2:y', 4)
+
+		const labels = c.resolveGroupLabels('g1')
+		expect(labels).toHaveLength(2)
+		expect(labels).toContain('a')
+		expect(labels).toContain('b')
+	})
+
 	it('does not add deps into resolved group when they share same "prefix"', async () => {
 		const c = createContainer()
 			.registerValue('group:a', 1)

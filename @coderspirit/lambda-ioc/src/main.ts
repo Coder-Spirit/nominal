@@ -9,12 +9,23 @@ type ExtractPrefix<T extends string> = T extends `${infer Prefix}:${string}`
 	? Prefix
 	: never
 
+type SpecialSuffix = '*' | '#'
+
+type ExtractSuffixes<
+	Keys extends string,
+	Prefix extends string,
+> = Keys extends `${Prefix}:${infer Suffix}`
+	? Suffix extends SpecialSuffix
+		? never
+		: Suffix
+	: never
+
 type ExtractPrefixedValues<
 	Prefix extends string,
 	Struct extends Dict,
 	BaseKeys extends keyof Struct = keyof Struct,
 > = BaseKeys extends `${Prefix}:${infer Suffix}`
-	? Suffix extends '*' | '#'
+	? Suffix extends SpecialSuffix
 		? never
 		: Struct[`${Prefix}:${Suffix}`]
 	: never
@@ -24,7 +35,7 @@ type ExtractLabelledPrefixedValues<
 	Struct extends Dict,
 	BaseKeys extends keyof Struct = keyof Struct,
 > = BaseKeys extends `${Prefix}:${infer Suffix}`
-	? Suffix extends '*' | '#'
+	? Suffix extends SpecialSuffix
 		? never
 		: [Suffix, Struct[`${Prefix}:${Suffix}`]]
 	: never
@@ -49,28 +60,65 @@ export interface AsyncContainer<
 				: never
 	>
 
+	/**
+	 * Resolves a list of dependencies that belong to the same group (i.e., they
+	 * share the same prefix).
+	 *
+	 * For example, if we register the following dependencies:
+	 * - `'group:dep1'` -> `'value1'`
+	 * - `'group:dep2'` -> `'value2'`
+	 *
+	 * then calling `resolveGroup('group')` will return:
+	 * - `['value1', 'value2']`
+	 *
+	 * @param groupName The prefix of the dependencies to resolve.
+	 */
 	resolveGroup<
 		TKey extends ExtractPrefix<
 			string & (keyof TSyncDependencies | keyof TAsyncDependencies)
 		>,
 	>(
-		k: TKey,
+		groupName: TKey,
 	): Promise<
 		ExtractPrefixedValues<TKey, TSyncDependencies & TAsyncDependencies>[]
 	>
 
+	/**
+	 * Resolves a list of tuples [depName, dependency] that belong to the same
+	 * group (i.e., they share the same prefix).
+	 *
+	 * For example, if we register the following dependencies:
+	 *  - `'group:dep1'` -> `'value1'`
+	 *  - `'group:dep2'` -> `'value2'`
+	 *
+	 * then calling `resolveLabelledGroup('group')` will return:
+	 *  - `[['dep1', 'value1'], ['dep2', 'value2']]`
+	 *
+	 * @param groupName The prefix of the dependencies to resolve.
+	 */
 	resolveLabelledGroup<
 		TKey extends ExtractPrefix<
 			string & (keyof TSyncDependencies | keyof TAsyncDependencies)
 		>,
 	>(
-		k: TKey,
+		groupName: TKey,
 	): Promise<
 		ExtractLabelledPrefixedValues<
 			TKey,
 			TSyncDependencies & TAsyncDependencies
 		>[]
 	>
+
+	resolveGroupLabels<
+		TKey extends ExtractPrefix<
+			string & (keyof TSyncDependencies | keyof TAsyncDependencies)
+		>,
+	>(
+		groupName: TKey,
+	): ExtractSuffixes<
+		string & (keyof TSyncDependencies | keyof TAsyncDependencies),
+		TKey
+	>[]
 }
 
 export interface Container<
@@ -154,8 +202,7 @@ type ConstrainedKey<
 	| keyof TAsyncDependencies
 	| `:${string}`
 	| `${string}:`
-	| `${string}:*`
-	| `${string}:#`
+	| `${string}:${SpecialSuffix}`
 >
 
 const forbiddenKeysMatcher = /(^:|:(#|\*)?$)/
@@ -175,8 +222,7 @@ type SyncRegisterResult<
 		? {
 				[TK in
 					| keyof TAsyncDependencies
-					| `${Prefix}:*`
-					| `${Prefix}:#`]: TK extends keyof TAsyncDependencies
+					| `${Prefix}:${SpecialSuffix}`]: TK extends keyof TAsyncDependencies
 					? TK extends `${Prefix}:*`
 						? [TAsyncDependencies[TK]] extends [unknown[]]
 							? [...TAsyncDependencies[TK], V]
@@ -241,8 +287,7 @@ type RegisterAsyncFactory<
 				[TK in
 					| keyof TAsyncDependencies
 					| K
-					| `${Prefix}:*`
-					| `${Prefix}:#`]: TK extends keyof TAsyncDependencies
+					| `${Prefix}:${SpecialSuffix}`]: TK extends keyof TAsyncDependencies
 					? TK extends `${Prefix}:*`
 						? [TAsyncDependencies[TK]] extends [unknown[]]
 							? [...TAsyncDependencies[TK], Awaited<V>]
@@ -322,6 +367,11 @@ export interface ContainerBuilder<
 
 export class LambdaIoCError extends Error {}
 
+const getSuffix = (
+	key: string,
+	// biome-ignore lint/style/noNonNullAssertion: we use it only for `${string}:${string}` keys
+) => key.split(':')[1]!
+
 export function __createContainer<
 	TSyncFactories extends SyncFactoriesCollection,
 	TAsyncFactories extends AsyncFactoriesCollection,
@@ -362,15 +412,16 @@ export function __createContainer<
 		},
 
 		async resolveGroup(k: string): Promise<unknown[]> {
-			const prefix = `${k}:`
+			const hasPrefix = ([key]: [string, ...unknown[]]) =>
+				key.startsWith(`${k}:`)
 
 			return Object.entries(syncFactories)
-				.filter(([key]) => key.startsWith(prefix))
+				.filter(hasPrefix)
 				.map(([_, factory]) => factory(c))
 				.concat(
 					await Promise.all(
 						Object.entries(asyncFactories)
-							.filter(([key]) => key.startsWith(prefix))
+							.filter(hasPrefix)
 							.map(([_, factory]) =>
 								factory(c as unknown as Container<Dict, Dict>),
 							),
@@ -379,21 +430,31 @@ export function __createContainer<
 		},
 
 		async resolveLabelledGroup(k: string): Promise<unknown[]> {
-			const prefix = `${k}:`
+			const hasPrefix = ([key]: [string, ...unknown[]]) =>
+				key.startsWith(`${k}:`)
 
 			return Object.entries(syncFactories)
-				.filter(([key]) => key.startsWith(prefix))
+				.filter(hasPrefix)
 				.map(([key, factory]) => [key.split(':')[1], factory(c)])
 				.concat(
 					await Promise.all(
 						Object.entries(asyncFactories)
-							.filter(([key]) => key.startsWith(prefix))
+							.filter(hasPrefix)
 							.map(([key, factory]) => async () => [
 								key.split(':')[1],
 								await factory(c as unknown as Container<Dict, Dict>),
 							]),
 					),
 				)
+		},
+
+		resolveGroupLabels(k: string): string[] {
+			const hasPrefix = (key: string) => key.startsWith(`${k}:`)
+
+			return Object.keys(syncFactories)
+				.filter(hasPrefix)
+				.map(getSuffix)
+				.concat(Object.keys(asyncFactories).filter(hasPrefix).map(getSuffix))
 		},
 
 		registerValue(k: string, v: unknown): ContainerBuilder<NNO, NNO> {

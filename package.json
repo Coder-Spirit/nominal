@@ -15,7 +15,7 @@
 		"publint": "^0.2.7",
 		"rollup": "^4.16.4",
 		"rollup-plugin-dts": "^6.1.0",
-		"turbo": "^1.13.2"
+		"turbo": "^1.13.3"
 	},
 	"packageManager": "pnpm@8.9.0",
 	"engines": {
