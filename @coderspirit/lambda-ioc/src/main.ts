@@ -9,7 +9,7 @@ type ExtractPrefix<T extends string> = T extends `${infer Prefix}:${string}`
 	? Prefix
 	: never
 
-type SpecialSuffix = '*' | '#'
+type SpecialSuffix = '*' | '#' | '@'
 
 type ExtractSuffixes<
 	Keys extends string,
@@ -205,7 +205,7 @@ type ConstrainedKey<
 	| `${string}:${SpecialSuffix}`
 >
 
-const forbiddenKeysMatcher = /(^:|:(#|\*)?$)/
+const forbiddenKeysMatcher = /(^:|:(#|@|\*)?$)/
 
 type SyncRegisterResult<
 	TSyncDependencies extends Dict,
@@ -213,16 +213,34 @@ type SyncRegisterResult<
 	K extends string,
 	V,
 > = ContainerBuilder<
-	{
-		[TK in keyof TSyncDependencies | K]: TK extends keyof TSyncDependencies
-			? TSyncDependencies[TK]
-			: V
-	},
+	// TSyncDependencies
+	K extends `${infer Prefix}:${infer Suffix}`
+		? {
+				[TK in
+					| keyof TSyncDependencies
+					| K
+					| `${Prefix}:@`]: TK extends keyof TSyncDependencies
+					? TK extends `${Prefix}:@`
+						? [TSyncDependencies[TK]] extends [string[]]
+							? (TSyncDependencies[TK][number] | Suffix)[]
+							: never
+						: TSyncDependencies[TK]
+					: TK extends `${Prefix}:@`
+						? Suffix[]
+						: V
+			}
+		: {
+				[TK in keyof TSyncDependencies | K]: TK extends keyof TSyncDependencies
+					? TSyncDependencies[TK]
+					: V
+			},
+	// TAsyncDependencies
 	K extends `${infer Prefix}:${infer Suffix}`
 		? {
 				[TK in
 					| keyof TAsyncDependencies
-					| `${Prefix}:${SpecialSuffix}`]: TK extends keyof TAsyncDependencies
+					| `${Prefix}:*`
+					| `${Prefix}:#`]: TK extends keyof TAsyncDependencies
 					? TK extends `${Prefix}:*`
 						? [TAsyncDependencies[TK]] extends [unknown[]]
 							? [...TAsyncDependencies[TK], V]
@@ -281,13 +299,28 @@ type RegisterAsyncFactory<
 	f: (...args: TArgs) => V,
 	...args: TDependencies
 ) => ContainerBuilder<
-	TSyncDependencies,
+	// TSyncDependencies
+	K extends `${infer Prefix}:${infer Suffix}`
+		? {
+				[TK in
+					| keyof TSyncDependencies
+					| `${Prefix}:@`]: TK extends keyof TSyncDependencies
+					? TK extends `${Prefix}:@`
+						? [TSyncDependencies[TK]] extends [string[]]
+							? (TSyncDependencies[TK][number] | Suffix)[]
+							: never
+						: TSyncDependencies[TK]
+					: Suffix[]
+			}
+		: TSyncDependencies,
+	// TAsyncDependencies
 	K extends `${infer Prefix}:${infer Suffix}`
 		? {
 				[TK in
 					| keyof TAsyncDependencies
 					| K
-					| `${Prefix}:${SpecialSuffix}`]: TK extends keyof TAsyncDependencies
+					| `${Prefix}:*`
+					| `${Prefix}:#`]: TK extends keyof TAsyncDependencies
 					? TK extends `${Prefix}:*`
 						? [TAsyncDependencies[TK]] extends [unknown[]]
 							? [...TAsyncDependencies[TK], Awaited<V>]
@@ -383,6 +416,10 @@ export function __createContainer<
 	// and are extremely difficult to maintain.
 	const c = {
 		resolve(k: string): unknown {
+			if (k.endsWith(':@')) {
+				return c.resolveGroupLabels(k.slice(0, -2))
+			}
+
 			const factory = syncFactories[k as keyof TSyncFactories]
 			if (factory === undefined) {
 				throw new LambdaIoCError(`Dependency "${k as string}" not found`)

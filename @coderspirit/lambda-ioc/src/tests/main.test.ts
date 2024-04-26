@@ -180,17 +180,25 @@ describe('container', () => {
 		}
 	})
 
-	it('resolves group labels', () => {
+	it('resolves group labels using the ":@" suffix', () => {
 		const c = createContainer()
 			.registerValue('g1:a', 1)
 			.registerValue('g1:b', 2)
+			.registerAsyncFactory('g1:c', async () => 3)
 			.registerValue('g2:x', 3)
 			.registerValue('g2:y', 4)
+			.close()
 
-		const labels = c.resolveGroupLabels('g1')
-		expect(labels).toHaveLength(2)
-		expect(labels).toContain('a')
-		expect(labels).toContain('b')
+		const labels1 = c.resolveGroupLabels('g1')
+		expect(labels1).toHaveLength(3)
+		expect(labels1).toContain('a')
+		expect(labels1).toContain('b')
+		expect(labels1).toContain('c')
+
+		const labels2 = c.resolve('g2:@')
+		expect(labels2).toHaveLength(2)
+		expect(labels2).toContain('x')
+		expect(labels2).toContain('y')
 	})
 
 	it('does not add deps into resolved group when they share same "prefix"', async () => {
@@ -300,6 +308,21 @@ describe('container', () => {
 		expect(() => c.registerSingleton('g:#', () => 1)).toThrow()
 		// @ts-expect-error
 		expect(() => c.registerAsyncSingleton('g:#', async () => 1)).toThrow()
+	})
+
+	it('throws when registering dependencies with ":@" suffix', async () => {
+		const c = createContainer()
+
+		// @ts-expect-error
+		expect(() => c.registerValue('g:@', 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerFactory('g:@', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncFactory('g:@', async () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerSingleton('g:@', () => 1)).toThrow()
+		// @ts-expect-error
+		expect(() => c.registerAsyncSingleton('g:@', async () => 1)).toThrow()
 	})
 
 	it('throws when registering dependencies with ":" prefix', async () => {

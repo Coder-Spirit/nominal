@@ -110,6 +110,10 @@ const svcGroup = await container.resolveAsync('svc:*')
 // dependencies, we can rely on the `:#` suffix. This will return us a
 // list where its values are [label, dependency] pairs.
 const svcLabelledGroup = await container.resolveAsync('svc:#')
+
+// We can also resolve the labels in a group without having to resolve
+// their associated dependencies (using the `:@` suffix).
+const svcLabels = container.resolve('svc:@')
 ```
 
 ## Other considerations
