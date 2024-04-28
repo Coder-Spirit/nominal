@@ -12,56 +12,104 @@ const uintTypes = ['uint8', 'uint16', 'uint32'] as const
 const intTypes = ['int8', 'int16', 'int32'] as const
 const integerTypes = [...uintTypes, ...intTypes] as const
 const floatTypes = ['float32', 'float64'] as const
+const numberTypes = [...integerTypes, ...floatTypes] as const
 
-type JtdUIntType = (typeof uintTypes)[number]
-type JtdIntType = (typeof intTypes)[number]
-type JtdIntegerType = JtdIntType | JtdUIntType
-type JtdFloatType = (typeof floatTypes)[number]
-type JtdNumberType = JtdFloatType | JtdIntegerType
-type JtdStringType = 'string' | 'timestamp'
-type JtdAllType = JtdNumberType | JtdStringType | 'boolean'
+type UIntType = (typeof uintTypes)[number]
+type IntType = (typeof intTypes)[number]
+type IntegerType = IntType | UIntType
+type FloatType = (typeof floatTypes)[number]
+type NumberType = FloatType | IntegerType
+type StringType = 'string'
+type BooleanType = 'boolean'
+type AllType = NumberType | StringType | BooleanType
+type NotConstrainableType = BooleanType
 
-type TMapper<T extends JtdAllType> = T extends JtdFloatType
-	? number
-	: T extends JtdIntegerType
-		? number | bigint
-		: T extends JtdStringType
-			? string
-			: T extends 'boolean'
-				? boolean
-				: never
+type TMapper<T extends AllType> = {
+	float32: number
+	float64: number
+	int8: number
+	int16: number
+	int32: number
+	uint8: number
+	uint16: number
+	uint32: number
+	string: string
+	boolean: boolean
+}[T]
 
-type TOutMapper<T extends JtdAllType> = T extends JtdFloatType
-	? TaggedFloat<number>
-	: T extends JtdIntegerType
-		? T extends 'uint8' | 'uint16' | 'uint32'
-			? TaggedPositiveInteger<number | bigint>
-			: TaggedInteger<number | bigint>
-		: T extends JtdStringType
-			? string
-			: T extends 'boolean'
-				? boolean
-				: never
+type TOutMapper<T extends AllType> = {
+	float32: TaggedFloat<number>
+	float64: TaggedFloat<number>
+	int8: TaggedInteger
+	int16: TaggedInteger
+	int32: TaggedInteger
+	uint8: TaggedPositiveInteger
+	uint16: TaggedPositiveInteger
+	uint32: TaggedPositiveInteger
+	string: string
+	boolean: boolean
+}[T]
 
-type FieldWithDefault<T extends JtdAllType> = {
+type NumberConstraints = {
+	min?: number
+	max?: number
+}
+
+type NumberField<T extends NumberType> = (
+	| { type: T; default?: undefined } // optional == false
+	| { type: T; default: number }
+	| { type: T; optional: true }
+) &
+	NumberConstraints
+
+type StringConstraints = {
+	minLength?: number
+	maxLength?: number
+	pattern?: RegExp
+}
+
+type StringField = (
+	| { type: StringType; default?: undefined } // optional == false
+	| { type: StringType; default: string }
+	| { type: StringType; optional: true }
+) &
+	StringConstraints
+
+type FieldWithDefault<T extends NotConstrainableType> = {
 	type: T
 	default: TMapper<T>
 }
 
+type Constraints<T extends AllType> = {
+	float32: NumberConstraints
+	float64: NumberConstraints
+	int8: NumberConstraints
+	int16: NumberConstraints
+	int32: NumberConstraints
+	uint8: NumberConstraints
+	uint16: NumberConstraints
+	uint32: NumberConstraints
+	string: StringConstraints
+	boolean: NonNullable<unknown>
+}[T]
+
+type NotConstrainableField =
+	| {
+			type: NotConstrainableType
+			default?: undefined
+	  } // optional == false
+	| {
+			type: NotConstrainableType
+			optional: true
+	  }
+	// Add individual variants for each non-constrainable type:
+	| FieldWithDefault<BooleanType>
+
 export type Schema = {
 	[key: string]:
-		| {
-				type: JtdAllType
-				default?: undefined
-		  } // optional == false
-		| {
-				type: JtdAllType
-				optional: true
-		  }
-		| FieldWithDefault<JtdFloatType>
-		| FieldWithDefault<JtdIntegerType>
-		| FieldWithDefault<JtdStringType>
-		| FieldWithDefault<'boolean'>
+		| NumberField<NumberType>
+		| StringField
+		| NotConstrainableField
 		| { enum: string[] }
 		| {
 				enum: string[]
@@ -80,18 +128,10 @@ type EnvData<S extends Schema> = {
 type EnvKeyType<S extends Schema, K extends keyof S> = S[K] extends {
 	type: infer T
 }
-	? T extends JtdAllType
+	? T extends AllType
 		? S[K] extends { optional: true }
 			? TOutMapper<T> | undefined
-			: S[K] extends { default: infer D }
-				? D extends undefined
-					? TOutMapper<T>
-					: D extends bigint | number
-						? D extends bigint
-							? bigint
-							: number
-						: TOutMapper<T>
-				: TOutMapper<T>
+			: TOutMapper<T>
 		: never
 	: S[K] extends { enum: infer E }
 		? E extends string[]
@@ -111,8 +151,8 @@ const checkInteger = (
 	value: unknown,
 	fieldName: string,
 	forDefault: boolean,
-): value is TaggedInteger<number | bigint> => {
-	if (typeof value !== 'bigint' && !Number.isInteger(value)) {
+): value is TaggedInteger => {
+	if (typeof value !== 'number' || !Number.isInteger(value)) {
 		throw new SafeEnvError(
 			forDefault
 				? `Default value for "${fieldName}" must be an integer`
@@ -122,13 +162,32 @@ const checkInteger = (
 	return true
 }
 
+const checkFloat = (
+	value: unknown,
+	fieldName: string,
+	forDefault: boolean,
+): value is TaggedFloat<number> => {
+	if (
+		typeof value !== 'number' ||
+		Number.isNaN(value) ||
+		!Number.isFinite(value)
+	) {
+		throw new SafeEnvError(
+			forDefault
+				? `Default value for "${fieldName}" must be a finite real number`
+				: `Environment variable "${fieldName}" must be a finite real number`,
+		)
+	}
+	return true
+}
+
 const checkBetween = (
-	value: number | bigint,
+	value: number,
 	lowerBound: number,
 	upperBound: number,
 	fieldName: string,
 	forDefault: boolean,
-) => {
+): void => {
 	if (value < lowerBound || value > upperBound) {
 		throw new SafeEnvError(
 			forDefault
@@ -139,47 +198,154 @@ const checkBetween = (
 }
 
 /**
+ * We use this in switch statement default cases to ensure that they are
+ * exhaustive.
+ */
+const exhaustiveGuard = (_v: never): void => {}
+
+/**
  * Extra runtime validations to cover cases that can't be covered by the type
  * system or the schema validation.
  */
-const validateValue = <T extends JtdAllType>(
+const validateValue = <const D extends boolean, const T extends AllType>(
+	forDefault: D,
 	fieldName: string,
 	type: T,
-	value: TMapper<T>,
-	forDefault: boolean,
+	value: D extends true ? TMapper<T> : unknown,
+	constraints: Constraints<T>,
 ): void => {
+	const v = forDefault
+		? value
+		: numberTypes.includes(type as NumberType) && typeof value === 'string'
+			? Number.parseFloat(value)
+			: value
+
+	const min = 'min' in constraints ? constraints.min : Number.NEGATIVE_INFINITY
+	const max = 'max' in constraints ? constraints.max : Number.POSITIVE_INFINITY
+
 	// For now we only check integer types
 	switch (type) {
 		case 'int8':
-			if (checkInteger(value, fieldName, forDefault)) {
-				checkBetween(value, -128, 127, fieldName, forDefault)
+			if (checkInteger(v, fieldName, forDefault)) {
+				checkBetween(
+					v,
+					Math.max(-128, min),
+					Math.min(127, max),
+					fieldName,
+					forDefault,
+				)
 			}
-			break
+			return
 		case 'int16':
-			if (checkInteger(value, fieldName, forDefault)) {
-				checkBetween(value, -32768, 32767, fieldName, forDefault)
+			if (checkInteger(v, fieldName, forDefault)) {
+				checkBetween(
+					v,
+					Math.max(-32768, min),
+					Math.min(32767, max),
+					fieldName,
+					forDefault,
+				)
 			}
-			break
+			return
 		case 'int32':
-			if (checkInteger(value, fieldName, forDefault)) {
-				checkBetween(value, -2147483648, 2147483647, fieldName, forDefault)
+			if (checkInteger(v, fieldName, forDefault)) {
+				checkBetween(
+					v,
+					Math.max(-2147483648, min),
+					Math.min(2147483647, max),
+					fieldName,
+					forDefault,
+				)
 			}
-			break
+			return
 		case 'uint8':
-			if (checkInteger(value, fieldName, forDefault)) {
-				checkBetween(value, 0, 255, fieldName, forDefault)
+			if (checkInteger(v, fieldName, forDefault)) {
+				checkBetween(
+					v,
+					Math.max(0, min),
+					Math.min(255, max),
+					fieldName,
+					forDefault,
+				)
 			}
-			break
+			return
 		case 'uint16':
-			if (checkInteger(value, fieldName, forDefault)) {
-				checkBetween(value, 0, 65535, fieldName, forDefault)
+			if (checkInteger(v, fieldName, forDefault)) {
+				checkBetween(
+					v,
+					Math.max(0, min),
+					Math.min(65535, max),
+					fieldName,
+					forDefault,
+				)
 			}
-			break
+			return
 		case 'uint32':
-			if (checkInteger(value, fieldName, forDefault)) {
-				checkBetween(value, 0, 4294967295, fieldName, forDefault)
+			if (checkInteger(v, fieldName, forDefault)) {
+				checkBetween(
+					v,
+					Math.max(0, min),
+					Math.min(4294967295, max),
+					fieldName,
+					forDefault,
+				)
 			}
-			break
+			return
+		case 'float32':
+			if (checkFloat(v, fieldName, forDefault)) {
+				checkBetween(
+					v,
+					Math.max(-3.4028234663852886e38, min),
+					Math.min(3.4028234663852886e38, max),
+					fieldName,
+					forDefault,
+				)
+			}
+			return
+		case 'float64':
+			if (checkFloat(v, fieldName, forDefault)) {
+				checkBetween(v, min, max, fieldName, forDefault)
+			}
+			return
+		case 'boolean':
+			// We only need to check environment variables, default values will always be correct
+			if (!forDefault && v !== 'true' && v !== 'false') {
+				throw new SafeEnvError(
+					`Environment variable "${fieldName}" must be a boolean`,
+				)
+			}
+			return
+		case 'string':
+			if (typeof v !== 'string') {
+				// This should never happen
+				throw new SafeEnvError(
+					forDefault
+						? `Default value for "${fieldName}" must be a string`
+						: `Environment variable "${fieldName}" must be a string`,
+				)
+			}
+			{
+				const minLength = 'minLength' in constraints ? constraints.minLength : 1
+				const maxLength =
+					'maxLength' in constraints ? constraints.maxLength : 65535
+				if (v.length < minLength || v.length > maxLength) {
+					throw new SafeEnvError(
+						forDefault
+							? `Default value for "${fieldName}" must be between ${minLength} and ${maxLength} characters`
+							: `Environment variable "${fieldName}" must be between ${minLength} and ${maxLength} characters`,
+					)
+				}
+			}
+			if ('pattern' in constraints && !constraints.pattern.test(v)) {
+				throw new SafeEnvError(
+					forDefault
+						? `Default value for "${fieldName}" must match the pattern ${constraints.pattern}`
+						: `Environment variable "${fieldName}" must match the pattern ${constraints.pattern}`,
+				)
+			}
+			return
+		default:
+			exhaustiveGuard(type)
 	}
 }
 
@@ -205,8 +371,8 @@ const verifyEnumDefault = (
 const processEnv = <S extends Schema>(
 	env: EnvData<S>,
 	schema: Schema,
-): Record<string, boolean | number | bigint | string> => {
-	const _env: Record<string, boolean | number | bigint | string> = {}
+): Record<string, boolean | number | string> => {
+	const _env: Record<string, boolean | number | string> = {}
 
 	// Verify Defaults
 	for (const key of Object.getOwnPropertyNames(schema)) {
@@ -215,7 +381,8 @@ const processEnv = <S extends Schema>(
 
 		if ('default' in rule && rule.default !== undefined) {
 			if ('type' in rule) {
-				validateValue(key, rule.type, rule.default, true)
+				const { type: _t, default: _d, ...constraints } = rule
+				validateValue(true, key, _t, _d, constraints)
 			} else {
 				verifyEnumDefault(key, rule.enum, rule.default, true)
 			}
@@ -243,58 +410,11 @@ const processEnv = <S extends Schema>(
 					)}], but it is "${envValue}"`,
 				)
 			}
-
 			_env[key] = envValue
 		} else if ('type' in rule) {
-			if (integerTypes.includes(rule.type as JtdIntegerType)) {
+			if (numberTypes.includes(rule.type as NumberType)) {
 				const fValue = Number.parseFloat(envValue)
-				if (!Number.isInteger(fValue)) {
-					throw new SafeEnvError(
-						`Environment variable "${key}" must be an integer`,
-					)
-				}
-				switch (rule.type) {
-					case 'int8':
-						checkBetween(fValue, -128, 127, key, false)
-						break
-					case 'int16':
-						checkBetween(fValue, -32768, 32767, key, false)
-						break
-					case 'int32':
-						checkBetween(fValue, -2147483648, 2147483647, key, false)
-						break
-					case 'uint8':
-						checkBetween(fValue, 0, 255, key, false)
-						break
-					case 'uint16':
-						checkBetween(fValue, 0, 65535, key, false)
-						break
-					case 'uint32':
-						checkBetween(fValue, 0, 4294967295, key, false)
-						break
-				}
-				_env[key] = fValue
-			} else if (floatTypes.includes(rule.type as JtdFloatType)) {
-				const fValue = Number.parseFloat(envValue)
-				if (Number.isNaN(fValue) || !Number.isFinite(fValue)) {
-					throw new SafeEnvError(
-						`Environment variable "${key}" must be a finite real number`,
-					)
-				}
-				switch (rule.type) {
-					case 'float32':
-						checkBetween(
-							fValue,
-							-3.4028234663852886e38,
-							3.4028234663852886e38,
-							key,
-							false,
-						)
-						break
-					case 'float64':
-						// No need to check, it's always valid
-						break
-				}
+				validateValue(false, key, rule.type, fValue, rule)
 				_env[key] = fValue
 			} else if (rule.type === 'boolean') {
 				if (envValue === 'true') {
@@ -307,16 +427,10 @@ const processEnv = <S extends Schema>(
 					)
 				}
 			} else if (rule.type === 'string') {
-				// This should never happen with real environment objects, but it's a
-				// possibility for "mock" environments
-				if (typeof envValue !== 'string') {
-					throw new SafeEnvError(
-						`Environment variable "${key}" must be a string`,
-					)
-				}
+				validateValue(false, key, rule.type, envValue, rule)
 				_env[key] = envValue
 			} else {
-				_env[key] = envValue
+				_env[key] = envValue // This should never happen
 			}
 		}
 	}

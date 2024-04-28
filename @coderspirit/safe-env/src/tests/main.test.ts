@@ -97,4 +97,55 @@ describe('getSafeEnv', () => {
 			).toThrowError(errorMsg)
 		},
 	)
+
+	it('should return an error when trying to read an unknown variable', () => {
+		const env = { FOO: 'foo' }
+
+		const envWrapper = getSafeEnv(env, {
+			FOO: { type: 'string' },
+		})
+
+		// @ts-expect-error
+		expect(() => envWrapper.get('BAR')).toThrowError(
+			'Missing environment variable: "BAR"',
+		)
+	})
+
+	it.each([
+		[
+			{ FOO: 'foo' },
+			{ FOO: { type: 'string', minLength: 4 } },
+			'Environment variable "FOO" must be between 4 and 65535 characters',
+		] as const,
+		[
+			{ FOO: 'foo' },
+			{ FOO: { type: 'string', maxLength: 2 } },
+			'Environment variable "FOO" must be between 1 and 2 characters',
+		] as const,
+		[
+			{ FOO: 'foo' },
+			{ FOO: { type: 'string', pattern: /bar/ } },
+			'Environment variable "FOO" must match the pattern /bar/',
+		] as const,
+		[
+			{ FOO: '128000' },
+			{ FOO: { type: 'uint32', max: 75000 } },
+			'Environment variable "FOO" must be between 0 and 75000',
+		] as const,
+		[
+			{ FOO: '128000' },
+			{ FOO: { type: 'int32', max: 75000 } },
+			'Environment variable "FOO" must be between -2147483648 and 75000',
+		] as const,
+		[
+			{ FOO: '64000' },
+			{ FOO: { type: 'int32', min: 75000 } },
+			'Environment variable "FOO" must be between 75000 and 2147483647',
+		] as const,
+	])(
+		'should return an error when a default value breaks a constraint',
+		(env, schema, errorMsg) => {
+			expect(() => getSafeEnv(env, schema)).toThrowError(errorMsg)
+		},
+	)
 })

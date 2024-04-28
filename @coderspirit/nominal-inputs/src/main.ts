@@ -32,17 +32,17 @@ export type TaggedNegativeInteger<N extends Numeric = number> = FastProperty<
 	{ Fractional: false; Sign: '-' }
 >
 
-export type TaggedFloat<N extends number> = FastProperty<
+export type TaggedFloat<N extends number = number> = FastProperty<
 	N,
 	{ Fractional: true }
 >
 
-export type TaggedPositiveFloat<N extends number> = FastProperty<
+export type TaggedPositiveFloat<N extends number = number> = FastProperty<
 	N,
 	{ Fractional: true; Sign: '+' }
 >
 
-export type TaggedNegativeFloat<N extends number> = FastProperty<
+export type TaggedNegativeFloat<N extends number = number> = FastProperty<
 	N,
 	{ Fractional: true; Sign: '-' }
 >

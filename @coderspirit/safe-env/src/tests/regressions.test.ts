@@ -1,4 +1,6 @@
+import type { TaggedInteger } from '@coderspirit/nominal-inputs'
 import { describe, expect, it } from 'vitest'
+
 import { getSafeEnv } from '../main'
 
 describe('getSafeEnv (regressions)', () => {
@@ -46,18 +48,12 @@ describe('getSafeEnv (regressions)', () => {
 
 		const envWrapper = getSafeEnv(env, {
 			FOO: { type: 'int32', default: 42 },
-			BAR: { type: 'int32', default: 42n },
 		})
 
 		const foo = envWrapper.get('FOO')
-		type Does_Number_extend_Foo = number extends typeof foo ? true : false
-		const number_extends_foo: Does_Number_extend_Foo = true
+		type Does_TI_extend_Foo = TaggedInteger extends typeof foo ? true : false
+		const number_extends_foo: Does_TI_extend_Foo = true
 		expect(number_extends_foo).toBe(true)
-
-		const bar = envWrapper.get('BAR')
-		type Does_BigInt_extend_Bar = bigint extends typeof bar ? true : false
-		const bigint_extends_bar: Does_BigInt_extend_Bar = true
-		expect(bigint_extends_bar).toBe(true)
 	})
 
 	it('should assign "string" type to "string" values', () => {
