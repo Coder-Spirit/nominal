@@ -7,7 +7,8 @@
 [![Known Vulnerabilities](https://snyk.io//test/github/Coder-Spirit/safe-env/badge.svg?targetFile=package.json)](https://snyk.io//test/github/Coder-Spirit/safe-env?targetFile=package.json)
 [![Security Score](https://snyk-widget.herokuapp.com/badge/npm/@coderspirit%2Fsafe-env/badge.svg)](https://snyk.io/advisor/npm-package/@coderspirit/safe-env)
 
-> Small library to load strongly typed values from environment variables
+Small library to load strongly typed values from environment variables and
+enforcing constraints on them.
 
 ## Install instructions
 
@@ -54,3 +55,31 @@ const githubToken = safeEnv.get('githubToken')
 // It fill fail if the variable does not exist
 const secretToken = safeEnv.get('secretToken')
 ```
+
+## Supported types
+
+- `boolean`
+- `string` and `string[]`
+- `int8`, `int16`, `int32`
+- `int8[]`, `int16[]`, `int32[]`
+- `uint8`, `uint16`, `uint32`
+- `uint8[]`, `uint16[]`, `uint32[]`
+
+## Supported Constraints
+
+### For numbers
+
+- `min`
+- `max`
+
+### For strings
+
+- `minLength`
+- `maxLength`
+- `pattern`: regular expression object.
+
+### For arrays
+
+- `minLength`
+- `maxLength`
+- `valueConstraints`: number or string constraints.

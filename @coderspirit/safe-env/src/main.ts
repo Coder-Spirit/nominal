@@ -13,6 +13,9 @@ const intTypes = ['int8', 'int16', 'int32'] as const
 const integerTypes = [...uintTypes, ...intTypes] as const
 const floatTypes = ['float32', 'float64'] as const
 const numberTypes = [...integerTypes, ...floatTypes] as const
+const arrayTypes = ([...numberTypes, 'string'] as const).map(
+	t => `${t}[]` as const,
+)
 
 type UIntType = (typeof uintTypes)[number]
 type IntType = (typeof intTypes)[number]
@@ -21,7 +24,9 @@ type FloatType = (typeof floatTypes)[number]
 type NumberType = FloatType | IntegerType
 type StringType = 'string'
 type BooleanType = 'boolean'
-type AllType = NumberType | StringType | BooleanType
+type BasicType = NumberType | StringType | BooleanType
+type ArrayType = (typeof arrayTypes)[number]
+type AllType = BasicType | ArrayType
 type NotConstrainableType = BooleanType
 
 type TMapper<T extends AllType> = {
@@ -35,6 +40,15 @@ type TMapper<T extends AllType> = {
 	uint32: number
 	string: string
 	boolean: boolean
+	'float32[]': number[]
+	'float64[]': number[]
+	'int8[]': number[]
+	'int16[]': number[]
+	'int32[]': number[]
+	'uint8[]': number[]
+	'uint16[]': number[]
+	'uint32[]': number[]
+	'string[]': string[]
 }[T]
 
 type TOutMapper<T extends AllType> = {
@@ -48,11 +62,32 @@ type TOutMapper<T extends AllType> = {
 	uint32: TaggedPositiveInteger
 	string: string
 	boolean: boolean
+	'float32[]': TaggedFloat<number>[]
+	'float64[]': TaggedFloat<number>[]
+	'int8[]': TaggedInteger[]
+	'int16[]': TaggedInteger[]
+	'int32[]': TaggedInteger[]
+	'uint8[]': TaggedPositiveInteger[]
+	'uint16[]': TaggedPositiveInteger[]
+	'uint32[]': TaggedPositiveInteger[]
+	'string[]': string[]
 }[T]
 
 type NumberConstraints = {
 	min?: number
 	max?: number
+}
+
+type StringConstraints = {
+	minLength?: number
+	maxLength?: number
+	pattern?: RegExp
+}
+
+type ArrayConstraints<T extends NumberType | StringType> = {
+	minLength?: number
+	maxLength?: number
+	valueConstraints?: Constraints<T>
 }
 
 type NumberField<T extends NumberType> = (
@@ -62,18 +97,19 @@ type NumberField<T extends NumberType> = (
 ) &
 	NumberConstraints
 
-type StringConstraints = {
-	minLength?: number
-	maxLength?: number
-	pattern?: RegExp
-}
-
 type StringField = (
 	| { type: StringType; default?: undefined } // optional == false
 	| { type: StringType; default: string }
 	| { type: StringType; optional: true }
 ) &
 	StringConstraints
+
+type ArrayField<T extends NumberType | StringType> = (
+	| { type: ArrayType; default?: undefined } // optional == false
+	| { type: ArrayType; default: TMapper<`${T}[]`> }
+	| { type: ArrayType; optional: true }
+) &
+	ArrayConstraints<T>
 
 type FieldWithDefault<T extends NotConstrainableType> = {
 	type: T
@@ -91,6 +127,15 @@ type Constraints<T extends AllType> = {
 	uint32: NumberConstraints
 	string: StringConstraints
 	boolean: NonNullable<unknown>
+	'float32[]': ArrayConstraints<'float32'>
+	'float64[]': ArrayConstraints<'float64'>
+	'int8[]': ArrayConstraints<'int8'>
+	'int16[]': ArrayConstraints<'int16'>
+	'int32[]': ArrayConstraints<'int32'>
+	'uint8[]': ArrayConstraints<'uint8'>
+	'uint16[]': ArrayConstraints<'uint16'>
+	'uint32[]': ArrayConstraints<'uint32'>
+	'string[]': ArrayConstraints<'string'>
 }[T]
 
 type NotConstrainableField =
@@ -109,6 +154,8 @@ export type Schema = {
 	[key: string]:
 		| NumberField<NumberType>
 		| StringField
+		| ArrayField<NumberType>
+		| ArrayField<StringType>
 		| NotConstrainableField
 		| { enum: string[] }
 		| {
@@ -181,6 +228,52 @@ const checkFloat = (
 	return true
 }
 
+const checkArray = <const NT extends StringType | NumberType>(
+	value: unknown,
+	fieldName: string,
+	nestedType: NT,
+	constraints: ArrayConstraints<NT>,
+	forDefault: boolean,
+): void => {
+	if (!Array.isArray(value)) {
+		throw new SafeEnvError(
+			forDefault
+				? `Default value for "${fieldName}" must be an array`
+				: `Environment variable "${fieldName}" must be an array`,
+		)
+	}
+	if (
+		constraints.maxLength !== undefined &&
+		value.length > constraints.maxLength
+	) {
+		throw new SafeEnvError(
+			forDefault
+				? `Default value for "${fieldName}" must have at most ${constraints.maxLength} elements`
+				: `Environment variable "${fieldName}" must have at most ${constraints.maxLength} elements`,
+		)
+	}
+
+	if (
+		constraints.minLength !== undefined &&
+		value.length < constraints.minLength
+	) {
+		throw new SafeEnvError(
+			forDefault
+				? `Default value for "${fieldName}" must have at least ${constraints.minLength} elements`
+				: `Environment variable "${fieldName}" must have at least ${constraints.minLength} elements`,
+		)
+	}
+	for (const [i, v] of value.entries()) {
+		validateValue(
+			forDefault,
+			`${fieldName}[${i}]`,
+			nestedType,
+			v,
+			constraints.valueConstraints ?? {},
+		)
+	}
+}
+
 const checkBetween = (
 	value: number,
 	lowerBound: number,
@@ -207,18 +300,29 @@ const exhaustiveGuard = (_v: never): void => {}
  * Extra runtime validations to cover cases that can't be covered by the type
  * system or the schema validation.
  */
-const validateValue = <const D extends boolean, const T extends AllType>(
+function validateValue<const D extends boolean, const T extends AllType>(
 	forDefault: D,
 	fieldName: string,
 	type: T,
 	value: D extends true ? TMapper<T> : unknown,
 	constraints: Constraints<T>,
-): void => {
-	const v = forDefault
-		? value
-		: numberTypes.includes(type as NumberType) && typeof value === 'string'
-			? Number.parseFloat(value)
-			: value
+): void {
+	let v: unknown
+	try {
+		v = forDefault
+			? value
+			: typeof value === 'string'
+				? numberTypes.includes(type as NumberType)
+					? Number.parseFloat(value)
+					: arrayTypes.includes(type as ArrayType)
+						? JSON.parse(value)
+						: value
+				: value
+	} catch (e) {
+		throw new SafeEnvError(
+			`Environment variable "${fieldName}" must be a valid JSON array`,
+		)
+	}
 
 	const min = 'min' in constraints ? constraints.min : Number.NEGATIVE_INFINITY
 	const max = 'max' in constraints ? constraints.max : Number.POSITIVE_INFINITY
@@ -236,6 +340,15 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
+		case 'int8[]':
+			checkArray(
+				v,
+				fieldName,
+				'int8',
+				constraints as ArrayConstraints<'int8'>,
+				forDefault,
+			)
+			return
 		case 'int16':
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
@@ -246,6 +359,15 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 					forDefault,
 				)
 			}
+			return
+		case 'int16[]':
+			checkArray(
+				v,
+				fieldName,
+				'int16',
+				constraints as ArrayConstraints<'int16'>,
+				forDefault,
+			)
 			return
 		case 'int32':
 			if (checkInteger(v, fieldName, forDefault)) {
@@ -258,6 +380,15 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
+		case 'int32[]':
+			checkArray(
+				v,
+				fieldName,
+				'int32',
+				constraints as ArrayConstraints<'int32'>,
+				forDefault,
+			)
+			return
 		case 'uint8':
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
@@ -268,6 +399,15 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 					forDefault,
 				)
 			}
+			return
+		case 'uint8[]':
+			checkArray(
+				v,
+				fieldName,
+				'uint8',
+				constraints as ArrayConstraints<'uint8'>,
+				forDefault,
+			)
 			return
 		case 'uint16':
 			if (checkInteger(v, fieldName, forDefault)) {
@@ -280,6 +420,15 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
+		case 'uint16[]':
+			checkArray(
+				v,
+				fieldName,
+				'uint16',
+				constraints as ArrayConstraints<'uint16'>,
+				forDefault,
+			)
+			return
 		case 'uint32':
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
@@ -290,6 +439,15 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 					forDefault,
 				)
 			}
+			return
+		case 'uint32[]':
+			checkArray(
+				v,
+				fieldName,
+				'uint32',
+				constraints as ArrayConstraints<'uint32'>,
+				forDefault,
+			)
 			return
 		case 'float32':
 			if (checkFloat(v, fieldName, forDefault)) {
@@ -302,18 +460,28 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
+		case 'float32[]':
+			checkArray(
+				v,
+				fieldName,
+				'float32',
+				constraints as ArrayConstraints<'float32'>,
+				forDefault,
+			)
+			return
 		case 'float64':
 			if (checkFloat(v, fieldName, forDefault)) {
 				checkBetween(v, min, max, fieldName, forDefault)
 			}
 			return
-		case 'boolean':
-			// We only need to check environment variables, default values will always be correct
-			if (!forDefault && v !== 'true' && v !== 'false') {
-				throw new SafeEnvError(
-					`Environment variable "${fieldName}" must be a boolean`,
-				)
-			}
+		case 'float64[]':
+			checkArray(
+				v,
+				fieldName,
+				'float64',
+				constraints as ArrayConstraints<'float64'>,
+				forDefault,
+			)
 			return
 		case 'string':
 			if (typeof v !== 'string') {
@@ -331,8 +499,8 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 				if (v.length < minLength || v.length > maxLength) {
 					throw new SafeEnvError(
 						forDefault
-							? `Default value for "${fieldName}" must be between ${minLength} and ${maxLength} characters`
-							: `Environment variable "${fieldName}" must be between ${minLength} and ${maxLength} characters`,
+							? `Default value for "${fieldName}" must have length between ${minLength} and ${maxLength} characters`
+							: `Environment variable "${fieldName}" must have length between ${minLength} and ${maxLength} characters`,
 					)
 				}
 			}
@@ -341,6 +509,23 @@ const validateValue = <const D extends boolean, const T extends AllType>(
 					forDefault
 						? `Default value for "${fieldName}" must match the pattern ${constraints.pattern}`
 						: `Environment variable "${fieldName}" must match the pattern ${constraints.pattern}`,
+				)
+			}
+			return
+		case 'string[]':
+			checkArray(
+				v,
+				fieldName,
+				'string',
+				constraints as ArrayConstraints<'string'>,
+				forDefault,
+			)
+			return
+		case 'boolean':
+			// We only need to check environment variables, default values will always be correct
+			if (!forDefault && v !== 'true' && v !== 'false') {
+				throw new SafeEnvError(
+					`Environment variable "${fieldName}" must be a boolean`,
 				)
 			}
 			return
@@ -416,6 +601,9 @@ const processEnv = <S extends Schema>(
 				const fValue = Number.parseFloat(envValue)
 				validateValue(false, key, rule.type, fValue, rule)
 				_env[key] = fValue
+			} else if (arrayTypes.includes(rule.type as ArrayType)) {
+				validateValue(false, key, rule.type, envValue, rule)
+				_env[key] = JSON.parse(envValue)
 			} else if (rule.type === 'boolean') {
 				if (envValue === 'true') {
 					_env[key] = true

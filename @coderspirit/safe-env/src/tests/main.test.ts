@@ -115,12 +115,12 @@ describe('getSafeEnv', () => {
 		[
 			{ FOO: 'foo' },
 			{ FOO: { type: 'string', minLength: 4 } },
-			'Environment variable "FOO" must be between 4 and 65535 characters',
+			'Environment variable "FOO" must have length between 4 and 65535 characters',
 		] as const,
 		[
 			{ FOO: 'foo' },
 			{ FOO: { type: 'string', maxLength: 2 } },
-			'Environment variable "FOO" must be between 1 and 2 characters',
+			'Environment variable "FOO" must have length between 1 and 2 characters',
 		] as const,
 		[
 			{ FOO: 'foo' },
@@ -141,6 +141,65 @@ describe('getSafeEnv', () => {
 			{ FOO: '64000' },
 			{ FOO: { type: 'int32', min: 75000 } },
 			'Environment variable "FOO" must be between 75000 and 2147483647',
+		] as const,
+		[
+			{ FOO: '["hello", "world"]' },
+			{ FOO: { type: 'string[]', minLength: 3 } },
+			'Environment variable "FOO" must have at least 3 elements',
+		] as const,
+		[
+			{ FOO: '["hello", "cruel", "world"]' },
+			{ FOO: { type: 'string[]', maxLength: 2 } },
+			'Environment variable "FOO" must have at most 2 elements',
+		] as const,
+		[
+			{ FOO: '["hello", "world"]' },
+			{
+				FOO: {
+					type: 'string[]',
+					maxLength: 3,
+					valueConstraints: { maxLength: 4 },
+				},
+			},
+			'Environment variable "FOO[0]" must have length between 1 and 4 characters',
+		] as const,
+	])(
+		'should return an error when an environment value breaks a constraint',
+		(env, schema, errorMsg) => {
+			expect(() => getSafeEnv(env, schema)).toThrowError(errorMsg)
+		},
+	)
+
+	it.each([
+		[
+			{ FOO: 'foox' },
+			{ FOO: { type: 'string', minLength: 4, default: 'foo' } },
+			'Default value for "FOO" must have length between 4 and 65535 characters',
+		] as const,
+		[
+			{ FOO: 'fo' },
+			{ FOO: { type: 'string', maxLength: 2, default: 'foo' } },
+			'Default value for "FOO" must have length between 1 and 2 characters',
+		] as const,
+		[
+			{ FOO: 'bar' },
+			{ FOO: { type: 'string', pattern: /bar/, default: 'foo' } },
+			'Default value for "FOO" must match the pattern /bar/',
+		] as const,
+		[
+			{ FOO: '74999' },
+			{ FOO: { type: 'uint32', max: 75000, default: 128000 } },
+			'Default value for "FOO" must be between 0 and 75000',
+		] as const,
+		[
+			{ FOO: '74999' },
+			{ FOO: { type: 'int32', max: 75000, default: 128000 } },
+			'Default value for "FOO" must be between -2147483648 and 75000',
+		] as const,
+		[
+			{ FOO: '75001' },
+			{ FOO: { type: 'int32', min: 75000, default: 64000 } },
+			'Default value for "FOO" must be between 75000 and 2147483647',
 		] as const,
 	])(
 		'should return an error when a default value breaks a constraint',
