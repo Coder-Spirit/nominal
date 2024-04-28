@@ -60,8 +60,8 @@ const secretToken = safeEnv.get('secretToken')
 
 - `boolean`
 - `string` and `string[]`
-- `int8`, `int16`, `int32`
-- `int8[]`, `int16[]`, `int32[]`
+- `int8`, `int16`, `int32`, `int54`
+- `int8[]`, `int16[]`, `int32[]`, `int54[]`
 - `uint8`, `uint16`, `uint32`
 - `uint8[]`, `uint16[]`, `uint32[]`
 

@@ -9,7 +9,7 @@ interface SimpleEnv {
 }
 
 const uintTypes = ['uint8', 'uint16', 'uint32'] as const
-const intTypes = ['int8', 'int16', 'int32'] as const
+const intTypes = ['int8', 'int16', 'int32', 'int54'] as const
 const integerTypes = [...uintTypes, ...intTypes] as const
 const floatTypes = ['float32', 'float64'] as const
 const numberTypes = [...integerTypes, ...floatTypes] as const
@@ -35,6 +35,7 @@ type TMapper<T extends AllType> = {
 	int8: number
 	int16: number
 	int32: number
+	int54: number
 	uint8: number
 	uint16: number
 	uint32: number
@@ -45,6 +46,7 @@ type TMapper<T extends AllType> = {
 	'int8[]': number[]
 	'int16[]': number[]
 	'int32[]': number[]
+	'int54[]': number[]
 	'uint8[]': number[]
 	'uint16[]': number[]
 	'uint32[]': number[]
@@ -57,6 +59,7 @@ type TOutMapper<T extends AllType> = {
 	int8: TaggedInteger
 	int16: TaggedInteger
 	int32: TaggedInteger
+	int54: TaggedInteger
 	uint8: TaggedPositiveInteger
 	uint16: TaggedPositiveInteger
 	uint32: TaggedPositiveInteger
@@ -67,6 +70,7 @@ type TOutMapper<T extends AllType> = {
 	'int8[]': TaggedInteger[]
 	'int16[]': TaggedInteger[]
 	'int32[]': TaggedInteger[]
+	'int54[]': TaggedInteger[]
 	'uint8[]': TaggedPositiveInteger[]
 	'uint16[]': TaggedPositiveInteger[]
 	'uint32[]': TaggedPositiveInteger[]
@@ -122,6 +126,7 @@ type Constraints<T extends AllType> = {
 	int8: NumberConstraints
 	int16: NumberConstraints
 	int32: NumberConstraints
+	int54: NumberConstraints
 	uint8: NumberConstraints
 	uint16: NumberConstraints
 	uint32: NumberConstraints
@@ -132,6 +137,7 @@ type Constraints<T extends AllType> = {
 	'int8[]': ArrayConstraints<'int8'>
 	'int16[]': ArrayConstraints<'int16'>
 	'int32[]': ArrayConstraints<'int32'>
+	'int54[]': ArrayConstraints<'int54'>
 	'uint8[]': ArrayConstraints<'uint8'>
 	'uint16[]': ArrayConstraints<'uint16'>
 	'uint32[]': ArrayConstraints<'uint32'>
@@ -386,6 +392,26 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				fieldName,
 				'int32',
 				constraints as ArrayConstraints<'int32'>,
+				forDefault,
+			)
+			return
+		case 'int54':
+			if (checkInteger(v, fieldName, forDefault)) {
+				checkBetween(
+					v,
+					Math.max(-9007199254740991, min),
+					Math.min(9007199254740991, max),
+					fieldName,
+					forDefault,
+				)
+			}
+			return
+		case 'int54[]':
+			checkArray(
+				v,
+				fieldName,
+				'int54',
+				constraints as ArrayConstraints<'int54'>,
 				forDefault,
 			)
 			return
