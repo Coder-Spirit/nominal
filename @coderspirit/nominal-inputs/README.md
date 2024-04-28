@@ -1,4 +1,4 @@
-# @coderspirit/nominal
+# @coderspirit/nominal-inputs
 
 [![NPM version](https://img.shields.io/npm/v/@coderspirit/nominal-inputs.svg?style=flat)](https://www.npmjs.com/package/@coderspirit/nominal-inputs)
 [![TypeScript](https://badgen.net/npm/types/@coderspirit/nominal-inputs)](http://www.typescriptlang.org/)
