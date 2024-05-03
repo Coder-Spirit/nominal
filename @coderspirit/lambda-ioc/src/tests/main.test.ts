@@ -167,16 +167,27 @@ describe('container', () => {
 	})
 
 	it('resolves labelled groups with the ":#" suffix', async () => {
-		const c = createContainer().registerValue('g:a', 1).registerValue('g:b', 2)
+		const c = createContainer()
+			.registerValue('g:a', 1)
+			.registerFactory('g:b', () => 2 as const)
+			.registerAsyncFactory('g:c', async () => 3 as const)
+			.registerAsyncSingleton('g:d', async () => 4 as const)
 
-		const g1: (['a', 1] | ['b', 2])[] = await c.resolveAsync('g:#')
-		expect(g1.length).toBe(2)
+		const g1: (['a', 1] | ['b', 2] | ['c', 3] | ['d', 4])[] = await c.resolveAsync('g:#')
+		expect(g1.length).toBe(4)
 
-		const g2: (['a', 1] | ['b', 2])[] = await c.resolveLabelledGroup('g')
-		expect(g2.length).toBe(2)
+		const g2: (['a', 1] | ['b', 2] | ['c', 3] | ['d', 4])[] = await c.resolveLabelledGroup('g')
+		expect(g2.length).toBe(4)
 
 		for (const v of g1) {
 			expect(g2.filter(w => w[0] === v[0]).map(w => w[1])).toContain(v[1])
+		}
+
+		const simpleGroup1 = g1.map(([_, v]) => v)
+		const simpleGroup2 = g2.map(([_, v]) => v)
+		for (const i of [1, 2, 3, 4]) {
+			expect(simpleGroup1).toContain(i)
+			expect(simpleGroup2).toContain(i)
 		}
 	})
 

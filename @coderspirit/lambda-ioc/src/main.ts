@@ -477,7 +477,7 @@ export function __createContainer<
 					await Promise.all(
 						Object.entries(asyncFactories)
 							.filter(hasPrefix)
-							.map(([key, factory]) => async () => [
+							.map(async ([key, factory]) => [
 								key.split(':')[1],
 								await factory(c as unknown as Container<Dict, Dict>),
 							]),
