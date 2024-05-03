@@ -10,7 +10,7 @@
 	},
 	"devDependencies": {
 		"@arethetypeswrong/cli": "^0.15.3",
-		"@biomejs/biome": "1.7.1",
+		"@biomejs/biome": "1.7.2",
 		"@rollup/plugin-typescript": "^11.1.6",
 		"publint": "^0.2.7",
 		"rollup": "^4.17.2",
