@@ -20,6 +20,7 @@ jobs:
   build:
     strategy:
       matrix:
+        deno-version: [ "1.45.5" ]
         node-version: [ 18, 20, 22 ]
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
         pnpm: ["9.7.0"]
@@ -42,6 +43,10 @@ jobs:
       with:
         node-version: "${{ matrix.node-version }}"
         cache: "pnpm"
+    - name: "Use Deno ${{ matrix.deno-version }}" # v1.3.0
+      uses: denoland/setup-deno@ba9dcf3bc3696623d1add6a2f5181ee1b5143de5
+      with:
+        deno-version: "${{ matrix.deno-version }}"
 
     # All
     - name: "(All) Install dependencies"
