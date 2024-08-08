@@ -2,14 +2,22 @@
 	"name": "@coderspirit/lambda-ioc",
 	"version": "2.2.1",
 	"description": "Super type safe dependency injection 💉 for TypeScript",
-	"keywords": ["typescript", "functional", "ioc", "di", "dependency injection"],
+	"keywords": [
+		"typescript",
+		"functional",
+		"ioc",
+		"di",
+		"dependency injection"
+	],
 	"author": "Andres Correa Casablanca <andreu@kindspells.dev>",
 	"private": false,
 	"license": "MIT",
 	"main": "./dist/main.cjs",
 	"module": "./dist/main.mjs",
 	"types": "./dist/main.d.cts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"exports": {
 		"import": {
 			"types": "./dist/main.d.mts",
@@ -31,8 +39,8 @@
 	},
 	"devDependencies": {
 		"@coderspirit/eslint-config": "^2.0.0",
-		"typescript": "^5.4.5",
-		"vitest": "^1.5.3"
+		"typescript": "^5.5.4",
+		"vitest": "^1.6.0"
 	},
 	"repository": {
 		"type": "git",

@@ -5,7 +5,9 @@
 	"main": "./dist/main.cjs",
 	"module": "./dist/main.mjs",
 	"types": "./dist/main.d.cts",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"exports": {
 		"import": {
 			"types": "./dist/main.d.mts",
@@ -16,7 +18,11 @@
 			"default": "./dist/main.cjs"
 		}
 	},
-	"keywords": ["typescript", "nominal", "environment"],
+	"keywords": [
+		"typescript",
+		"nominal",
+		"environment"
+	],
 	"author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
 	"private": false,
 	"license": "MIT",
@@ -35,10 +41,10 @@
 	},
 	"devDependencies": {
 		"@coderspirit/eslint-config": "^2.0.0",
-		"@types/node": "^20.12.8",
-		"tslib": "^2.6.2",
-		"typescript": "^5.4.5",
-		"vitest": "^1.5.3"
+		"@types/node": "^20.14.14",
+		"tslib": "^2.6.3",
+		"typescript": "^5.5.4",
+		"vitest": "^1.6.0"
 	},
 	"engines": {
 		"node": ">=18.0.0"
