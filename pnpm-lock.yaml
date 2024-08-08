@@ -227,10 +227,10 @@ importers:
   '@coderspirit/safe-env':
     dependencies:
       '@coderspirit/nominal':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../nominal
       '@coderspirit/nominal-inputs':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../nominal-inputs
     devDependencies:
       '@arethetypeswrong/cli':
