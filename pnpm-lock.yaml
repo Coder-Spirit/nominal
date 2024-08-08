@@ -78,7 +78,7 @@ importers:
   '@coderspirit/nominal':
     dependencies:
       '@coderspirit/nominal-symbols':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nominal-symbols
     devDependencies:
       '@arethetypeswrong/cli':
@@ -121,7 +121,7 @@ importers:
   '@coderspirit/nominal-inputs':
     dependencies:
       '@coderspirit/nominal':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nominal
     devDependencies:
       '@arethetypeswrong/cli':
@@ -203,10 +203,10 @@ importers:
   '@coderspirit/safe-env':
     dependencies:
       '@coderspirit/nominal':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nominal
       '@coderspirit/nominal-inputs':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../nominal-inputs
     devDependencies:
       '@arethetypeswrong/cli':
