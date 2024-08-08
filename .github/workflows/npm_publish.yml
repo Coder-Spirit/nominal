@@ -40,6 +40,9 @@ jobs:
         deno-version: "${{ matrix.deno-version }}"
     - name: "Install dependencies"
       run: "pnpm install --recursive --frozen-lockfile"
+    - name: "Configure PNPM shell emulator"
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: "pnpm config set shell-emulator true"
     - name: "Publish to NPM registry"
       run: "pnpm turbo publish:safe"
       working-directory: "."

@@ -51,5 +51,8 @@ jobs:
     # All
     - name: "(All) Install dependencies"
       run: "pnpm install --frozen-lockfile"
+    - name: "Configure PNPM shell emulator"
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: "pnpm config set shell-emulator true"
     - name: "(All) Run All Tasks"
       run: "pnpm turbo all"
