@@ -93,16 +93,16 @@
 			"inputs": ["./package.json", "./dist/**/*"]
 		},
 		"test": {
-			"dependsOn": ["^test"],
+			"dependsOn": ["build", "^test"],
 			"inputs": ["./package.json", "./vitest.config.mts", "./src/**/*"]
 		},
 		"test:cov": {
-			"dependsOn": ["^test:cov"],
+			"dependsOn": ["build", "^test:cov"],
 			"inputs": ["./package.json", "./src/**/*"],
 			"outputs": ["./coverage/**/*"]
 		},
 		"typecheck": {
-			"dependsOn": ["^typecheck"],
+			"dependsOn": ["build", "^typecheck"],
 			"inputs": ["./src/**/*", "./tsconfig.json", "./.tsbuildinfo"],
 			"outputs": ["./.tsbuildinfo"]
 		},
