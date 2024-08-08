@@ -16,8 +16,9 @@ jobs:
   build:
     strategy:
       matrix:
-        node-version: [ 18, 20 ]
-        os: [ubuntu-22.04, ubuntu-20.04, windows-latest, macos-12, macos-11]
+        node-version: [ 18, 20, 22 ]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        pnpm: ['9.7.0']
 
     runs-on: ${{ matrix.os }}
 
@@ -31,7 +32,7 @@ jobs:
     - name: Install PNPM # v3.0.0
       uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d
       with:
-        version: '9.0.6'
+        version: ${{ matrix.pnpm }}
     - name: Use Node.js ${{ matrix.node-version }} # v4.0.2
       uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8
       with:

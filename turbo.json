@@ -1,72 +1,113 @@
 {
 	"$schema": "https://turbo.build/schema.json",
-	"globalDependencies": ["tsconfig.json"],
-	"pipeline": {
+	"tasks": {
 		"build": {
+			"dependsOn": ["^build"],
 			"inputs": [
-				"src/**",
-				"package.json",
-				"rollup.config.prod.mjs",
-				"tsconfig.json"
+				"./package.json",
+				"./rollup.config.mjs",
+				"./tsconfig.json",
+				"./src/**/*"
+			],
+			"outputs": ["./dist/**/*"]
+		},
+		"format": {
+			"dependsOn": ["^format"],
+			"inputs": [
+				"./biome.jsonc",
+				"./**/*.json",
+				"./**/*.jsonc",
+				"./**/*.js",
+				"./**/*.mjs",
+				"./**/*.cjs",
+				"./**/*.ts",
+				"./**/*.mts",
+				"./**/*.cts",
+				"./**/*.d.ts",
+				"./**/*.d.mts",
+				"./**/*.d.cts"
 			],
 			"outputs": [
-				"dist/**"
-			],
-			"dependsOn": [
-				"^build"
+				"./**/*.json",
+				"./**/*.jsonc",
+				"./**/*.js",
+				"./**/*.mjs",
+				"./**/*.cjs",
+				"./**/*.ts",
+				"./**/*.mts",
+				"./**/*.cts",
+				"./**/*.d.ts",
+				"./**/*.d.mts",
+				"./**/*.d.cts"
 			]
 		},
-		"lint:biome": {
+		"format-staged": {
+			"dependsOn": ["^format-staged"],
 			"inputs": [
-				"src/**",
-				"biome.jsonc",
-				"package.json",
-				"tsconfig.json"
+				"./biome.jsonc",
+				"./**/*.json",
+				"./**/*.jsonc",
+				"./**/*.js",
+				"./**/*.mjs",
+				"./**/*.cjs",
+				"./**/*.ts",
+				"./**/*.mts",
+				"./**/*.cts",
+				"./**/*.d.ts",
+				"./**/*.d.mts",
+				"./**/*.d.cts"
 			],
-			"dependsOn": [
-				"^build"
-			]
-		},
-		"lint:publint": {
-			"inputs": ["dist/**", "package.json"],
-			"dependsOn": [
-				"build"
-			]
-		},
-		"lint:tsc": {
-			"inputs": [
-				"src/**",
-				"package.json",
-				"tsconfig.json"
-			],
-			"dependsOn": [
-				"^build"
+			"outputs": [
+				"./**/*.json",
+				"./**/*.jsonc",
+				"./**/*.js",
+				"./**/*.mjs",
+				"./**/*.cjs",
+				"./**/*.ts",
+				"./**/*.mts",
+				"./**/*.cts",
+				"./**/*.d.ts",
+				"./**/*.d.mts",
+				"./**/*.d.cts"
 			]
 		},
 		"lint": {
-			"dependsOn": [
-				"lint:biome",
-				"lint:publint",
-				"lint:tsc"
+			"dependsOn": ["^lint"],
+			"inputs": [
+				"./biome.jsonc",
+				"./**/*.json",
+				"./**/*.jsonc",
+				"./**/*.js",
+				"./**/*.mjs",
+				"./**/*.cjs",
+				"./**/*.ts",
+				"./**/*.mts",
+				"./**/*.cts",
+				"./**/*.d.ts",
+				"./**/*.d.mts",
+				"./**/*.d.cts"
 			]
+		},
+		"lint:publint": {
+			"dependsOn": ["build", "^lint:publint"],
+			"inputs": ["./package.json", "./dist/**/*"]
 		},
 		"test": {
-			"inputs": [
-				"src/**",
-				"package.json",
-				"tsconfig.json",
-				"vitest.config.mts"
-			],
-			"dependsOn": [
-				"^build"
-			]
+			"dependsOn": ["^test"],
+			"inputs": ["./package.json", "./vitest.config.mts", "./src/**/*"]
+		},
+		"test:cov": {
+			"dependsOn": ["^test:cov"],
+			"inputs": ["./package.json", "./src/**/*"],
+			"outputs": ["./coverage/**/*"]
+		},
+		"typecheck": {
+			"dependsOn": ["^typecheck"],
+			"inputs": ["./src/**/*", "./tsconfig.json", "./.tsbuildinfo"],
+			"outputs": ["./.tsbuildinfo"]
 		},
 		"all": {
-			"dependsOn": [
-				"build",
-				"lint",
-				"test"
-			]
+			"dependsOn": ["build", "lint", "lint:publint", "typecheck", "test"]
 		}
 	}
 }

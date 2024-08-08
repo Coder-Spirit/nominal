@@ -1,7 +1,10 @@
 {
-	"extends": "../../tsconfig.json",
+	"extends": "@coderspirit/dev-configs/tsconfig",
 	"compilerOptions": {
-		"baseUrl": "./src"
+		"rootDir": ".",
+		"baseUrl": "./src/",
+		"outDir": "./dist/"
 	},
-	"exclude": ["coverage/**/*", "dist/**/*", "node_modules/**/*"]
+	"include": ["src/**/*"],
+	"exclude": ["dist/**/*", "node_modules/**/*"]
 }

@@ -198,7 +198,12 @@ export type EnvWrapper<Values extends Record<string, unknown>> = {
 	get<K extends keyof Values & string>(key: K): Values[K]
 }
 
-class SafeEnvError extends Error {}
+class SafeEnvError extends Error {
+	constructor(message: string, opts?: ErrorOptions) {
+		super(message, opts)
+		this.name = 'SafeEnvError'
+	}
+}
 
 const checkInteger = (
 	value: unknown,
@@ -296,10 +301,7 @@ const checkBetween = (
 	}
 }
 
-/**
- * We use this in switch statement default cases to ensure that they are
- * exhaustive.
- */
+// biome-ignore lint/suspicious/noEmptyBlockStatements: We need this to ensure that the switch statement is exhaustive
 const exhaustiveGuard = (_v: never): void => {}
 
 /**
@@ -327,6 +329,7 @@ function validateValue<const D extends boolean, const T extends AllType>(
 	} catch (e) {
 		throw new SafeEnvError(
 			`Environment variable "${fieldName}" must be a valid JSON array`,
+			{ cause: e },
 		)
 	}
 
@@ -335,7 +338,7 @@ function validateValue<const D extends boolean, const T extends AllType>(
 
 	// For now we only check integer types
 	switch (type) {
-		case 'int8':
+		case 'int8': {
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
 					v,
@@ -346,7 +349,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'int8[]':
+		}
+		case 'int8[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -355,7 +359,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'int16':
+		}
+		case 'int16': {
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
 					v,
@@ -366,7 +371,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'int16[]':
+		}
+		case 'int16[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -375,7 +381,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'int32':
+		}
+		case 'int32': {
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
 					v,
@@ -386,7 +393,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'int32[]':
+		}
+		case 'int32[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -395,7 +403,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'int54':
+		}
+		case 'int54': {
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
 					v,
@@ -406,7 +415,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'int54[]':
+		}
+		case 'int54[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -415,7 +425,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'uint8':
+		}
+		case 'uint8': {
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
 					v,
@@ -426,7 +437,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'uint8[]':
+		}
+		case 'uint8[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -435,7 +447,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'uint16':
+		}
+		case 'uint16': {
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
 					v,
@@ -446,7 +459,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'uint16[]':
+		}
+		case 'uint16[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -455,7 +469,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'uint32':
+		}
+		case 'uint32': {
 			if (checkInteger(v, fieldName, forDefault)) {
 				checkBetween(
 					v,
@@ -466,7 +481,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'uint32[]':
+		}
+		case 'uint32[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -475,7 +491,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'float32':
+		}
+		case 'float32': {
 			if (checkFloat(v, fieldName, forDefault)) {
 				checkBetween(
 					v,
@@ -486,7 +503,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'float32[]':
+		}
+		case 'float32[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -495,12 +513,14 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'float64':
+		}
+		case 'float64': {
 			if (checkFloat(v, fieldName, forDefault)) {
 				checkBetween(v, min, max, fieldName, forDefault)
 			}
 			return
-		case 'float64[]':
+		}
+		case 'float64[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -509,7 +529,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'string':
+		}
+		case 'string': {
 			if (typeof v !== 'string') {
 				// This should never happen
 				throw new SafeEnvError(
@@ -538,7 +559,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
-		case 'string[]':
+		}
+		case 'string[]': {
 			checkArray(
 				v,
 				fieldName,
@@ -547,7 +569,8 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				forDefault,
 			)
 			return
-		case 'boolean':
+		}
+		case 'boolean': {
 			// We only need to check environment variables, default values will always be correct
 			if (!forDefault && v !== 'true' && v !== 'false') {
 				throw new SafeEnvError(
@@ -555,6 +578,7 @@ function validateValue<const D extends boolean, const T extends AllType>(
 				)
 			}
 			return
+		}
 		default:
 			exhaustiveGuard(type)
 	}

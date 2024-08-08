@@ -9,8 +9,8 @@ import type {
 	PropertyValueType,
 	PropertyWrapper,
 	WeakBaseTypeMarker,
-} from './internal/Markers'
-import type { PreserveBrandlikeMarkers } from './internal/Preservers'
+} from './internal/markers.mts'
+import type { PreserveBrandlikeMarkers } from './internal/preservers.mts'
 
 /**
  * `WithProperty` adds a new property to the passed base type, and it overwrites

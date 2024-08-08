@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { WithBrand, WithFlavor } from '..'
-import type { WithoutBrand } from '../Brands'
+
+import type { WithBrand, WithFlavor, WithoutBrand } from '../brands.mts'
 
 type ACME = WithBrand<string, 'ACME'>
 type Ubik = WithBrand<string, 'Ubik'>

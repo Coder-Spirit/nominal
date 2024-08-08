@@ -4,12 +4,12 @@ export type {
 	PropertyTypeDefinition,
 	WithStrictProperty,
 	WithProperty,
-} from './Properties'
+} from './properties.mts'
 
-export type { WithBrand, WithFlavor, WithoutBrand } from './Brands'
+export type { WithBrand, WithFlavor, WithoutBrand } from './brands.mts'
 
 export type {
 	BrandMarker as FastBrand,
 	FlavorMarker as FastFlavor,
 	PropertiesMarker as FastProperty,
-} from './internal/Markers'
+} from './internal/markers.mts'

@@ -430,9 +430,9 @@ export function __createContainer<
 		async resolveAsync(k: string): Promise<unknown> {
 			switch (k.slice(-2)) {
 				case ':*':
-					return c.resolveGroup(k.slice(0, -2))
+					return await c.resolveGroup(k.slice(0, -2))
 				case ':#':
-					return c.resolveLabelledGroup(k.slice(0, -2))
+					return await c.resolveLabelledGroup(k.slice(0, -2))
 			}
 
 			const syncFactory = syncFactories[k as keyof TSyncFactories]

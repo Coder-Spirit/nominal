@@ -1,0 +1,52 @@
+{
+	"compilerOptions": {
+		/* Visit https://aka.ms/tsconfig to read more about this file */
+
+		/* Projects */
+		"incremental": true,
+
+		/* Language and Environment */
+		"target": "es2020",
+		"lib": ["es2020", "DOM", "DOM.Iterable"],
+
+		/* Modules */
+		"module": "es2020",
+		"moduleResolution": "Bundler",
+		"allowArbitraryExtensions": true,
+		"allowImportingTsExtensions": true,
+		"resolvePackageJsonExports": true,
+		"resolvePackageJsonImports": true,
+		"resolveJsonModule": true,
+
+		/* JavaScript Support */
+		"allowJs": false,
+		"checkJs": false,
+
+		/* Emit */
+		"noEmit": true,
+		"tsBuildInfoFile": ".tsbuildinfo",
+
+		/* Interop Constraints */
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+
+		/* Declarations */
+		"declaration": false,
+		"isolatedDeclarations": false,
+
+		/* Type Checking */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"exactOptionalPropertyTypes": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+
+		/* Completeness */
+		"skipLibCheck": true
+	}
+}

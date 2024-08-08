@@ -13,7 +13,3 @@ trim_trailing_whitespace = true
 [*.md]
 indent_style = space
 indent_size = 2
-
-[package.json]
-indent_style = space
-indent_size = 2

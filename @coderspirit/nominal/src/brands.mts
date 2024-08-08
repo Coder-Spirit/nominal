@@ -4,8 +4,8 @@ import type {
 	BrandType,
 	FlavorMarker,
 	WeakBaseTypeMarker,
-} from './internal/Markers'
-import type { PreservePropertyMarkers } from './internal/Preservers'
+} from './internal/markers.mts'
+import type { PreservePropertyMarkers } from './internal/preservers.mts'
 
 /**
  * It adds a brand to the passed base type, erasing previous brands or flavors,

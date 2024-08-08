@@ -1,11 +1,25 @@
 # Macos
 .DS_Store
 
-# Caches & Artifacts
-.turbo/
-coverage/
-dist/
+# Vendored Packages
 node_modules/
-.eslintcache
+
+# Build Artifacts
+.rollup.cache/
+.tsbuildinfo
+.turbo/
 .turbo-build.log
-tsconfig.tsbuildinfo
+dist/
+
+# Tests Coverage
+coverage/
+
+# Local .env files
+.env
+
+# Logs
+*.log
+
+# IDEs
+.idea
+this.code-workspace

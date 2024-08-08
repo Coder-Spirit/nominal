@@ -1,0 +1,68 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"files": {
+		"include": [
+			"*.json",
+			"*.jsonc",
+			"*.js",
+			"*.mjs",
+			"*.cjs",
+			"*.jsx",
+			"*.ts",
+			"*.mts",
+			"*.cts",
+			"*.tsx",
+			"*.d.ts",
+			"*.d.mts",
+			"*.d.cts",
+			"*.md",
+			"*.mdx",
+			"*.astro",
+			"*.vue",
+			"*.svelte"
+		],
+		"ignore": ["coverage/**/*", "dist/**/*", "node_modules/**/*"]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"correctness": {
+				"all": true,
+				"noNodejsModules": "off"
+			},
+			"performance": { "all": true },
+			"security": { "all": true },
+			"style": { "all": true, "useNamingConvention": "off" },
+			"suspicious": { "all": true }
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 2,
+		"lineWidth": 80,
+		"lineEnding": "lf"
+	},
+	"javascript": {
+		"formatter": {
+			"enabled": true,
+			"arrowParentheses": "asNeeded",
+			"semicolons": "asNeeded",
+			"trailingCommas": "all",
+			"quoteProperties": "asNeeded",
+			"quoteStyle": "single",
+			"jsxQuoteStyle": "single"
+		}
+	},
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"defaultBranch": "main",
+		"useIgnoreFile": true
+	}
+}

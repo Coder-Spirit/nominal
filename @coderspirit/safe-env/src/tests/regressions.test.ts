@@ -1,7 +1,7 @@
 import type { TaggedInteger } from '@coderspirit/nominal-inputs'
 import { describe, expect, it } from 'vitest'
 
-import { getSafeEnv } from '../main'
+import { getSafeEnv } from '../main.mts'
 
 describe('getSafeEnv (regressions)', () => {
 	it('shoud set correct type for .get with enum variables', () => {
@@ -44,7 +44,7 @@ describe('getSafeEnv (regressions)', () => {
 	})
 
 	it('should not apply "const" to default value types', () => {
-		const env = { }
+		const env = {}
 
 		const envWrapper = getSafeEnv(env, {
 			FOO: { type: 'int32', default: 42 },

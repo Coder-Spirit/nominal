@@ -1,5 +1,5 @@
 import type { __Impossible } from '@coderspirit/nominal-symbols'
-import type { BrandMarker, FlavorMarker, PropertiesMarker } from './Markers'
+import type { BrandMarker, FlavorMarker, PropertiesMarker } from './markers.mts'
 
 /**
  * It helps us to preserve brand-like markers

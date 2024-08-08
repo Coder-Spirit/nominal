@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getSafeEnv } from '../main'
+import { getSafeEnv } from '../main.mts'
 
 describe('getSafeEnv', () => {
 	it('should return a safe env wrapper when a schema is specified', () => {

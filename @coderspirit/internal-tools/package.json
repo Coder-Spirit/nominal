@@ -1,0 +1,17 @@
+{
+	"name": "@coderspirit/internal-tools",
+	"private": true,
+	"type": "module",
+	"bin": {
+		"biome-check-staged": "./src/biome-check-staged.ts"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.8.3",
+		"@coderspirit/dev-configs": "workspace:*"
+	},
+	"scripts": {
+		"format": "pnpm biome check --write --files-ignore-unknown=true .",
+		"format-staged": "biome-check-staged",
+		"lint": "pnpm biome check --files-ignore-unknown=true ."
+	}
+}

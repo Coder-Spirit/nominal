@@ -2,47 +2,52 @@
 	"name": "@coderspirit/nominal-symbols",
 	"version": "2.0.0",
 	"description": "Symbol objects for @coderspirit/nominal",
-	"keywords": [
-		"typescript",
-		"types",
-		"nominal",
-		"taint"
-	],
+	"keywords": ["typescript", "types", "nominal", "taint"],
 	"author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
 	"private": false,
 	"license": "MIT",
-	"main": "./dist/symbols.cjs",
-	"module": "./dist/symbols.mjs",
-	"types": "./dist/symbols.d.cts",
-	"files": [
-		"dist"
-	],
+	"main": "./dist/main.cjs",
+	"module": "./dist/main.mjs",
+	"types": "./dist/main.d.cts",
+	"files": ["dist"],
 	"exports": {
 		"import": {
-			"types": "./dist/symbols.d.mts",
-			"default": "./dist/symbols.mjs"
+			"types": "./dist/main.d.mts",
+			"default": "./dist/main.mjs"
 		},
 		"require": {
-			"types": "./dist/symbols.d.cts",
-			"default": "./dist/symbols.cjs"
+			"types": "./dist/main.d.cts",
+			"default": "./dist/main.cjs"
 		}
 	},
 	"scripts": {
-		"build": "rm -rf dist && rollup --config rollup.config.prod.mjs",
-		"lint:_all": "pnpm run lint:tsc && pnpm run lint:eslint && pnpm run lint:publint",
-		"lint:biome": "biome lint .",
+		"build": "rm -rf dist/* && rollup --config rollup.config.mjs",
+		"format": "pnpm biome check --write --files-ignore-unknown=true .",
+		"format-staged": "biome-check-staged",
+		"lint": "pnpm lint:biome",
+		"lint:biome": "pnpm biome check --files-ignore-unknown=true .",
 		"lint:publint": "publint",
-		"lint:tsc": "tsc",
-		"prepublishOnly": "pnpm run build"
+		"prepublishOnly": "turbo lint && turbo build",
+		"typecheck": "tsc --incremental true --tsBuildInfoFile .tsbuildinfo --noEmit -p ./tsconfig.json"
 	},
 	"peerDependencies": {
 		"typescript": ">=5.2"
 	},
 	"devDependencies": {
-		"@coderspirit/eslint-config": "^2.0.0",
-		"@types/node": "^20.14.14",
+		"@arethetypeswrong/cli": "^0.15.4",
+		"@biomejs/biome": "1.8.3",
+		"@coderspirit/dev-configs": "workspace:*",
+		"@coderspirit/internal-tools": "workspace:*",
+		"@types/node": "^22.1.0",
+		"get-tsconfig": "^4.7.6",
+		"publint": "^0.2.9",
+		"rollup": "^4.20.0",
+		"rollup-plugin-dts": "^6.1.1",
+		"rollup-plugin-esbuild": "^6.1.1",
 		"tslib": "^2.6.3",
-		"typescript": "^5.5.4"
+		"turbo": "^2.0.12",
+		"typescript": "^5.5.4",
+		"vitest": "^2.0.5"
 	},
 	"engines": {
 		"node": ">=18.0.0"

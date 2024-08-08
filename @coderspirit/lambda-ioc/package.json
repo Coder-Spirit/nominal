@@ -2,22 +2,14 @@
 	"name": "@coderspirit/lambda-ioc",
 	"version": "2.2.1",
 	"description": "Super type safe dependency injection 💉 for TypeScript",
-	"keywords": [
-		"typescript",
-		"functional",
-		"ioc",
-		"di",
-		"dependency injection"
-	],
+	"keywords": ["typescript", "functional", "ioc", "di", "dependency injection"],
 	"author": "Andres Correa Casablanca <andreu@kindspells.dev>",
 	"private": false,
 	"license": "MIT",
 	"main": "./dist/main.cjs",
 	"module": "./dist/main.mjs",
 	"types": "./dist/main.d.cts",
-	"files": [
-		"dist"
-	],
+	"files": ["dist"],
 	"exports": {
 		"import": {
 			"types": "./dist/main.d.mts",
@@ -29,18 +21,31 @@
 		}
 	},
 	"scripts": {
-		"build": "rm -rf dist && rollup --config rollup.config.prod.mjs",
-		"lint:_all": "pnpm run lint:tsc && pnpm run lint:biome && pnpm run lint:publint",
-		"lint:biome": "biome lint .",
+		"build": "rm -rf dist/* && rollup --config rollup.config.mjs",
+		"format": "pnpm biome check --write --files-ignore-unknown=true .",
+		"format-staged": "biome-check-staged",
+		"lint": "pnpm lint:biome",
+		"lint:biome": "pnpm biome check --files-ignore-unknown=true .",
 		"lint:publint": "publint",
-		"lint:tsc": "tsc",
-		"test": "vitest run",
-		"prepublishOnly": "pnpm run build"
+		"prepublishOnly": "turbo lint && turbo build",
+		"test": "vitest -c vitest.config.mts run",
+		"test:cov": "vitest -c vitest.config.mts run --coverage",
+		"typecheck": "tsc --incremental true --tsBuildInfoFile .tsbuildinfo --noEmit -p ./tsconfig.json"
 	},
 	"devDependencies": {
-		"@coderspirit/eslint-config": "^2.0.0",
+		"@arethetypeswrong/cli": "^0.15.4",
+		"@biomejs/biome": "1.8.3",
+		"@coderspirit/dev-configs": "workspace:*",
+		"@coderspirit/internal-tools": "workspace:*",
+		"get-tsconfig": "^4.7.6",
+		"publint": "^0.2.9",
+		"rollup": "^4.20.0",
+		"rollup-plugin-dts": "^6.1.1",
+		"rollup-plugin-esbuild": "^6.1.1",
+		"tslib": "^2.6.3",
+		"turbo": "^2.0.12",
 		"typescript": "^5.5.4",
-		"vitest": "^1.6.0"
+		"vitest": "^2.0.5"
 	},
 	"repository": {
 		"type": "git",

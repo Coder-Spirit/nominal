@@ -1,5 +1,5 @@
-import { createContainer } from '../main'
 import { describe, expect, it } from 'vitest'
+import { createContainer } from '../main.mts'
 
 describe('container', () => {
 	it('resolves registered simple values', () => {
@@ -173,10 +173,12 @@ describe('container', () => {
 			.registerAsyncFactory('g:c', async () => 3 as const)
 			.registerAsyncSingleton('g:d', async () => 4 as const)
 
-		const g1: (['a', 1] | ['b', 2] | ['c', 3] | ['d', 4])[] = await c.resolveAsync('g:#')
+		const g1: (['a', 1] | ['b', 2] | ['c', 3] | ['d', 4])[] =
+			await c.resolveAsync('g:#')
 		expect(g1.length).toBe(4)
 
-		const g2: (['a', 1] | ['b', 2] | ['c', 3] | ['d', 4])[] = await c.resolveLabelledGroup('g')
+		const g2: (['a', 1] | ['b', 2] | ['c', 3] | ['d', 4])[] =
+			await c.resolveLabelledGroup('g')
 		expect(g2.length).toBe(4)
 
 		for (const v of g1) {
@@ -427,13 +429,13 @@ describe('container', () => {
 			dbClient: ReturnType<typeof buildDbClient>,
 			webhookClient: ReturnType<typeof buildWebhookClient>,
 		) => {
-			return { dbClient, webhookClient }
+			return await Promise.resolve({ dbClient, webhookClient })
 		}
 		const buildApp2 = (app1: Awaited<ReturnType<typeof buildApp1>>) => {
 			return { app1 }
 		}
 		const buildApp2_ = async (app1: Awaited<ReturnType<typeof buildApp1>>) => {
-			return { app1 }
+			return await Promise.resolve({ app1 })
 		}
 		const buildApp3 = (
 			app1: Awaited<ReturnType<typeof buildApp1>>,

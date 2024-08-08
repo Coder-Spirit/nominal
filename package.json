@@ -1,25 +1,21 @@
 {
+	"name": "@coderspirit/nominal-root",
 	"private": true,
 	"author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
 	"license": "MIT",
-	"workspaces": [
-		"@coderspirit/*"
-	],
+	"workspaces": ["@coderspirit/*"],
 	"scripts": {
 		"build": "pnpm -r run build",
 		"install-githooks": "if [ -d .git ]; then git config core.hooksPath .hooks; fi",
 		"test": "pnpm -r run test"
 	},
 	"devDependencies": {
-		"@arethetypeswrong/cli": "^0.15.4",
-		"@biomejs/biome": "1.7.1",
-		"@rollup/plugin-typescript": "^11.1.6",
-		"publint": "^0.2.9",
-		"rollup": "^4.20.0",
-		"rollup-plugin-dts": "^6.1.1",
-		"turbo": "^1.13.4"
+		"@biomejs/biome": "1.8.3",
+		"@coderspirit/dev-configs": "workspace:*",
+		"@coderspirit/internal-tools": "workspace:*",
+		"turbo": "^2.0.12"
 	},
-	"packageManager": "pnpm@9.0.6",
+	"packageManager": "pnpm@9.7.0",
 	"engines": {
 		"node": ">=18.0"
 	}

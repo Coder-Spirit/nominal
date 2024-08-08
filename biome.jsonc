@@ -1,71 +1,12 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.7.2/schema.json",
-	"organizeImports": {
-		"enabled": true
-	},
+	"extends": ["@coderspirit/dev-configs/biome"],
 	"files": {
-		"include": [
-			"*.json",
-			"*.jsonc",
-			"*.js",
-			"*.mjs",
-			"*.cjs",
-			"*.jsx",
-			"*.ts",
-			"*.mts",
-			"*.cts",
-			"*.tsx",
-			"*.d.ts",
-			"*.d.mts",
-			"*.d.cts",
-			"*.md",
-			"*.mdx",
-			"*.astro",
-			"*.vue",
-			"*.svelte"
-		],
-		"ignore": ["coverage/**/*", "dist/**/*", "node_modules/**/*", ".turbo/**/*"]
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true
-		}
-	},
-	"formatter": {
-		"enabled": true,
-		"formatWithErrors": false,
-		"indentStyle": "tab",
-		"indentWidth": 2,
-		"lineWidth": 80,
-		"lineEnding": "lf"
-	},
-	"javascript": {
-		"formatter": {
-			"enabled": true,
-			"arrowParentheses": "asNeeded",
-			"semicolons": "asNeeded",
-			"trailingComma": "all",
-			"quoteProperties": "asNeeded",
-			"quoteStyle": "single",
-			"jsxQuoteStyle": "single"
-		}
-	},
-	"vcs": {
-		"enabled": true,
-		"clientKind": "git",
-		"defaultBranch": "main",
-		"useIgnoreFile": true
-	},
-	"overrides": [
-		{
-			"include": ["tsconfig.json"],
-			"json": {
-				"parser": {
-					"allowComments": true,
-					"allowTrailingCommas": true
-				}
-			}
-		}
-	]
+		"ignore": [
+			".hooks/**/*",
+			".turbo/**/*",
+			"coverage-unit/**/*",
+			"node_modules/**/*",
+			"@coderspirit/**/*"
+		]
+	}
 }
