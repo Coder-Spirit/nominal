@@ -1,9 +1,9 @@
-#!/usr/bin/env -S deno run --node-modules-dir --unstable-byonm --allow-env --allow-read --allow-sys --allow-run
+#!/usr/bin/env -S deno run --no-config --allow-env --allow-read --allow-sys --allow-run
 
 import { readFile } from 'node:fs/promises'
 import process from 'node:process'
 
-import { $ } from 'zx'
+import { $ } from 'npm:zx@8.1.4'
 
 type PackageJson = {
 	name: string

@@ -1,7 +1,8 @@
-#!/usr/bin/env -S deno run --node-modules-dir --unstable-byonm --allow-env --allow-read --allow-sys --allow-run
+#!/usr/bin/env -S deno run --no-config --allow-env --allow-read --allow-sys --allow-run
 
 import process from 'node:process'
-import { $ } from 'zx'
+
+import { $ } from 'npm:zx@8.1.4'
 
 const JSON_EXT = 'json|jsonc'
 const JS_EXT = 'js|mjs|cjs|jsx'

@@ -1,5 +1,8 @@
 {
 	"files.autoSave": "afterDelay",
 	"editor.formatOnSave": true,
-	"editor.defaultFormatter": "biomejs.biome"
+	"editor.defaultFormatter": "biomejs.biome",
+	"biome.enabled": true,
+	"deno.enable": false,
+	"deno.enablePaths": ["./@coderspirit/internal-tools"]
 }
