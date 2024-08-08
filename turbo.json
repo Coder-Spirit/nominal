@@ -1,6 +1,9 @@
 {
 	"$schema": "https://turbo.build/schema.json",
 	"tasks": {
+		"all": {
+			"dependsOn": ["build", "lint", "lint:publint", "typecheck", "test"]
+		},
 		"build": {
 			"dependsOn": ["^build"],
 			"inputs": [
@@ -92,6 +95,10 @@
 			"dependsOn": ["build", "^lint:publint"],
 			"inputs": ["./package.json", "./dist/**/*"]
 		},
+		"publish:safe": {
+			"dependsOn": ["^publish:safe"],
+			"cache": false
+		},
 		"test": {
 			"dependsOn": ["build", "^test"],
 			"inputs": ["./package.json", "./vitest.config.mts", "./src/**/*"]
@@ -105,9 +112,6 @@
 			"dependsOn": ["build", "^typecheck"],
 			"inputs": ["./src/**/*", "./tsconfig.json", "./.tsbuildinfo"],
 			"outputs": ["./.tsbuildinfo"]
-		},
-		"all": {
-			"dependsOn": ["build", "lint", "lint:publint", "typecheck", "test"]
 		}
 	}
 }

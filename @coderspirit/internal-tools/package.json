@@ -3,15 +3,21 @@
 	"private": true,
 	"type": "module",
 	"bin": {
-		"biome-check-staged": "./src/biome-check-staged.ts"
+		"biome-check-staged": "./src/biome-check-staged.sh",
+		"safe-publish": "./src/safe-publish.sh"
+	},
+	"scripts": {
+		"format": "pnpm biome check --write --files-ignore-unknown=true .",
+		"format-staged": "biome-check-staged",
+		"lint": "pnpm lint:biome",
+		"lint:biome": "pnpm biome check --files-ignore-unknown=true .",
+		"typecheck": "tsc --incremental true --tsBuildInfoFile .tsbuildinfo --noEmit -p ./tsconfig.json"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
 		"@coderspirit/dev-configs": "workspace:*"
 	},
-	"scripts": {
-		"format": "pnpm biome check --write --files-ignore-unknown=true .",
-		"format-staged": "biome-check-staged",
-		"lint": "pnpm biome check --files-ignore-unknown=true ."
+	"dependencies": {
+		"zx": "^8.1.4"
 	}
 }

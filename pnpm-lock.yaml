@@ -28,6 +28,10 @@ importers:
         version: 1.8.3
 
   '@coderspirit/internal-tools':
+    dependencies:
+      zx:
+        specifier: ^8.1.4
+        version: 8.1.4
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.8.3
@@ -611,6 +615,12 @@ packages:
 
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
+
+  '@types/fs-extra@11.0.4':
+    resolution: {integrity: sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==}
+
+  '@types/jsonfile@6.1.4':
+    resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
 
   '@types/node@22.1.0':
     resolution: {integrity: sha512-AOmuRF0R2/5j1knA3c6G3HOk523Ga+l+ZXltX8SF1+5oqcXijjfTd8fY3XRZqSihEu9XhtQnKYLmkFaoxgsJHw==}
@@ -1218,6 +1228,11 @@ packages:
     resolution: {integrity: sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==}
     engines: {node: '>=10'}
 
+  zx@8.1.4:
+    resolution: {integrity: sha512-QFDYYpnzdpRiJ3dL2102Cw26FpXpWshW4QLTGxiYfIcwdAqg084jRCkK/kuP/NOSkxOjydRwNFG81qzA5r1a6w==}
+    engines: {node: '>= 12.17.0'}
+    hasBin: true
+
 snapshots:
 
   '@ampproject/remapping@2.3.0':
@@ -1446,6 +1461,17 @@ snapshots:
   '@sindresorhus/is@4.6.0': {}
 
   '@types/estree@1.0.5': {}
+
+  '@types/fs-extra@11.0.4':
+    dependencies:
+      '@types/jsonfile': 6.1.4
+      '@types/node': 22.1.0
+    optional: true
+
+  '@types/jsonfile@6.1.4':
+    dependencies:
+      '@types/node': 22.1.0
+    optional: true
 
   '@types/node@22.1.0':
     dependencies:
@@ -2047,3 +2073,8 @@ snapshots:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
+
+  zx@8.1.4:
+    optionalDependencies:
+      '@types/fs-extra': 11.0.4
+      '@types/node': 22.1.0

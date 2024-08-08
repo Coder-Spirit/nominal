@@ -27,7 +27,8 @@
 		"lint": "pnpm lint:biome",
 		"lint:biome": "pnpm biome check --files-ignore-unknown=true .",
 		"lint:publint": "publint",
-		"prepublishOnly": "turbo lint && turbo build",
+		"prepublishOnly": "turbo all",
+		"publish:safe": "safe-publish",
 		"test": "vitest -c vitest.config.mts run",
 		"test:cov": "vitest -c vitest.config.mts run --coverage",
 		"typecheck": "tsc --incremental true --tsBuildInfoFile .tsbuildinfo --noEmit -p ./tsconfig.json"

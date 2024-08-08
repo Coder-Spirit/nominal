@@ -1,6 +1,7 @@
-#!/usr/bin/env -S deno run --no-config --allow-env --allow-read --allow-sys --allow-run
+#!/usr/bin/env -S deno run --node-modules-dir --unstable-byonm --allow-env --allow-read --allow-sys --allow-run
+
 import process from 'node:process'
-import { $ } from 'npm:zx@8.1.4'
+import { $ } from 'zx'
 
 const JSON_EXT = 'json|jsonc'
 const JS_EXT = 'js|mjs|cjs|jsx'
@@ -16,7 +17,7 @@ const runGitDiffStaged = async (): Promise<string[]> => {
 	).lines()
 }
 
-export const main = async () => {
+const main = async () => {
 	const stagedFiles = (await runGitDiffStaged()).filter(file =>
 		extsRegex.test(file),
 	)

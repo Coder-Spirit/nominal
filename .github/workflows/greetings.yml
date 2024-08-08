@@ -1,14 +1,20 @@
-name: Greetings
+# SPDX-FileCopyrightText: 2024 KindSpells Labs S.L.
+#
+# SPDX-License-Identifier: MIT
 
-on: [pull_request, issues]
+name: "Greetings"
+
+on:
+  - "pull_request"
+  - "issues"
 
 jobs:
   greeting:
-    runs-on: ubuntu-latest
+    runs-on: "ubuntu-latest"
     steps:
-    - name: 'Greeting' # v1.2.0
-      uses: 'actions/first-interaction@1dbfe1ba5525b8257e1f259b09745bee346d62d8'
+    - name: "Greeting" # v1.2.0
+      uses: "actions/first-interaction@1dbfe1ba5525b8257e1f259b09745bee346d62d8"
       with:
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
-        issue-message: '🥳 Thank you for opening your first issue for Coder-Spirit/nominal ! 😀'
-        pr-message: '🥳 Thank you for your first PR on Coder-Spirit/nominal ! 😀'
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        issue-message: "🥳 Thank you for opening your first issue for Coder-Spirit/nominal ! 😀"
+        pr-message: "🥳 Thank you for your first PR on Coder-Spirit/nominal ! 😀"

@@ -1,46 +1,50 @@
-name: Tests
+# SPDX-FileCopyrightText: 2024 KindSpells Labs S.L.
+#
+# SPDX-License-Identifier: MIT
+
+name: "Tests"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
   merge_group:
-    branches: [ main]
+    branches: [ "main" ]
 
 defaults:
   run:
-    working-directory: .
+    working-directory: "."
 
 jobs:
   build:
     strategy:
       matrix:
         node-version: [ 18, 20, 22 ]
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        pnpm: ['9.7.0']
+        os: ["ubuntu-latest", "windows-latest", "macos-latest"]
+        pnpm: ["9.7.0"]
 
-    runs-on: ${{ matrix.os }}
+    runs-on: "${{ matrix.os }}"
 
     env:
-      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+      TURBO_TOKEN: "${{ secrets.TURBO_TOKEN }}"
+      TURBO_TEAM: "${{ vars.TURBO_TEAM }}"
 
     steps:
-    - name: Checkout repository # v4.1.1
-      uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
-    - name: Install PNPM # v3.0.0
-      uses: pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d
+    - name: "Checkout repository" # v4.1.1
+      uses: "actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11"
+    - name: "Install PNPM" # v3.0.0
+      uses: "pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d"
       with:
-        version: ${{ matrix.pnpm }}
-    - name: Use Node.js ${{ matrix.node-version }} # v4.0.2
-      uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8
+        version: "${{ matrix.pnpm }}"
+    - name: "Use Node.js ${{ matrix.node-version }}" # v4.0.2
+      uses: "actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8"
       with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'pnpm'
+        node-version: "${{ matrix.node-version }}"
+        cache: "pnpm"
 
     # All
-    - name: (All) Install dependencies
-      run: pnpm install --frozen-lockfile
-    - name: (All) Run All Tasks
-      run: pnpm turbo all
+    - name: "(All) Install dependencies"
+      run: "pnpm install --frozen-lockfile"
+    - name: "(All) Run All Tasks"
+      run: "pnpm turbo all"
