@@ -15,7 +15,8 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.8.3",
-		"@coderspirit/dev-configs": "workspace:*"
+		"@coderspirit/dev-configs": "workspace:*",
+		"typescript": "^5.5.4"
 	},
 	"dependencies": {
 		"zx": "^8.1.4"

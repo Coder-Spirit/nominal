@@ -39,6 +39,9 @@ importers:
       '@coderspirit/dev-configs':
         specifier: workspace:*
         version: link:../dev-configs
+      typescript:
+        specifier: ^5.5.4
+        version: 5.5.4
 
   '@coderspirit/lambda-ioc':
     devDependencies:
