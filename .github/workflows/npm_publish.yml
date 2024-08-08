@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: MIT
 
 name: "Publish Package to NPMJS"
-on:
-  release:
-    types: ["created"]
+
+on: workflow_dispatch
+
 jobs:
   build:
     strategy:
@@ -41,3 +41,4 @@ jobs:
       env:
         NPM_CONFIG_PROVENANCE: "true"
         NODE_AUTH_TOKEN: "${{ secrets.NPM_TOKEN }}"
+    # TODO: Create a release for each published package
