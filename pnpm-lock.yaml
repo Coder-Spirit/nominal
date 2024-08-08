@@ -47,12 +47,6 @@ importers:
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
-      '@coderspirit/dev-configs':
-        specifier: workspace:*
-        version: link:../dev-configs
-      '@coderspirit/internal-tools':
-        specifier: workspace:*
-        version: link:../internal-tools
       get-tsconfig:
         specifier: ^4.7.6
         version: 4.7.6
@@ -93,12 +87,6 @@ importers:
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
-      '@coderspirit/dev-configs':
-        specifier: workspace:*
-        version: link:../dev-configs
-      '@coderspirit/internal-tools':
-        specifier: workspace:*
-        version: link:../internal-tools
       '@types/node':
         specifier: ^22.1.0
         version: 22.1.0
@@ -142,12 +130,6 @@ importers:
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
-      '@coderspirit/dev-configs':
-        specifier: workspace:*
-        version: link:../dev-configs
-      '@coderspirit/internal-tools':
-        specifier: workspace:*
-        version: link:../internal-tools
       '@types/node':
         specifier: ^22.1.0
         version: 22.1.0
@@ -187,12 +169,6 @@ importers:
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
-      '@coderspirit/dev-configs':
-        specifier: workspace:*
-        version: link:../dev-configs
-      '@coderspirit/internal-tools':
-        specifier: workspace:*
-        version: link:../internal-tools
       '@types/node':
         specifier: ^22.1.0
         version: 22.1.0
@@ -239,12 +215,6 @@ importers:
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
-      '@coderspirit/dev-configs':
-        specifier: workspace:*
-        version: link:../dev-configs
-      '@coderspirit/internal-tools':
-        specifier: workspace:*
-        version: link:../internal-tools
       '@types/node':
         specifier: ^22.1.0
         version: 22.1.0

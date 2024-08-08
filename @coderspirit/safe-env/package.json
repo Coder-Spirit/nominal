@@ -39,8 +39,6 @@
 	},
 	"devDependencies": {
 		"@arethetypeswrong/cli": "^0.15.4",
-		"@coderspirit/dev-configs": "workspace:*",
-		"@coderspirit/internal-tools": "workspace:*",
 		"@biomejs/biome": "1.8.3",
 		"@types/node": "^22.1.0",
 		"get-tsconfig": "^4.7.6",
