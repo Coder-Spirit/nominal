@@ -1,0 +1,159 @@
+{
+  "version": "3",
+  "packages": {
+    "specifiers": {
+      "npm:zx@8.1.4": "npm:zx@8.1.4"
+    },
+    "npm": {
+      "@types/fs-extra@11.0.4": {
+        "integrity": "sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==",
+        "dependencies": {
+          "@types/jsonfile": "@types/jsonfile@6.1.4",
+          "@types/node": "@types/node@18.16.19"
+        }
+      },
+      "@types/jsonfile@6.1.4": {
+        "integrity": "sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==",
+        "dependencies": {
+          "@types/node": "@types/node@18.16.19"
+        }
+      },
+      "@types/node@18.16.19": {
+        "integrity": "sha512-IXl7o+R9iti9eBW4Wg2hx1xQDig183jj7YLn8F7udNceyfkbn1ZxmzZXuak20gR40D7pIkIY1kYGx5VIGbaHKA==",
+        "dependencies": {}
+      },
+      "@types/node@22.1.0": {
+        "integrity": "sha512-AOmuRF0R2/5j1knA3c6G3HOk523Ga+l+ZXltX8SF1+5oqcXijjfTd8fY3XRZqSihEu9XhtQnKYLmkFaoxgsJHw==",
+        "dependencies": {
+          "undici-types": "undici-types@6.13.0"
+        }
+      },
+      "undici-types@6.13.0": {
+        "integrity": "sha512-xtFJHudx8S2DSoujjMd1WeWvn7KKWFRESZTMeL1RptAYERu29D6jphMjjY+vn96jvN3kVPDNxU/E13VTaXj6jg==",
+        "dependencies": {}
+      },
+      "zx@8.1.4": {
+        "integrity": "sha512-QFDYYpnzdpRiJ3dL2102Cw26FpXpWshW4QLTGxiYfIcwdAqg084jRCkK/kuP/NOSkxOjydRwNFG81qzA5r1a6w==",
+        "dependencies": {
+          "@types/fs-extra": "@types/fs-extra@11.0.4",
+          "@types/node": "@types/node@22.1.0"
+        }
+      }
+    }
+  },
+  "remote": {},
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@biomejs/biome@1.8.3",
+        "npm:turbo@^2.0.12"
+      ]
+    },
+    "members": {
+      "@coderspirit/dev-configs": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@biomejs/biome@1.8.3"
+          ]
+        }
+      },
+      "@coderspirit/internal-tools": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@biomejs/biome@^1.8.3",
+            "npm:typescript@^5.5.4"
+          ]
+        }
+      },
+      "@coderspirit/lambda-ioc": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@arethetypeswrong/cli@^0.15.4",
+            "npm:@biomejs/biome@1.8.3",
+            "npm:get-tsconfig@^4.7.6",
+            "npm:publint@^0.2.9",
+            "npm:rollup-plugin-dts@^6.1.1",
+            "npm:rollup-plugin-esbuild@^6.1.1",
+            "npm:rollup@^4.20.0",
+            "npm:tslib@^2.6.3",
+            "npm:turbo@^2.0.12",
+            "npm:typescript@^5.5.4",
+            "npm:vitest@^2.0.5"
+          ]
+        }
+      },
+      "@coderspirit/nominal": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@arethetypeswrong/cli@^0.15.4",
+            "npm:@biomejs/biome@1.8.3",
+            "npm:@types/node@^22.1.0",
+            "npm:get-tsconfig@^4.7.6",
+            "npm:publint@^0.2.9",
+            "npm:rollup-plugin-dts@^6.1.1",
+            "npm:rollup-plugin-esbuild@^6.1.1",
+            "npm:rollup@^4.20.0",
+            "npm:tslib@^2.6.3",
+            "npm:turbo@^2.0.12",
+            "npm:typescript@^5.5.4",
+            "npm:vitest@^2.0.5"
+          ]
+        }
+      },
+      "@coderspirit/nominal-inputs": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@arethetypeswrong/cli@^0.15.4",
+            "npm:@biomejs/biome@1.8.3",
+            "npm:@types/node@^22.1.0",
+            "npm:get-tsconfig@^4.7.6",
+            "npm:publint@^0.2.9",
+            "npm:rollup-plugin-dts@^6.1.1",
+            "npm:rollup-plugin-esbuild@^6.1.1",
+            "npm:rollup@^4.20.0",
+            "npm:tslib@^2.6.3",
+            "npm:turbo@^2.0.12",
+            "npm:typescript@^5.5.4",
+            "npm:vitest@^2.0.5"
+          ]
+        }
+      },
+      "@coderspirit/nominal-symbols": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@arethetypeswrong/cli@^0.15.4",
+            "npm:@biomejs/biome@1.8.3",
+            "npm:@types/node@^22.1.0",
+            "npm:get-tsconfig@^4.7.6",
+            "npm:publint@^0.2.9",
+            "npm:rollup-plugin-dts@^6.1.1",
+            "npm:rollup-plugin-esbuild@^6.1.1",
+            "npm:rollup@^4.20.0",
+            "npm:tslib@^2.6.3",
+            "npm:turbo@^2.0.12",
+            "npm:typescript@^5.5.4",
+            "npm:vitest@^2.0.5"
+          ]
+        }
+      },
+      "@coderspirit/safe-env": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@arethetypeswrong/cli@^0.15.4",
+            "npm:@biomejs/biome@1.8.3",
+            "npm:@types/node@^22.1.0",
+            "npm:get-tsconfig@^4.7.6",
+            "npm:publint@^0.2.9",
+            "npm:rollup-plugin-dts@^6.1.1",
+            "npm:rollup-plugin-esbuild@^6.1.1",
+            "npm:rollup@^4.20.0",
+            "npm:tslib@^2.6.3",
+            "npm:turbo@^2.0.12",
+            "npm:typescript@^5.5.4",
+            "npm:vitest@^2.0.5"
+          ]
+        }
+      }
+    }
+  }
+}

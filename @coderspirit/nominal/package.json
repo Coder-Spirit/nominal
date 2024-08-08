@@ -60,5 +60,8 @@
 	"bugs": {
 		"url": "https://github.com/Coder-Spirit/nominal/issues"
 	},
-	"homepage": "https://github.com/Coder-Spirit/nominal#readme"
+	"homepage": "https://github.com/Coder-Spirit/nominal#readme",
+	"publishConfig": {
+		"provenance": true
+	}
 }

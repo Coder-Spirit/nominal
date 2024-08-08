@@ -3,4 +3,5 @@
 set -eu
 set -o pipefail
 
+pnpm turbo format-staged
 pnpm turbo all

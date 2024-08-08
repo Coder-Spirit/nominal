@@ -31,17 +31,24 @@ jobs:
     - name: "Use Node.js ${{ matrix.node-version }}" # v4.0.2
       uses: "actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8"
       with:
-          node-version: "${{ matrix.node-version }}"
-          cache: "pnpm"
-          registry-url: "https://registry.npmjs.org"
+        node-version: "${{ matrix.node-version }}"
+        cache: "pnpm"
+        registry-url: "https://registry.npmjs.org"
     - name: "Use Deno ${{ matrix.deno-version }}" # v1.3.0
       uses: denoland/setup-deno@ba9dcf3bc3696623d1add6a2f5181ee1b5143de5
       with:
         deno-version: "${{ matrix.deno-version }}"
     - name: "Install dependencies"
       run: "pnpm install --recursive --frozen-lockfile"
+    - name: "Login into NPMJS"
+      run: |
+        pnpm config set "//registry.npmjs.org/:_authToken" "${NODE_AUTH_TOKEN}";
+        echo "provenance=true" >> .npmrc
+        echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> .npmrc
+      env:
+        NODE_AUTH_TOKEN: "${{ secrets.NPM_TOKEN }}"
     - name: "Publish to NPM registry"
-      run: "pnpm turbo publish:safe"
+      run: "pnpm turbo publish:safe --env-mode=loose"
       working-directory: "."
       env:
         NPM_CONFIG_PROVENANCE: "true"
