@@ -47,6 +47,9 @@ importers:
       '@biomejs/biome':
         specifier: 1.8.3
         version: 1.8.3
+      '@vitest/coverage-v8':
+        specifier: ^2.0.5
+        version: 2.0.5(vitest@2.0.5(@types/node@22.1.0))
       get-tsconfig:
         specifier: ^4.7.6
         version: 4.7.6
@@ -90,6 +93,9 @@ importers:
       '@types/node':
         specifier: ^22.1.0
         version: 22.1.0
+      '@vitest/coverage-v8':
+        specifier: ^2.0.5
+        version: 2.0.5(vitest@2.0.5(@types/node@22.1.0))
       get-tsconfig:
         specifier: ^4.7.6
         version: 4.7.6
@@ -270,6 +276,9 @@ importers:
       '@types/node':
         specifier: ^22.1.0
         version: 22.1.0
+      '@vitest/coverage-v8':
+        specifier: ^2.0.5
+        version: 2.0.5(vitest@2.0.5(@types/node@22.1.0))
       get-tsconfig:
         specifier: ^4.7.6
         version: 4.7.6

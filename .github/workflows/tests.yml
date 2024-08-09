@@ -56,4 +56,4 @@ jobs:
       run: "pnpm turbo test"
     - name: "(All) Run All Tasks"
       if: ${{ matrix.os != 'windows-latest' }}
-      run: "pnpm turbo all"
+      run: "pnpm turbo all:cov"

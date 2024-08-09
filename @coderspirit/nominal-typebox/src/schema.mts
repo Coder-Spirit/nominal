@@ -30,6 +30,7 @@ export type BrandedSchema<B extends string, T extends TSchema> = Pick<
 }
 
 export const brandedSchema = <const B extends string, S extends TSchema>(
+	_b: B,
 	schema: S,
 ): BrandedSchema<B, S> => {
 	return schema as BrandedSchema<B, S>

@@ -5,7 +5,7 @@ import type { TaggedInteger } from '@coderspirit/nominal-inputs'
 import { TypeCompiler } from '@sinclair/typebox/compiler'
 import { describe, expect, it } from 'vitest'
 
-import { brandedInteger, brandedNumber } from '../number.mts'
+import { brandedInteger, brandedNumber } from '../main.mts'
 
 describe('brandedInteger', () => {
 	it('lets typebox to annotate a number as an integer', () => {

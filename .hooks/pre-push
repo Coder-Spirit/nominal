@@ -3,4 +3,4 @@
 set -eu
 set -o pipefail
 
-pnpm turbo all
+pnpm turbo all:cov

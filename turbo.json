@@ -4,6 +4,9 @@
 		"all": {
 			"dependsOn": ["build", "lint", "lint:publint", "typecheck", "test"]
 		},
+		"all:cov": {
+			"dependsOn": ["build", "lint", "lint:publint", "typecheck", "test:cov"]
+		},
 		"build": {
 			"dependsOn": ["^build"],
 			"inputs": [

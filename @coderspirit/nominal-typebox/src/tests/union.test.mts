@@ -5,7 +5,7 @@ import { Literal } from '@sinclair/typebox'
 import { TypeCompiler } from '@sinclair/typebox/compiler'
 import { describe, expect, it } from 'vitest'
 
-import { brandedUnion } from '../union.mts'
+import { brandedUnion } from '../main.mts'
 
 describe('brandedUnion', () => {
 	it('lets typebox to annotate unions with a brand', () => {

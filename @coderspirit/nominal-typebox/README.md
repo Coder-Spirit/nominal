@@ -148,3 +148,45 @@ const unionSchema = brandedUnion(
 	[Literal('on'), Literal('off')]
 )
 ```
+
+### Fallback alternative
+
+In case this library does not provide a specific schema factory for your type,
+you can rely on `brandedSchema`. Notice that if you are using it for complex
+schemas, it can loose some branding information from inner/nested properties.
+
+```typescript
+import type { FastBrand } from '@coderspirit/nominal'
+import {
+	brandedInteger,
+	brandedSchema,
+	brandedString,
+} from '@coderspirit/nominal-typebox'
+import { Record as TBRecord } from '@sinclair/typebox'
+
+const personNameSchema = brandedString<'PersonName'>()
+const personAgeSchema = brandedInteger<'PersonAge'>()
+const recordSchema = brandedSchema('PeopleAges', TBRecord(
+	personNameSchema,
+	personAgeSchema,
+))
+const recordValidator = TypeCompiler.Compile(recordSchema)
+
+const requestRecord = getRequestFromSomewhere() // unknown
+if (!requestValidator.Check(requestRecord)) {
+	throw new Error('Invalid request!')
+}
+
+// OK
+const recordSink: FastBrand<Record<string, number>, 'PeopleAges'> =
+	requestRecord
+
+// @ts-expect-error Type Error!
+const corruptedRecordSink: FastBrand<
+	Record<string, number>, 'PeopleAges'
+> = { Alice: 20, Bob: 30 }
+
+// IMPORTANT!: Notice that `brandedSchema` is unable to preserve the
+//             brands of keys & values in the record. This limitation
+//             is due to the fact that `brandedSchema` is too generic.
+```

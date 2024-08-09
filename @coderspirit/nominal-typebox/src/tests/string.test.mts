@@ -4,7 +4,7 @@ import type { FastBrand } from '@coderspirit/nominal'
 import { TypeCompiler } from '@sinclair/typebox/compiler'
 import { describe, expect, it } from 'vitest'
 
-import { brandedString } from '../string.mjs'
+import { brandedString } from '../main.mjs'
 
 describe('brandedString', () => {
 	it('lets typebox to annotate a string with a brand', () => {

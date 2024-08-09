@@ -5,8 +5,7 @@ import type { TaggedInteger } from '@coderspirit/nominal-inputs'
 import { TypeCompiler } from '@sinclair/typebox/compiler'
 import { describe, expect, it } from 'vitest'
 
-import { brandedArray } from '../array.mts'
-import { brandedInteger } from '../number.mts'
+import { brandedArray, brandedInteger } from '../main.mts'
 
 describe('brandedArray', () => {
 	it('lets typebox to annotate arrays with a brand', () => {
