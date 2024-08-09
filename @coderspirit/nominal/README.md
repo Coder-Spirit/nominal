@@ -34,7 +34,7 @@ combine *brands* or *flavors* with *properties*.
 
 ```
 # With NPM
-npm install @coderspirit/nominal
+npm install --save-dev @coderspirit/nominal
 
 # Or with PNPM
 pnpm add --save-dev @coderspirit/nominal
@@ -42,6 +42,12 @@ pnpm add --save-dev @coderspirit/nominal
 # Or with Yarn:
 yarn add --dev @coderspirit/nominal
 ```
+
+> [!TIP]
+> Note that if you are developing an application, it is fine to install
+> `@coderspirit/nominal` as a development dependency, but it might be necessary
+> to install it as a normal or peer dependency in case you are developing your
+> own libraries based on it.
 
 ## Brands
 
