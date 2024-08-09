@@ -1,7 +1,7 @@
 {
-	"name": "@coderspirit/nominal",
-	"version": "4.1.0",
-	"description": "Powerful nominal types for your project",
+	"name": "@coderspirit/nominal-typebox",
+	"version": "1.0.0",
+	"description": "Integration of @coderspirit/nominal with @sinclair/typebox",
 	"main": "./dist/main.cjs",
 	"module": "./dist/main.mjs",
 	"types": "./dist/main.d.cts",
@@ -16,7 +16,15 @@
 			"default": "./dist/main.cjs"
 		}
 	},
-	"keywords": ["nominal", "taint", "typecheck", "types", "typescript"],
+	"keywords": [
+		"nominal",
+		"taint",
+		"typecheck",
+		"types",
+		"typescript",
+		"validate",
+		"validation"
+	],
 	"author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
 	"private": false,
 	"license": "MIT",
@@ -34,12 +42,15 @@
 		"typecheck": "tsc --incremental true --tsBuildInfoFile .tsbuildinfo --noEmit -p ./tsconfig.json"
 	},
 	"dependencies": {
-		"@coderspirit/nominal-symbols": "workspace:^"
+		"@coderspirit/nominal": "workspace:^"
 	},
 	"devDependencies": {
 		"@arethetypeswrong/cli": "^0.15.4",
 		"@biomejs/biome": "1.8.3",
+		"@coderspirit/nominal-inputs": "workspace:^",
+		"@sinclair/typebox": "^0.33.3",
 		"@types/node": "^22.1.0",
+		"@vitest/coverage-v8": "^2.0.5",
 		"get-tsconfig": "^4.7.6",
 		"publint": "^0.2.9",
 		"rollup": "^4.20.0",
@@ -49,6 +60,9 @@
 		"turbo": "^2.0.12",
 		"typescript": "^5.5.4",
 		"vitest": "^2.0.5"
+	},
+	"peerDependencies": {
+		"@sinclair/typebox": "^0.33.2"
 	},
 	"engines": {
 		"node": ">=18.0.0"

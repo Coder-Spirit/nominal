@@ -3,12 +3,12 @@ import type {
 	__PropertyValues,
 } from '@coderspirit/nominal-symbols'
 import type {
-	BaseTypeMarker,
-	PropertiesMarker,
+	FastBaseType,
+	FastProperty,
+	FastWeakBaseType,
 	PropertyKeyType,
 	PropertyValueType,
 	PropertyWrapper,
-	WeakBaseTypeMarker,
 } from './internal/markers.mts'
 import type { PreserveBrandlikeMarkers } from './internal/preservers.mts'
 
@@ -25,30 +25,24 @@ export type WithProperty<
 	BaseType,
 	PropertyKey extends PropertyKeyType,
 	PropertyValue extends PropertyValueType = true, // By default we consider binary properties (the property holds or not)
-> = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
+> = BaseType extends FastProperty<infer TrueBaseType, infer Properties>
 	? PreserveBrandlikeMarkers<BaseType> &
-			PropertiesMarker<
+			FastProperty<
 				TrueBaseType,
 				Omit<Properties, PropertyKey> &
 					PropertyWrapper<PropertyKey, PropertyValue>
 			>
-	: BaseType extends BaseTypeMarker<infer TrueBaseType>
+	: BaseType extends FastBaseType<infer TrueBaseType>
 		? PreserveBrandlikeMarkers<BaseType> &
-				PropertiesMarker<
-					TrueBaseType,
-					PropertyWrapper<PropertyKey, PropertyValue>
-				>
-		: BaseType extends WeakBaseTypeMarker<infer TrueBaseType>
+				FastProperty<TrueBaseType, PropertyWrapper<PropertyKey, PropertyValue>>
+		: BaseType extends FastWeakBaseType<infer TrueBaseType>
 			? PreserveBrandlikeMarkers<BaseType> &
-					PropertiesMarker<
+					FastProperty<
 						TrueBaseType,
 						PropertyWrapper<PropertyKey, PropertyValue>
 					>
 			: PreserveBrandlikeMarkers<BaseType> &
-					PropertiesMarker<
-						BaseType,
-						PropertyWrapper<PropertyKey, PropertyValue>
-					>
+					FastProperty<BaseType, PropertyWrapper<PropertyKey, PropertyValue>>
 
 /**
  * It helps to provide a strict definition of a property, delimiting which
@@ -102,9 +96,9 @@ export type WithStrictProperty<
 export type KeepProperties<
 	BaseType,
 	PropertyKeys extends PropertyKeyType,
-> = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
+> = BaseType extends FastProperty<infer TrueBaseType, infer Properties>
 	? PreserveBrandlikeMarkers<BaseType> &
-			PropertiesMarker<TrueBaseType, Pick<Properties, PropertyKeys>>
+			FastProperty<TrueBaseType, Pick<Properties, PropertyKeys>>
 	: BaseType
 
 /**
@@ -116,13 +110,13 @@ export type KeepPropertyIfValueMatches<
 	BaseType,
 	PropertyKey extends PropertyKeyType,
 	PropertyValues extends PropertyValueType,
-> = BaseType extends PropertiesMarker<infer TrueBaseType, infer Properties>
+> = BaseType extends FastProperty<infer TrueBaseType, infer Properties>
 	? Properties extends PropertyWrapper<PropertyKey, PropertyValueType>
 		? Properties[PropertyKey] extends PropertyValues
 			? BaseType
 			: PropertyWrapper<PropertyKey, Properties[PropertyKey]> extends Properties
 				? PreserveBrandlikeMarkers<BaseType> & TrueBaseType
 				: PreserveBrandlikeMarkers<BaseType> &
-						PropertiesMarker<TrueBaseType, Omit<Properties, PropertyKey>>
+						FastProperty<TrueBaseType, Omit<Properties, PropertyKey>>
 		: BaseType
 	: BaseType

@@ -25,7 +25,7 @@ export type PropertyWrapper<
 /**
  * It helps us to construct new types with added properties "metadata".
  */
-export type PropertiesMarker<
+export type FastProperty<
 	BaseType,
 	Properties extends PropertyWrapper<PropertyKeyType, PropertyValueType>,
 > = BaseType & {
@@ -42,7 +42,7 @@ export type BrandType = string | symbol
 /**
  * It helps us to construct new branded types.
  */
-export type BrandMarker<BaseType, Brand extends BrandType> = BaseType & {
+export type FastBrand<BaseType, Brand extends BrandType> = BaseType & {
 	readonly [__BaseType]: BaseType
 	readonly [__Brand]: Brand
 }
@@ -50,9 +50,22 @@ export type BrandMarker<BaseType, Brand extends BrandType> = BaseType & {
 /**
  * It helps us to construct new flavored types.
  */
-export type FlavorMarker<BaseType, Brand extends BrandType> = BaseType & {
+export type FastFlavor<BaseType, Brand extends BrandType> = BaseType & {
 	readonly [__BaseType]?: BaseType
 	readonly [__Brand]?: Brand
+}
+
+// -----------------------------------------------------------------------------
+// Types for Brands & Properties combined (for fast inference)
+// -----------------------------------------------------------------------------
+export type FastBrandAndProperties<
+	BaseType,
+	Brand extends BrandType,
+	Properties extends PropertyWrapper<PropertyKeyType, PropertyValueType>,
+> = BaseType & {
+	readonly [__BaseType]: BaseType
+	readonly [__Brand]: Brand
+	readonly [__Properties]: Properties
 }
 
 // -----------------------------------------------------------------------------
@@ -62,13 +75,29 @@ export type FlavorMarker<BaseType, Brand extends BrandType> = BaseType & {
 /**
  * Useful for type inference purposes
  */
-export type BaseTypeMarker<BaseType> = BaseType & {
+export type FastBaseType<BaseType> = BaseType & {
 	readonly [__BaseType]: BaseType
 }
 
 /**
  * Useful for type inference purposes
  */
-export type WeakBaseTypeMarker<BaseType> = BaseType & {
+export type FastWeakBaseType<BaseType> = BaseType & {
 	readonly [__BaseType]?: BaseType
+}
+
+// -----------------------------------------------------------------------------
+// Low-level types, for type inference performance on userland
+// -----------------------------------------------------------------------------
+export type BaseTypeMarker<BaseType> = {
+	readonly [__BaseType]: BaseType
+}
+
+export type BrandMarker<Brand extends BrandType> = {
+	readonly [__Brand]: Brand
+}
+
+export type BaseTypeAndBrandMarker<BaseType, Brand extends BrandType> = {
+	readonly [__BaseType]: BaseType
+	readonly [__Brand]: Brand
 }

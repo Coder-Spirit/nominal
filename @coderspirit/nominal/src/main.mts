@@ -9,7 +9,11 @@ export type {
 export type { WithBrand, WithFlavor, WithoutBrand } from './brands.mts'
 
 export type {
-	BrandMarker as FastBrand,
-	FlavorMarker as FastFlavor,
-	PropertiesMarker as FastProperty,
+	BaseTypeMarker,
+	BaseTypeAndBrandMarker,
+	BrandMarker,
+	FastBrand,
+	FastFlavor,
+	FastProperty,
+	FastBrandAndProperties,
 } from './internal/markers.mts'
