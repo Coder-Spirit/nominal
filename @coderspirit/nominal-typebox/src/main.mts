@@ -4,6 +4,7 @@ export type { BrandedSchema } from './schema.mts'
 // Basic types
 export type { BrandedIntegerSchema, BrandedNumberSchema } from './number.mts'
 export type { BrandedStringSchema } from './string.mts'
+export type { BrandedRegExpSchema } from './regexp.mts'
 
 // Complex types
 export type { BrandedArraySchema } from './array.mts'
@@ -16,6 +17,7 @@ export { brandedSchema } from './schema.mts'
 // Basic schemas
 export { brandedInteger, brandedNumber } from './number.mts'
 export { brandedString } from './string.mts'
+export { brandedRegExp } from './regexp.mts'
 
 // Complex schemas
 export { brandedArray } from './array.mts'

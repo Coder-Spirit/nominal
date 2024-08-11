@@ -11,6 +11,7 @@ const tsconfig = getTsconfig(projectDir)
 const target = tsconfig?.config.compilerOptions?.target ?? 'es2020'
 
 const input = 'src/main.mts'
+const external = ['@coderspirit/nominal-symbols']
 
 export default defineConfig([
 	{
@@ -26,7 +27,7 @@ export default defineConfig([
 				minify: true,
 			}),
 		],
-		external: ['@coderspirit/nominal-symbols'],
+		external,
 	},
 	{
 		input,
@@ -35,6 +36,6 @@ export default defineConfig([
 			{ format: 'esm', file: 'dist/main.d.mts' },
 		],
 		plugins: [dts()],
-		external: ['@coderspirit/nominal-symbols'],
+		external,
 	},
 ])

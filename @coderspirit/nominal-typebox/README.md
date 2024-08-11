@@ -31,7 +31,7 @@ yarn add @coderspirit/nominal-typebox
 
 ## Usage instructions
 
-### Typebox' Type.String -> brandedString
+### TypeBox' Type.String -> brandedString
 
 ```typescript
 import type { FastBrand } from '@coderspirit/nominal'
@@ -61,7 +61,42 @@ const username: Username = requestObject.username // OK
 const corruptedUserame: Username = 'untagged string' // type error
 ```
 
-### Typebox' Type.Number -> brandedNumber
+### TypeBox' Type.RegExp -> brandedRegExp
+
+```typescript
+
+import type { FastBrand } from '@coderspirit/nominal'
+import { brandedRegExp } from '@coderspirit/nominal-typebox'
+
+import { Object as TBObject } from '@sinclair/typebox'
+import { TypeCompiler } from '@sinclair/typebox/compiler'
+
+type UserId = FastBrand<string, 'UserId'>
+
+// Use `brandedString` instead of Typebox' `Type.String`
+const requestSchema = TBObject({
+	// We can pass the same options Type.String has
+	userId: brandedRegExp<'UserId'>(
+		/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+	)
+})
+const requestValidator = TypeCompiler.Compile(requestSchema)
+
+const requestObject = getRequestFromSomewhere() // unknown
+if (!requestValidator.Check(requestObject)) {
+	throw new Error('Invalid request!')
+}
+
+// At this point, the type checker knows that requestObject.username is
+// "branded" as 'Username'
+
+const userId: UserId = requestObject.userId // OK
+const corruptedUserId: UserId = 'untagged (and probably wrong) id' // type error
+```
+
+---
+
+### TypeBox' Type.Number -> brandedNumber
 
 
 ```typescript
@@ -93,12 +128,14 @@ const corruptedLat: Latitude = 10 // type error
 const corruptedLon: Longitude = 10 // type error
 ```
 
-### Typebox' Type.Integer -> brandedInteger
+### TypeBox' Type.Integer -> brandedInteger
 
 The same applies as for the two previous examples, you can use `brandedInteger`
 instead of Typebox' `Type.Integer`.
 
-### Typebox' Type.Array -> brandedArray
+---
+
+### TypeBox' Type.Array -> brandedArray
 
 `brandedArray` has the same signature as Typebox' `Type.Array`, except that we
 have to pass a "brand" string argument as its first parameter:
@@ -115,7 +152,7 @@ const arraySchema = brandedArray(
 )
 ```
 
-### Typebox' Type.Object -> brandedObject
+### TypeBox' Type.Object -> brandedObject
 
 `brandedObject` has the same signature as Typebox' `Type.Object`, except that we
 have to pass a "brand" string argument as its first parameter:
@@ -134,7 +171,7 @@ const objectSchema = brandedObject(
 )
 ```
 
-### Typebox' Type.Union -> brandedUnion
+### TypeBox' Type.Union -> brandedUnion
 
 `brandedUnion` has the same signature as Typebox' `Type.Union`, except that we
 have to pass a "brand" string argument as its first parameter:
@@ -148,6 +185,8 @@ const unionSchema = brandedUnion(
 	[Literal('on'), Literal('off')]
 )
 ```
+
+---
 
 ### Fallback alternative
 
