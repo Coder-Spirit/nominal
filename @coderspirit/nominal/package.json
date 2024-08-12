@@ -1,6 +1,6 @@
 {
 	"name": "@coderspirit/nominal",
-	"version": "4.1.0",
+	"version": "4.1.1",
 	"description": "Powerful nominal types for your project",
 	"main": "./dist/main.cjs",
 	"module": "./dist/main.mjs",
@@ -34,7 +34,7 @@
 		"typecheck": "tsc --incremental true --tsBuildInfoFile .tsbuildinfo --noEmit -p ./tsconfig.json"
 	},
 	"dependencies": {
-		"@coderspirit/nominal-symbols": "workspace:^"
+		"@coderspirit/nominal-symbols": "^2.0.0"
 	},
 	"devDependencies": {
 		"@arethetypeswrong/cli": "^0.15.4",
