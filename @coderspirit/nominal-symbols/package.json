@@ -27,7 +27,7 @@
 		"lint": "pnpm lint:biome",
 		"lint:biome": "pnpm biome check --files-ignore-unknown=true .",
 		"lint:publint": "publint",
-		"prepublishOnly": "turbo all",
+		"prepublishOnly": "turbo all:ci",
 		"publish:safe": "safe-publish",
 		"typecheck": "tsc --incremental true --tsBuildInfoFile .tsbuildinfo --noEmit -p ./tsconfig.json"
 	},
