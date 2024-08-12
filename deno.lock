@@ -50,6 +50,19 @@
       ]
     },
     "members": {
+      "@coderspirit/const-generics": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@arethetypeswrong/cli@^0.15.4",
+            "npm:@biomejs/biome@1.8.3",
+            "npm:@types/node@^22.2.0",
+            "npm:publint@^0.2.9",
+            "npm:tslib@^2.6.3",
+            "npm:turbo@^2.0.12",
+            "npm:typescript@^5.5.4"
+          ]
+        }
+      },
       "@coderspirit/dev-configs": {
         "packageJson": {
           "dependencies": [
@@ -70,6 +83,7 @@
           "dependencies": [
             "npm:@arethetypeswrong/cli@^0.15.4",
             "npm:@biomejs/biome@1.8.3",
+            "npm:@vitest/coverage-v8@^2.0.5",
             "npm:get-tsconfig@^4.7.6",
             "npm:publint@^0.2.9",
             "npm:rollup-plugin-dts@^6.1.1",
@@ -87,7 +101,9 @@
           "dependencies": [
             "npm:@arethetypeswrong/cli@^0.15.4",
             "npm:@biomejs/biome@1.8.3",
-            "npm:@types/node@^22.1.0",
+            "npm:@coderspirit/nominal-symbols@^2.0.0",
+            "npm:@types/node@^22.2.0",
+            "npm:@vitest/coverage-v8@^2.0.5",
             "npm:get-tsconfig@^4.7.6",
             "npm:publint@^0.2.9",
             "npm:rollup-plugin-dts@^6.1.1",
@@ -105,7 +121,8 @@
           "dependencies": [
             "npm:@arethetypeswrong/cli@^0.15.4",
             "npm:@biomejs/biome@1.8.3",
-            "npm:@types/node@^22.1.0",
+            "npm:@coderspirit/nominal@^4.0.3",
+            "npm:@types/node@^22.2.0",
             "npm:get-tsconfig@^4.7.6",
             "npm:publint@^0.2.9",
             "npm:rollup-plugin-dts@^6.1.1",
@@ -123,7 +140,28 @@
           "dependencies": [
             "npm:@arethetypeswrong/cli@^0.15.4",
             "npm:@biomejs/biome@1.8.3",
-            "npm:@types/node@^22.1.0",
+            "npm:@types/node@^22.2.0",
+            "npm:get-tsconfig@^4.7.6",
+            "npm:publint@^0.2.9",
+            "npm:rollup-plugin-dts@^6.1.1",
+            "npm:rollup-plugin-esbuild@^6.1.1",
+            "npm:rollup@^4.20.0",
+            "npm:tslib@^2.6.3",
+            "npm:turbo@^2.0.12",
+            "npm:typescript@^5.5.4",
+            "npm:vitest@^2.0.5"
+          ]
+        }
+      },
+      "@coderspirit/nominal-typebox": {
+        "packageJson": {
+          "dependencies": [
+            "npm:@arethetypeswrong/cli@^0.15.4",
+            "npm:@biomejs/biome@1.8.3",
+            "npm:@coderspirit/nominal@^4.1.1",
+            "npm:@sinclair/typebox@^0.33.4",
+            "npm:@types/node@^22.2.0",
+            "npm:@vitest/coverage-v8@^2.0.5",
             "npm:get-tsconfig@^4.7.6",
             "npm:publint@^0.2.9",
             "npm:rollup-plugin-dts@^6.1.1",
@@ -141,7 +179,10 @@
           "dependencies": [
             "npm:@arethetypeswrong/cli@^0.15.4",
             "npm:@biomejs/biome@1.8.3",
-            "npm:@types/node@^22.1.0",
+            "npm:@coderspirit/nominal-inputs@^1.1.1",
+            "npm:@coderspirit/nominal@^4.0.3",
+            "npm:@types/node@^22.2.0",
+            "npm:@vitest/coverage-v8@^2.0.5",
             "npm:get-tsconfig@^4.7.6",
             "npm:publint@^0.2.9",
             "npm:rollup-plugin-dts@^6.1.1",

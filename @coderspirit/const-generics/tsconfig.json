@@ -1,0 +1,10 @@
+{
+	"extends": "@coderspirit/dev-configs/tsconfig",
+	"compilerOptions": {
+		"rootDir": ".",
+		"baseUrl": "./src/",
+		"outDir": "./dist/"
+	},
+	"include": ["src/**/*"],
+	"exclude": ["dist/**/*", "node_modules/**/*"]
+}

@@ -1,0 +1,32 @@
+{
+	"extends": ["@coderspirit/dev-configs/biome"],
+	"files": {
+		"maxSize": 4194304
+	},
+	"overrides": [
+		{
+			"include": ["*.ts", "*.mts", "*.cts", "*.tsx"],
+			"linter": {
+				"rules": {
+					"complexity": { "useLiteralKeys": "off" }
+				}
+			}
+		},
+		{
+			"include": ["*.test.ts", "*.test.mts"],
+			"linter": {
+				"rules": {
+					"style": { "noParameterProperties": "off" }
+				}
+			}
+		},
+		{
+			"include": ["rollup.config.mjs", "vitest.config.mts"],
+			"linter": {
+				"rules": {
+					"style": { "noDefaultExport": "off" }
+				}
+			}
+		}
+	]
+}

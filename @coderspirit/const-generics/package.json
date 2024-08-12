@@ -1,0 +1,60 @@
+{
+	"name": "@coderspirit/const-generics",
+	"version": "1.0.0",
+	"description": "Powerful const generics for TypeScript",
+	"type": "module",
+	"files": ["dist"],
+	"exports": {
+		"./abs": { "types": "./dist/abs.d.mts" },
+		"./add": { "types": "./dist/add.d.mts" },
+		"./eq": { "types": "./dist/eq.d.mts" },
+		"./gt": { "types": "./dist/gt.d.mts" },
+		"./gte": { "types": "./dist/gte.d.mts" },
+		"./logic": { "types": "./dist/logic.d.mts" },
+		"./lt": { "types": "./dist/lt.d.mts" },
+		"./lte": { "types": "./dist/lte.d.mts" },
+		"./max": { "types": "./dist/max.d.mts" },
+		"./min": { "types": "./dist/min.d.mts" },
+		"./neg": { "types": "./dist/neg.d.mts" },
+		"./numprops": { "types": "./dist/numprops.d.mts" },
+		"./sub": { "types": "./dist/sub.d.mts" }
+	},
+	"keywords": ["typecheck", "types", "typescript"],
+	"author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
+	"private": false,
+	"license": "MIT",
+	"scripts": {
+		"build": "rm -rf dist/* && mkdir -p dist && cp -R ./src/*.d.mts ./dist/",
+		"format": "pnpm biome check --write --files-ignore-unknown=true .",
+		"format-staged": "biome-check-staged",
+		"lint": "pnpm lint:biome",
+		"lint:biome": "pnpm biome check --files-ignore-unknown=true .",
+		"lint:publint": "publint",
+		"prepublishOnly": "turbo all",
+		"publish:safe": "safe-publish",
+		"typecheck": "tsc --incremental true --tsBuildInfoFile .tsbuildinfo --noEmit -p ./tsconfig.json"
+	},
+	"devDependencies": {
+		"@arethetypeswrong/cli": "^0.15.4",
+		"@biomejs/biome": "1.8.3",
+		"@types/node": "^22.2.0",
+		"publint": "^0.2.9",
+		"tslib": "^2.6.3",
+		"turbo": "^2.0.12",
+		"typescript": "^5.5.4"
+	},
+	"engines": {
+		"node": ">=18.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Coder-Spirit/nominal.git"
+	},
+	"bugs": {
+		"url": "https://github.com/Coder-Spirit/nominal/issues"
+	},
+	"homepage": "https://github.com/Coder-Spirit/nominal#readme",
+	"publishConfig": {
+		"provenance": true
+	}
+}

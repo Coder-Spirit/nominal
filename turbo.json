@@ -13,7 +13,8 @@
 				"./package.json",
 				"./rollup.config.mjs",
 				"./tsconfig.json",
-				"./src/**/*"
+				"./src/**/*",
+				"!./src/**/*.test.mts"
 			],
 			"outputs": ["./dist/**/*"]
 		},
