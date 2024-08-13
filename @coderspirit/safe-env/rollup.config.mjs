@@ -11,6 +11,7 @@ const tsconfig = getTsconfig(projectDir)
 const target = tsconfig?.config.compilerOptions?.target ?? 'es2022'
 
 const input = 'src/main.mts'
+const external = ['@coderspirit/nominal-inputs']
 
 export default defineConfig([
 	{
@@ -26,6 +27,7 @@ export default defineConfig([
 				minify: true,
 			}),
 		],
+		external,
 	},
 	{
 		input,
@@ -34,5 +36,6 @@ export default defineConfig([
 			{ format: 'esm', file: 'dist/main.d.mts' },
 		],
 		plugins: [dts()],
+		external,
 	},
 ])
