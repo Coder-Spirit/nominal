@@ -1,5 +1,7 @@
 import type { FastProperty } from '@coderspirit/nominal'
 
+import type { StringLength } from './str.mts'
+
 // Basic Types (copied from Type-Fest)
 // -----------------------------------------------------------------------------
 type Numeric = number | bigint
@@ -85,3 +87,8 @@ export type PositiveIntegerInput<N extends Numeric = number> =
 
 export type NegativeIntegerInput<N extends Numeric = number> =
 	NegativeInput<N> & IntegerInput<N>
+
+export type SizedStringInput<
+	T extends string,
+	N extends number,
+> = StringLength<T> extends N ? T : never

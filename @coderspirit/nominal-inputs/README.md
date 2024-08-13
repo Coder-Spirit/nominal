@@ -39,8 +39,22 @@ function onlyAcceptsIntegers<N extends number>(n: IntegerInput<N>): number {
 }
 
 // Using the function
-onlyAcceptsIntegers(42) // All good :D
+onlyAcceptsIntegers(42)  // All good :D
 onlyAcceptsIntegers(0.5) // Type Error!
+```
+
+### `SizedStringInput<S>`
+
+```typescript
+import type { SizedStringInput } from '@coderspirit/nominal-inputs'
+
+function onlyAcceptsThreeCharStrings<S extends string>(s: SizedStringInput<S, 3>): void {
+  console.log(s)
+}
+
+onlyAcceptsThreeCharStrings("abc")  // All good :D
+onlyAcceptsThreeCharStrings("ab")   // Type Error!
+onlyAcceptsThreeCharStrings("abcd") // Type Error!
 ```
 
 ### Other Input types
