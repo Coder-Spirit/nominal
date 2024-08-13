@@ -4,6 +4,7 @@
 	"type": "module",
 	"bin": {
 		"biome-check-staged": "./src/biome-check-staged.ts",
+		"check-dist": "./src/check-dist.sh",
 		"safe-publish": "./src/safe-publish.ts"
 	},
 	"scripts": {

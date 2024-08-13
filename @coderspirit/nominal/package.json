@@ -26,7 +26,7 @@
 		"format-staged": "biome-check-staged",
 		"lint": "pnpm lint:biome",
 		"lint:biome": "pnpm biome check --files-ignore-unknown=true .",
-		"lint:publint": "publint",
+		"lint:publint": "check-dist && publint",
 		"prepublishOnly": "turbo all:ci",
 		"publish:safe": "safe-publish",
 		"test": "vitest -c vitest.config.mts run",
