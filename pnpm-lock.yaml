@@ -264,8 +264,8 @@ importers:
         specifier: ^4.0.3
         version: 4.1.1(typescript@5.5.4)
       '@coderspirit/nominal-inputs':
-        specifier: ^1.1.1
-        version: 1.1.4(typescript@5.5.4)
+        specifier: ^1.2.0
+        version: 1.2.0(typescript@5.5.4)
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.15.4
@@ -406,8 +406,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@coderspirit/nominal-inputs@1.1.4':
-    resolution: {integrity: sha512-PwjG+VB7H9h1F/hcaxlVgN9r5E8N63lSkCbZcWj8aDwloiBDdrrOi9eJyTe1EAHsf9ovav18M4iSFbfNMj/B5w==}
+  '@coderspirit/nominal-inputs@1.2.0':
+    resolution: {integrity: sha512-is4WubYtoAG6Dz0mg3us+5CLCyVLyYtxHRQTJlafp1hMLahtVmCQqWzzGerOvcpB/047/GScrdQ1YI5poZWEEw==}
     engines: {node: '>=18.0.0'}
 
   '@coderspirit/nominal-symbols@2.0.1':
@@ -1484,7 +1484,7 @@ snapshots:
   '@biomejs/cli-win32-x64@1.8.3':
     optional: true
 
-  '@coderspirit/nominal-inputs@1.1.4(typescript@5.5.4)':
+  '@coderspirit/nominal-inputs@1.2.0(typescript@5.5.4)':
     dependencies:
       '@coderspirit/nominal': 4.1.1(typescript@5.5.4)
     transitivePeerDependencies:

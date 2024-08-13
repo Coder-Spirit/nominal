@@ -609,68 +609,84 @@ const processEnv = <S extends Schema>(
 ): Record<string, boolean | number | string> => {
 	const _env: Record<string, boolean | number | string> = {}
 
+	const errors: unknown[] = []
+
 	// Verify Defaults
 	for (const key of Object.getOwnPropertyNames(schema)) {
-		// biome-ignore lint/style/noNonNullAssertion: We know it exists
-		const rule = schema[key]!
+		try {
+			// biome-ignore lint/style/noNonNullAssertion: We know it exists
+			const rule = schema[key]!
 
-		if ('default' in rule && rule.default !== undefined) {
-			if ('type' in rule) {
-				const { type: _t, default: _d, ...constraints } = rule
-				validateValue(true, key, _t, _d, constraints)
-			} else {
-				verifyEnumDefault(key, rule.enum, rule.default, true)
-			}
-		}
-
-		const envValue = env[key]
-
-		if (envValue === undefined) {
-			if (
-				!('optional' in rule) &&
-				(!('default' in rule) || rule.default === undefined)
-			) {
-				throw new SafeEnvError(
-					`Missing required environment variable: "${key}"`,
-				)
-			}
-			continue
-		}
-
-		if ('enum' in rule) {
-			if (!rule.enum.includes(envValue)) {
-				throw new SafeEnvError(
-					`Environment variable "${key}" must be one of [${rule.enum.join(
-						', ',
-					)}], but it is "${envValue}"`,
-				)
-			}
-			_env[key] = envValue
-		} else if ('type' in rule) {
-			if (numberTypes.includes(rule.type as NumberType)) {
-				const fValue = Number.parseFloat(envValue)
-				validateValue(false, key, rule.type, fValue, rule)
-				_env[key] = fValue
-			} else if (arrayTypes.includes(rule.type as ArrayType)) {
-				validateValue(false, key, rule.type, envValue, rule)
-				_env[key] = JSON.parse(envValue)
-			} else if (rule.type === 'boolean') {
-				if (envValue === 'true') {
-					_env[key] = true
-				} else if (envValue === 'false') {
-					_env[key] = false
+			if ('default' in rule && rule.default !== undefined) {
+				if ('type' in rule) {
+					const { type: _t, default: _d, ...constraints } = rule
+					validateValue(true, key, _t, _d, constraints)
 				} else {
+					verifyEnumDefault(key, rule.enum, rule.default, true)
+				}
+			}
+
+			const envValue = env[key]
+
+			if (envValue === undefined) {
+				if (
+					!('optional' in rule) &&
+					(!('default' in rule) || rule.default === undefined)
+				) {
 					throw new SafeEnvError(
-						`Environment variable "${key}" must be a boolean`,
+						`Missing required environment variable: "${key}"`,
 					)
 				}
-			} else if (rule.type === 'string') {
-				validateValue(false, key, rule.type, envValue, rule)
-				_env[key] = envValue
-			} else {
-				_env[key] = envValue // This should never happen
+				continue
 			}
+
+			if ('enum' in rule) {
+				if (!rule.enum.includes(envValue)) {
+					throw new SafeEnvError(
+						`Environment variable "${key}" must be one of [${rule.enum.join(
+							', ',
+						)}], but it is "${envValue}"`,
+					)
+				}
+				_env[key] = envValue
+			} else if ('type' in rule) {
+				if (numberTypes.includes(rule.type as NumberType)) {
+					const fValue = Number.parseFloat(envValue)
+					validateValue(false, key, rule.type, fValue, rule)
+					_env[key] = fValue
+				} else if (arrayTypes.includes(rule.type as ArrayType)) {
+					validateValue(false, key, rule.type, envValue, rule)
+					_env[key] = JSON.parse(envValue)
+				} else if (rule.type === 'boolean') {
+					if (envValue === 'true') {
+						_env[key] = true
+					} else if (envValue === 'false') {
+						_env[key] = false
+					} else {
+						throw new SafeEnvError(
+							`Environment variable "${key}" must be a boolean`,
+						)
+					}
+				} else if (rule.type === 'string') {
+					validateValue(false, key, rule.type, envValue, rule)
+					_env[key] = envValue
+				} else {
+					_env[key] = envValue // This should never happen
+				}
+			}
+		} catch (err) {
+			errors.push(err)
 		}
+	}
+
+	if (errors.length === 1) {
+		throw errors[0]
+	}
+	if (errors.length > 1) {
+		throw new AggregateError(
+			errors,
+			'Multiple errors occurred while processing environment variables',
+		)
 	}
 
 	return _env

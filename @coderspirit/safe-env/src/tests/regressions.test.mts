@@ -1,5 +1,5 @@
 import type { TaggedInteger } from '@coderspirit/nominal-inputs'
-import { describe, expect, it } from 'vitest'
+import { assert, describe, expect, it } from 'vitest'
 
 import { getSafeEnv } from '../main.mts'
 
@@ -73,5 +73,38 @@ describe('getSafeEnv (regressions)', () => {
 		type Does_String_extend_Bar = string extends typeof bar ? true : false
 		const string_extends_bar: Does_String_extend_Bar = true
 		expect(string_extends_bar).toBe(true)
+	})
+
+	it('should aggregate all detected errors', () => {
+		const env = { FOO: 'foo', XXX: 'hello' }
+
+		const schema = {
+			FOO: { type: 'string' },
+			BAR: { type: 'string' },
+			XXX: { type: 'uint8' },
+		} as const
+
+		expect(() => getSafeEnv(env, schema)).toThrowError(
+			new AggregateError(
+				[],
+				'Multiple errors occurred while processing environment variables',
+			),
+		)
+
+		try {
+			getSafeEnv(env, schema)
+			expect(true).toBe(false) // We shoudln't reach this point
+		} catch (err) {
+			expect(err).toBeInstanceOf(AggregateError)
+			assert(err instanceof AggregateError)
+			assert(err.errors.length === 2)
+
+			expect(() => {
+				throw err.errors[0]
+			}).toThrowError('Missing required environment variable: "BAR"')
+			expect(() => {
+				throw err.errors[1]
+			}).toThrowError('Environment variable "XXX" must be an integer')
+		}
 	})
 })

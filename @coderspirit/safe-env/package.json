@@ -1,6 +1,6 @@
 {
 	"name": "@coderspirit/safe-env",
-	"version": "1.3.3",
+	"version": "1.4.0",
 	"description": "Safe & strongly typed environment variables accessor",
 	"main": "./dist/main.cjs",
 	"module": "./dist/main.mjs",
@@ -35,7 +35,7 @@
 	},
 	"dependencies": {
 		"@coderspirit/nominal": "^4.0.3",
-		"@coderspirit/nominal-inputs": "^1.1.1"
+		"@coderspirit/nominal-inputs": "^1.2.0"
 	},
 	"devDependencies": {
 		"@arethetypeswrong/cli": "^0.15.4",
