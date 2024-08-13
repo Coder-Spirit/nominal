@@ -2,42 +2,45 @@
 	"$schema": "https://turbo.build/schema.json",
 	"tasks": {
 		"all": {
-			"dependsOn": ["build", "lint", "lint:publint", "typecheck", "test"]
+			"dependsOn": [
+				"format",
+				"build",
+				"lint",
+				"lint:publint",
+				"typecheck",
+				"test"
+			]
 		},
 		"all:ci": {
 			"dependsOn": [
-				"build:ci",
-				"lint:ci",
-				"lint:publint:ci",
-				"typecheck:ci",
-				"test:ci"
+				"build",
+				"lint",
+				"lint:publint",
+				"typecheck",
+				"test"
 			]
 		},
 		"all:cov": {
-			"dependsOn": ["build", "lint", "lint:publint", "typecheck", "test:cov"]
+			"dependsOn": [
+				"format",
+				"build",
+				"lint",
+				"lint:publint",
+				"typecheck",
+				"test:cov"
+			]
 		},
 		"all:cov:ci": {
 			"dependsOn": [
-				"build:ci",
-				"lint:ci",
-				"lint:publint:ci",
-				"typecheck:ci",
-				"test:cov:ci"
+				"build",
+				"lint",
+				"lint:publint",
+				"typecheck",
+				"test:cov"
 			]
 		},
 		"build": {
-			"dependsOn": ["format", "^build"],
-			"inputs": [
-				"./package.json",
-				"./rollup.config.mjs",
-				"./tsconfig.json",
-				"./src/**/*",
-				"!./src/**/*.test.mts"
-			],
-			"outputs": ["./dist/**/*"]
-		},
-		"build:ci": {
-			"dependsOn": ["^build"],
+			"dependsOn": ["^lint:publint", "^build"],
 			"inputs": [
 				"./package.json",
 				"./rollup.config.mjs",
@@ -48,7 +51,6 @@
 			"outputs": ["./dist/**/*"]
 		},
 		"format": {
-			"dependsOn": ["^format"],
 			"inputs": [
 				"./biome.jsonc",
 				"./**/*.json",
@@ -78,7 +80,6 @@
 			]
 		},
 		"format-staged": {
-			"dependsOn": ["^format-staged"],
 			"inputs": [
 				"./biome.jsonc",
 				"./**/*.json",
@@ -108,24 +109,6 @@
 			]
 		},
 		"lint": {
-			"dependsOn": ["format", "^lint"],
-			"inputs": [
-				"./biome.jsonc",
-				"./**/*.json",
-				"./**/*.jsonc",
-				"./**/*.js",
-				"./**/*.mjs",
-				"./**/*.cjs",
-				"./**/*.ts",
-				"./**/*.mts",
-				"./**/*.cts",
-				"./**/*.d.ts",
-				"./**/*.d.mts",
-				"./**/*.d.cts"
-			]
-		},
-		"lint:ci": {
-			"dependsOn": ["^lint"],
 			"inputs": [
 				"./biome.jsonc",
 				"./**/*.json",
@@ -145,39 +128,21 @@
 			"dependsOn": ["build", "^lint:publint"],
 			"inputs": ["./package.json", "./dist/**/*"]
 		},
-		"lint:publint:ci": {
-			"dependsOn": ["build:ci", "^lint:publint"],
-			"inputs": ["./package.json", "./dist/**/*"]
-		},
 		"publish:safe": {
 			"dependsOn": ["^publish:safe"],
 			"cache": false
 		},
 		"test": {
-			"dependsOn": ["build", "^test"],
-			"inputs": ["./package.json", "./vitest.config.mts", "./src/**/*"]
-		},
-		"test:ci": {
-			"dependsOn": ["build:ci", "^test"],
+			"dependsOn": ["build"],
 			"inputs": ["./package.json", "./vitest.config.mts", "./src/**/*"]
 		},
 		"test:cov": {
-			"dependsOn": ["build", "^test:cov"],
-			"inputs": ["./package.json", "./src/**/*"],
-			"outputs": ["./coverage/**/*"]
-		},
-		"test:cov:ci": {
-			"dependsOn": ["build:ci", "^test:cov"],
+			"dependsOn": ["build"],
 			"inputs": ["./package.json", "./src/**/*"],
 			"outputs": ["./coverage/**/*"]
 		},
 		"typecheck": {
-			"dependsOn": ["build", "^typecheck"],
-			"inputs": ["./src/**/*", "./tsconfig.json", "./.tsbuildinfo"],
-			"outputs": ["./.tsbuildinfo"]
-		},
-		"typecheck:ci": {
-			"dependsOn": ["build:ci", "^typecheck"],
+			"dependsOn": ["^typecheck", "^build"],
 			"inputs": ["./src/**/*", "./tsconfig.json", "./.tsbuildinfo"],
 			"outputs": ["./.tsbuildinfo"]
 		}

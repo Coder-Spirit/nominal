@@ -166,7 +166,6 @@
           "dependencies": [
             "npm:@arethetypeswrong/cli@^0.15.4",
             "npm:@biomejs/biome@1.8.3",
-            "npm:@coderspirit/nominal-inputs@^1.1.1",
             "npm:@coderspirit/nominal@^4.0.3",
             "npm:@types/node@^22.2.0",
             "npm:@vitest/coverage-v8@^2.0.5",
