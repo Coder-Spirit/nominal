@@ -4,5 +4,14 @@
 	"editor.defaultFormatter": "biomejs.biome",
 	"biome.enabled": true,
 	"deno.enable": false,
-	"deno.enablePaths": ["./@coderspirit/internal-tools"]
+	"deno.enablePaths": ["./@coderspirit/internal-tools"],
+	"deno.disablePaths": [
+		"./@coderspirit/dev-configs",
+		"./@coderspirit/lambda-ioc",
+		"./@coderspirit/nominal",
+		"./@coderspirit/nominal-inputs",
+		"./@coderspirit/nominal-symbols",
+		"./@coderspirit/nominal-typebox",
+		"./@coderspirit/safe-env"
+	]
 }

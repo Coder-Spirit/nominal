@@ -40,7 +40,7 @@
 			]
 		},
 		"build": {
-			"dependsOn": ["^lint:publint", "^build"],
+			"dependsOn": ["^build"],
 			"inputs": [
 				"./package.json",
 				"./rollup.config.mjs",
