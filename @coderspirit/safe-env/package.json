@@ -35,7 +35,7 @@
 	},
 	"dependencies": {
 		"@coderspirit/nominal": "^4.0.3",
-		"@coderspirit/nominal-inputs": "^1.2.0"
+		"@coderspirit/nominal-inputs": "workspace:^"
 	},
 	"devDependencies": {
 		"@arethetypeswrong/cli": "^0.15.4",
