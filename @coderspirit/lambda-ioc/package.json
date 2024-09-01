@@ -38,7 +38,7 @@
 		"@biomejs/biome": "1.8.3",
 		"@vitest/coverage-v8": "^2.0.5",
 		"get-tsconfig": "^4.7.6",
-		"publint": "^0.2.9",
+		"publint": "^0.2.10",
 		"rollup": "^4.20.0",
 		"rollup-plugin-dts": "^6.1.1",
 		"rollup-plugin-esbuild": "^6.1.1",
