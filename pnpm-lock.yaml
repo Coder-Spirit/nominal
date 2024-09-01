@@ -66,8 +66,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(esbuild@0.21.5)(rollup@4.20.0)
       tslib:
-        specifier: ^2.6.3
-        version: 2.6.3
+        specifier: ^2.7.0
+        version: 2.7.0
       turbo:
         specifier: ^2.0.12
         version: 2.0.12
@@ -112,8 +112,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(esbuild@0.21.5)(rollup@4.20.0)
       tslib:
-        specifier: ^2.6.3
-        version: 2.6.3
+        specifier: ^2.7.0
+        version: 2.7.0
       turbo:
         specifier: ^2.0.12
         version: 2.0.12
@@ -155,8 +155,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(esbuild@0.21.5)(rollup@4.20.0)
       tslib:
-        specifier: ^2.6.3
-        version: 2.6.3
+        specifier: ^2.7.0
+        version: 2.7.0
       turbo:
         specifier: ^2.0.12
         version: 2.0.12
@@ -194,8 +194,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(esbuild@0.21.5)(rollup@4.20.0)
       tslib:
-        specifier: ^2.6.3
-        version: 2.6.3
+        specifier: ^2.7.0
+        version: 2.7.0
       turbo:
         specifier: ^2.0.12
         version: 2.0.12
@@ -246,8 +246,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(esbuild@0.21.5)(rollup@4.20.0)
       tslib:
-        specifier: ^2.6.3
-        version: 2.6.3
+        specifier: ^2.7.0
+        version: 2.7.0
       turbo:
         specifier: ^2.0.12
         version: 2.0.12
@@ -295,8 +295,8 @@ importers:
         specifier: ^6.1.1
         version: 6.1.1(esbuild@0.21.5)(rollup@4.20.0)
       tslib:
-        specifier: ^2.6.3
-        version: 2.6.3
+        specifier: ^2.7.0
+        version: 2.7.0
       turbo:
         specifier: ^2.0.12
         version: 2.0.12
@@ -1235,8 +1235,8 @@ packages:
   ts-expose-internals-conditionally@1.0.0-empty.0:
     resolution: {integrity: sha512-F8m9NOF6ZhdOClDVdlM8gj3fDCav4ZIFSs/EI3ksQbAAXVSCN/Jh5OCJDDZWBuBy9psFc6jULGDlPwjMYMhJDw==}
 
-  tslib@2.6.3:
-    resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
+  tslib@2.7.0:
+    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
 
   turbo-darwin-64@2.0.12:
     resolution: {integrity: sha512-NAgfgbXxX/JScWQmmQnGbPuFZq7LIswHfcMk5JwyBXQM/xmklNOxxac7MnGGIOf19Z2f6S3qHy17VIj0SeGfnA==}
@@ -2238,7 +2238,7 @@ snapshots:
 
   ts-expose-internals-conditionally@1.0.0-empty.0: {}
 
-  tslib@2.6.3: {}
+  tslib@2.7.0: {}
 
   turbo-darwin-64@2.0.12:
     optional: true
