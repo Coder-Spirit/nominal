@@ -51,7 +51,7 @@
 		"@sinclair/typebox": "^0.33.4",
 		"@types/node": "^22.2.0",
 		"@vitest/coverage-v8": "^2.0.5",
-		"get-tsconfig": "^4.7.6",
+		"get-tsconfig": "^4.8.0",
 		"publint": "^0.2.9",
 		"rollup": "^4.20.0",
 		"rollup-plugin-dts": "^6.1.1",

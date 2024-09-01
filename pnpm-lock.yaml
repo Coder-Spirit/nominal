@@ -51,8 +51,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5(vitest@2.0.5(@types/node@22.2.0))
       get-tsconfig:
-        specifier: ^4.7.6
-        version: 4.7.6
+        specifier: ^4.8.0
+        version: 4.8.0
       publint:
         specifier: ^0.2.9
         version: 0.2.9
@@ -97,8 +97,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5(vitest@2.0.5(@types/node@22.2.0))
       get-tsconfig:
-        specifier: ^4.7.6
-        version: 4.7.6
+        specifier: ^4.8.0
+        version: 4.8.0
       publint:
         specifier: ^0.2.9
         version: 0.2.9
@@ -140,8 +140,8 @@ importers:
         specifier: ^22.2.0
         version: 22.2.0
       get-tsconfig:
-        specifier: ^4.7.6
-        version: 4.7.6
+        specifier: ^4.8.0
+        version: 4.8.0
       publint:
         specifier: ^0.2.9
         version: 0.2.9
@@ -179,8 +179,8 @@ importers:
         specifier: ^22.2.0
         version: 22.2.0
       get-tsconfig:
-        specifier: ^4.7.6
-        version: 4.7.6
+        specifier: ^4.8.0
+        version: 4.8.0
       publint:
         specifier: ^0.2.9
         version: 0.2.9
@@ -231,8 +231,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5(vitest@2.0.5(@types/node@22.2.0))
       get-tsconfig:
-        specifier: ^4.7.6
-        version: 4.7.6
+        specifier: ^4.8.0
+        version: 4.8.0
       publint:
         specifier: ^0.2.9
         version: 0.2.9
@@ -280,8 +280,8 @@ importers:
         specifier: ^2.0.5
         version: 2.0.5(vitest@2.0.5(@types/node@22.2.0))
       get-tsconfig:
-        specifier: ^4.7.6
-        version: 4.7.6
+        specifier: ^4.8.0
+        version: 4.8.0
       publint:
         specifier: ^0.2.9
         version: 0.2.9
@@ -892,8 +892,8 @@ packages:
     resolution: {integrity: sha512-VaUJspBffn/LMCJVoMvSAdmscJyS1auj5Zulnn5UoYcY531UWmdwhRWkcGKnGU93m5HSXP9LP2usOryrBtQowA==}
     engines: {node: '>=16'}
 
-  get-tsconfig@4.7.6:
-    resolution: {integrity: sha512-ZAqrLlu18NbDdRaHq+AKXzAmqIUPswPWKUchfytdAjiRFnCe5ojG2bstg6mRiZabkKfCoL/e98pbBELIV/YCeA==}
+  get-tsconfig@4.8.0:
+    resolution: {integrity: sha512-Pgba6TExTZ0FJAn1qkJAjIeKoDJ3CsI2ChuLohJnZl/tTU8MVrq3b+2t5UOPfRa4RMsorClBjJALkJUMjG1PAw==}
 
   glob@10.4.5:
     resolution: {integrity: sha512-7Bv8RF0k6xjo7d4A/PxYLbUCfb6c+Vpd2/mB2yRDlew7Jb5hEXiCD9ibfO7wpk8i4sevK6DFny9h7EYbM3/sHg==}
@@ -1895,7 +1895,7 @@ snapshots:
 
   get-stream@8.0.1: {}
 
-  get-tsconfig@4.7.6:
+  get-tsconfig@4.8.0:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
@@ -2123,7 +2123,7 @@ snapshots:
       debug: 4.3.6
       es-module-lexer: 1.5.4
       esbuild: 0.21.5
-      get-tsconfig: 4.7.6
+      get-tsconfig: 4.8.0
       rollup: 4.20.0
     transitivePeerDependencies:
       - supports-color
