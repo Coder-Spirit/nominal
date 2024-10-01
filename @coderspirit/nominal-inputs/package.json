@@ -38,7 +38,7 @@
 		"@arethetypeswrong/cli": "^0.15.4",
 		"@biomejs/biome": "1.8.3",
 		"@types/node": "^22.2.0",
-		"get-tsconfig": "^4.7.6",
+		"get-tsconfig": "^4.8.1",
 		"publint": "^0.2.9",
 		"rollup": "^4.20.0",
 		"rollup-plugin-dts": "^6.1.1",
