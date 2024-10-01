@@ -39,7 +39,7 @@
 		"@vitest/coverage-v8": "^2.0.5",
 		"get-tsconfig": "^4.7.6",
 		"publint": "^0.2.9",
-		"rollup": "^4.20.0",
+		"rollup": "^4.22.5",
 		"rollup-plugin-dts": "^6.1.1",
 		"rollup-plugin-esbuild": "^6.1.1",
 		"tslib": "^2.6.3",
