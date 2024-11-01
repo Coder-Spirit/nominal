@@ -40,7 +40,7 @@
 		"@types/node": "^22.2.0",
 		"get-tsconfig": "^4.7.6",
 		"publint": "^0.2.9",
-		"rollup": "^4.20.0",
+		"rollup": "^4.24.3",
 		"rollup-plugin-dts": "^6.1.1",
 		"rollup-plugin-esbuild": "^6.1.1",
 		"tslib": "^2.6.3",
