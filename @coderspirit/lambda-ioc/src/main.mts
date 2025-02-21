@@ -433,6 +433,8 @@ export function __createContainer<
 					return await c.resolveGroup(k.slice(0, -2))
 				case ':#':
 					return await c.resolveLabelledGroup(k.slice(0, -2))
+				default:
+					break // Nothing to do
 			}
 
 			const syncFactory = syncFactories[k as keyof TSyncFactories]
@@ -563,6 +565,8 @@ export function __createContainer<
 									return c.resolveGroup(arg.slice(0, -2))
 								case ':#':
 									return c.resolveLabelledGroup(arg.slice(0, -2))
+								default:
+									break // Nothing to do
 							}
 							if (syncFactories[arg] !== undefined) {
 								// biome-ignore lint/style/noNonNullAssertion: asserted above!
@@ -643,6 +647,8 @@ export function __createContainer<
 										return c.resolveGroup(arg.slice(0, -2))
 									case ':#':
 										return c.resolveLabelledGroup(arg.slice(0, -2))
+									default:
+										break // Nothing to do
 								}
 								if (syncFactories[arg] !== undefined) {
 									// biome-ignore lint/style/noNonNullAssertion: asserted above!

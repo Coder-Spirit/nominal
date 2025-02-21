@@ -1,7 +1,7 @@
 import type { TaggedInteger } from '@coderspirit/nominal-inputs'
 import { assert, describe, expect, it } from 'vitest'
 
-import { getSafeEnv } from '../main.mts'
+import { SafeEnvError, getSafeEnv } from '../main.mts'
 
 describe('getSafeEnv (regressions)', () => {
 	it('shoud set correct type for .get with enum variables', () => {
@@ -86,7 +86,10 @@ describe('getSafeEnv (regressions)', () => {
 
 		expect(() => getSafeEnv(env, schema)).toThrowError(
 			new AggregateError(
-				[],
+				[
+					new SafeEnvError('Missing required environment variable: "BAR"'),
+					new SafeEnvError('Environment variable "XXX" must be an integer'),
+				],
 				'Multiple errors occurred while processing environment variables',
 			),
 		)

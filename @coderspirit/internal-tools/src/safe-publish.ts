@@ -69,6 +69,7 @@ const main = async (): Promise<void> => {
 try {
 	await main()
 } catch (err) {
+	// biome-ignore lint/suspicious/noConsole: Internal usage
 	console.error(err)
 	process.exit(1)
 }

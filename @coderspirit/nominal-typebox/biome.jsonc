@@ -13,6 +13,7 @@
 			"include": ["*.test.ts", "*.test.mts"],
 			"linter": {
 				"rules": {
+					"performance": { "useTopLevelRegex": "off" },
 					"style": { "noParameterProperties": "off" }
 				}
 			}

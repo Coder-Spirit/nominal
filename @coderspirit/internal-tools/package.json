@@ -15,8 +15,8 @@
 		"typecheck": "deno check ./src/*.ts"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^1.8.3",
+		"@biomejs/biome": "^1.9.4",
 		"@coderspirit/dev-configs": "workspace:*",
-		"typescript": "^5.5.4"
+		"typescript": "^5.7.3"
 	}
 }

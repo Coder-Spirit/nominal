@@ -3,19 +3,21 @@
 	"private": true,
 	"author": "Andres Correa Casablanca <castarco@coderspirit.xyz>",
 	"license": "MIT",
-	"workspaces": ["@coderspirit/*"],
+	"workspaces": [
+		"@coderspirit/*"
+	],
 	"scripts": {
 		"build": "pnpm -r run build",
 		"install-githooks": "if [ -d .git ]; then git config core.hooksPath .hooks; fi",
 		"test": "pnpm -r run test"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.8.3",
+		"@biomejs/biome": "^1.9.4",
 		"@coderspirit/dev-configs": "workspace:*",
 		"@coderspirit/internal-tools": "workspace:*",
-		"turbo": "^2.0.12"
+		"turbo": "^2.4.2"
 	},
-	"packageManager": "pnpm@9.7.0",
+	"packageManager": "pnpm@10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af",
 	"engines": {
 		"node": ">=18.0"
 	}
