@@ -28,6 +28,10 @@ importers:
         version: 1.9.4
 
   '@coderspirit/internal-tools':
+    dependencies:
+      zx:
+        specifier: ^8.3.2
+        version: 8.3.2
     devDependencies:
       '@biomejs/biome':
         specifier: ^1.9.4
@@ -35,6 +39,9 @@ importers:
       '@coderspirit/dev-configs':
         specifier: workspace:*
         version: link:../dev-configs
+      '@types/node':
+        specifier: ^22.13.5
+        version: 22.13.5
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
@@ -712,6 +719,12 @@ packages:
   '@types/estree@1.0.6':
     resolution: {integrity: sha512-AYnb1nQyY49te+VRAVgmzfcgjYS91mY5P0TKUDCLEM+gNnA+3T6rWITXRLYCpahpqSQbN5cE+gHpnPyXjHWxcw==}
 
+  '@types/fs-extra@11.0.4':
+    resolution: {integrity: sha512-yTbItCNreRooED33qjunPthRcSjERP1r4MqCZc7wv0u2sUkzTFp45tgUfS5+r7FrZPdmCCNflLhVSP/o+SemsQ==}
+
+  '@types/jsonfile@6.1.4':
+    resolution: {integrity: sha512-D5qGUYwjvnNNextdU59/+fI+spnwtTFmyQP0h+PfIOSkNfpU6AOICUOkm4i0OnSk+NyjdPJrxCDro0sJsWlRpQ==}
+
   '@types/node@22.13.5':
     resolution: {integrity: sha512-+lTU0PxZXn0Dr1NBtC7Y8cR21AJr87dLLU953CWA6pMxxv/UDc7jYAY90upcrie1nRcD6XNG5HOYEDtgW5TxAg==}
 
@@ -1336,6 +1349,11 @@ packages:
     resolution: {integrity: sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==}
     engines: {node: '>=10'}
 
+  zx@8.3.2:
+    resolution: {integrity: sha512-qjTunv1NClO05jDaUjrNZfpqC9yvNCchge/bzOcQevsh1aM5qE3TG6MY24kuQKlOWx+7vNuhqO2wa9nQCIGvZA==}
+    engines: {node: '>= 12.17.0'}
+    hasBin: true
+
 snapshots:
 
   '@ampproject/remapping@2.3.0':
@@ -1612,6 +1630,17 @@ snapshots:
   '@sindresorhus/is@4.6.0': {}
 
   '@types/estree@1.0.6': {}
+
+  '@types/fs-extra@11.0.4':
+    dependencies:
+      '@types/jsonfile': 6.1.4
+      '@types/node': 22.13.5
+    optional: true
+
+  '@types/jsonfile@6.1.4':
+    dependencies:
+      '@types/node': 22.13.5
+    optional: true
 
   '@types/node@22.13.5':
     dependencies:
@@ -2247,3 +2276,8 @@ snapshots:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
+
+  zx@8.3.2:
+    optionalDependencies:
+      '@types/fs-extra': 11.0.4
+      '@types/node': 22.13.5

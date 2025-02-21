@@ -12,11 +12,15 @@
 		"format-staged": "biome-check-staged",
 		"lint": "pnpm lint:biome",
 		"lint:biome": "pnpm biome check --files-ignore-unknown=true .",
-		"typecheck": "deno check ./src/*.ts"
+		"typecheck": "deno install && deno check ./src/*.ts"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@coderspirit/dev-configs": "workspace:*",
+		"@types/node": "^22.13.5",
 		"typescript": "^5.7.3"
+	},
+	"dependencies": {
+		"zx": "^8.3.2"
 	}
 }

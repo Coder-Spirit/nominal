@@ -2,7 +2,7 @@
 
 import process from 'node:process'
 
-import { $ } from 'npm:zx@8.1.4'
+import { $ } from 'npm:zx@8.3.2'
 
 const JSON_EXT = 'json|jsonc'
 const JS_EXT = 'js|mjs|cjs|jsx'

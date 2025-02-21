@@ -20,10 +20,10 @@ jobs:
   build:
     strategy:
       matrix:
-        deno-version: [ "1.45.5" ]
+        deno-version: [ "2.2.0" ]
         node-version: [ 18, 20, 22 ]
         os: ["ubuntu-latest", "windows-latest", "macos-latest"]
-        pnpm: ["9.7.0"]
+        pnpm: ["10.4.1+sha512.c753b6c3ad7afa13af388fa6d808035a008e30ea9993f58c6663e2bc5ff21679aa834db094987129aa4d488b86df57f7b634981b2f827cdcacc698cc0cfb88af"]
 
     runs-on: "${{ matrix.os }}"
 
@@ -32,19 +32,20 @@ jobs:
       TURBO_TEAM: "${{ vars.TURBO_TEAM }}"
 
     steps:
-    - name: "Checkout repository" # v4.1.1
-      uses: "actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11"
-    - name: "Install PNPM" # v3.0.0
-      uses: "pnpm/action-setup@a3252b78c470c02df07e9d59298aecedc3ccdd6d"
+    - name: "Checkout repository" # v4.2.2
+      uses: "actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683"
+    - name: "Install PNPM" # v4.1.0
+      uses: "pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda"
       with:
         version: "${{ matrix.pnpm }}"
-    - name: "Use Node.js ${{ matrix.node-version }}" # v4.0.2
-      uses: "actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8"
+    - name: "Use Node.js ${{ matrix.node-version }}" # v4.2.0
+      uses: "actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a"
       with:
         node-version: "${{ matrix.node-version }}"
         cache: "pnpm"
-    - name: "Use Deno ${{ matrix.deno-version }}" # v1.3.0
-      uses: denoland/setup-deno@ba9dcf3bc3696623d1add6a2f5181ee1b5143de5
+        registry-url: "https://registry.npmjs.org"
+    - name: "Use Deno ${{ matrix.deno-version }}" # v2.0.2
+      uses: "denoland/setup-deno@909cc5acb0fdd60627fb858598759246509fa755"
       with:
         deno-version: "${{ matrix.deno-version }}"
 

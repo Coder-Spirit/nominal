@@ -3,7 +3,7 @@
 import { readFile } from 'node:fs/promises'
 import process from 'node:process'
 
-import { $ } from 'npm:zx@8.1.4'
+import { $ } from 'npm:zx@8.3.2'
 
 type PackageJson = {
 	name: string
