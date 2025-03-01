@@ -48,7 +48,7 @@
 		"@arethetypeswrong/cli": "^0.17.4",
 		"@biomejs/biome": "^1.9.4",
 		"@coderspirit/nominal-inputs": "workspace:^",
-		"@sinclair/typebox": "^0.34.27",
+		"@sinclair/typebox": "^0.34.28",
 		"@types/node": "^22.13.5",
 		"@vitest/coverage-v8": "^3.0.6",
 		"get-tsconfig": "^4.10.0",
