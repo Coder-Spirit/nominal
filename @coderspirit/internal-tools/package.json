@@ -17,7 +17,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.4",
 		"@coderspirit/dev-configs": "workspace:*",
-		"@types/node": "^22.13.5",
+		"@types/node": "^22.13.7",
 		"typescript": "^5.7.3"
 	},
 	"dependencies": {
