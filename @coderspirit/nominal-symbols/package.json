@@ -37,7 +37,7 @@
 	"devDependencies": {
 		"@arethetypeswrong/cli": "^0.17.4",
 		"@biomejs/biome": "^1.9.4",
-		"@types/node": "^22.13.5",
+		"@types/node": "^22.13.7",
 		"get-tsconfig": "^4.10.0",
 		"publint": "^0.3.6",
 		"rollup": "^4.34.8",
