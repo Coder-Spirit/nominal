@@ -61,8 +61,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.7
+        version: 0.3.7
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -107,8 +107,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.7
+        version: 0.3.7
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -150,8 +150,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.7
+        version: 0.3.7
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -189,8 +189,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.7
+        version: 0.3.7
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -241,8 +241,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.7
+        version: 0.3.7
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -290,8 +290,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.7
+        version: 0.3.7
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -1024,8 +1024,8 @@ packages:
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
 
-  package-manager-detector@0.2.9:
-    resolution: {integrity: sha512-+vYvA/Y31l8Zk8dwxHhL3JfTuHPm6tlxM2A3GeQyl7ovYnSp1+mzAxClxaOr0qO1TtPxbQxetI7v5XqKLJZk7Q==}
+  package-manager-detector@0.2.10:
+    resolution: {integrity: sha512-1wlNZK7HW+UE3eGCcMv3hDaYokhspuIeH6enXSnCL1eEZSVDsy/dYwo/4CczhUsrKLA1SSXB+qce8Glw5DEVtw==}
 
   parse5-htmlparser2-tree-adapter@6.0.1:
     resolution: {integrity: sha512-qPuWvbLgvDGilKc5BoicRovlT4MtYT6JfJyBOMDsKoiT+GiuP5qyrPCnR9HcPECIJJmZh5jRndyNThnhhb/vlA==}
@@ -1062,10 +1062,13 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  publint@0.3.6:
-    resolution: {integrity: sha512-f6mQw/RsX8GiUaUliYWJsivveYuwIozFLe4wCWE3NGj3vBamr816pxQGN0ycVwFIoTnIeqIJb9wsN7XAS8wRCA==}
+  publint@0.3.7:
+    resolution: {integrity: sha512-UJAdT3pHmhxGHfFadlZZnTZWNyagwPplW4YJ7kM0ysDs45otRnusonRxeWYQHrdryWxAntsjCuXcUHkbUHGk7g==}
     engines: {node: '>=18'}
     hasBin: true
+
+  quansync@0.2.6:
+    resolution: {integrity: sha512-u3TuxVTuJtkTxKGk5oZ7K2/o+l0/cC6J8SOyaaSnrnroqvcVy7xBxtvBUyd+Xa8cGoCr87XmQj4NR6W+zbqH8w==}
 
   require-directory@2.1.1:
     resolution: {integrity: sha512-fGxEI7+wsG9xrvdjsrlmL22OMTTiHRwAMroiEeMgq8gzoLC/PQr7RsRDSTLUg/bZAZtF+TVIkHc6/4RIKrui+Q==}
@@ -1965,7 +1968,9 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
-  package-manager-detector@0.2.9: {}
+  package-manager-detector@0.2.10:
+    dependencies:
+      quansync: 0.2.6
 
   parse5-htmlparser2-tree-adapter@6.0.1:
     dependencies:
@@ -1996,12 +2001,14 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  publint@0.3.6:
+  publint@0.3.7:
     dependencies:
       '@publint/pack': 0.1.1
-      package-manager-detector: 0.2.9
+      package-manager-detector: 0.2.10
       picocolors: 1.1.1
       sade: 1.8.1
+
+  quansync@0.2.6: {}
 
   require-directory@2.1.1: {}
 
