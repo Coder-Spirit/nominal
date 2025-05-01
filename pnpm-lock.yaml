@@ -61,8 +61,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.12
+        version: 0.3.12
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -107,8 +107,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.12
+        version: 0.3.12
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -150,8 +150,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.12
+        version: 0.3.12
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -189,8 +189,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.12
+        version: 0.3.12
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -241,8 +241,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.12
+        version: 0.3.12
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -290,8 +290,8 @@ importers:
         specifier: ^4.10.0
         version: 4.10.0
       publint:
-        specifier: ^0.3.6
-        version: 0.3.6
+        specifier: ^0.3.12
+        version: 0.3.12
       rollup:
         specifier: ^4.34.8
         version: 4.34.8
@@ -610,8 +610,8 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@publint/pack@0.1.1':
-    resolution: {integrity: sha512-TvCl79Y8v18ZhFGd5mjO1kYPovSBq3+4LVCi5Nfl1JI8fS8i8kXbgQFGwBJRXczim8GlW8c2LMBKTtExYXOy/A==}
+  '@publint/pack@0.1.2':
+    resolution: {integrity: sha512-S+9ANAvUmjutrshV4jZjaiG8XQyuJIZ8a4utWmN/vW1sgQ9IfBnPndwkmQYw53QmouOIytT874u65HEmu6H5jw==}
     engines: {node: '>=18'}
 
   '@rollup/rollup-android-arm-eabi@4.34.8':
@@ -1024,8 +1024,8 @@ packages:
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
 
-  package-manager-detector@0.2.9:
-    resolution: {integrity: sha512-+vYvA/Y31l8Zk8dwxHhL3JfTuHPm6tlxM2A3GeQyl7ovYnSp1+mzAxClxaOr0qO1TtPxbQxetI7v5XqKLJZk7Q==}
+  package-manager-detector@1.2.0:
+    resolution: {integrity: sha512-PutJepsOtsqVfUsxCzgTTpyXmiAgvKptIgY4th5eq5UXXFhj5PxfQ9hnGkypMeovpAvVshFRItoFHYO18TCOqA==}
 
   parse5-htmlparser2-tree-adapter@6.0.1:
     resolution: {integrity: sha512-qPuWvbLgvDGilKc5BoicRovlT4MtYT6JfJyBOMDsKoiT+GiuP5qyrPCnR9HcPECIJJmZh5jRndyNThnhhb/vlA==}
@@ -1062,8 +1062,8 @@ packages:
     resolution: {integrity: sha512-dle9A3yYxlBSrt8Fu+IpjGT8SY8hN0mlaA6GY8t0P5PjIOZemULz/E2Bnm/2dcUOena75OTNkHI76uZBNUUq3A==}
     engines: {node: ^10 || ^12 || >=14}
 
-  publint@0.3.6:
-    resolution: {integrity: sha512-f6mQw/RsX8GiUaUliYWJsivveYuwIozFLe4wCWE3NGj3vBamr816pxQGN0ycVwFIoTnIeqIJb9wsN7XAS8wRCA==}
+  publint@0.3.12:
+    resolution: {integrity: sha512-1w3MMtL9iotBjm1mmXtG3Nk06wnq9UhGNRpQ2j6n1Zq7YAD6gnxMMZMIxlRPAydVjVbjSm+n0lhwqsD1m4LD5w==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1566,7 +1566,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@publint/pack@0.1.1': {}
+  '@publint/pack@0.1.2': {}
 
   '@rollup/rollup-android-arm-eabi@4.34.8':
     optional: true
@@ -1965,7 +1965,7 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
-  package-manager-detector@0.2.9: {}
+  package-manager-detector@1.2.0: {}
 
   parse5-htmlparser2-tree-adapter@6.0.1:
     dependencies:
@@ -1996,10 +1996,10 @@ snapshots:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
-  publint@0.3.6:
+  publint@0.3.12:
     dependencies:
-      '@publint/pack': 0.1.1
-      package-manager-detector: 0.2.9
+      '@publint/pack': 0.1.2
+      package-manager-detector: 1.2.0
       picocolors: 1.1.1
       sade: 1.8.1
 
